@@ -65,7 +65,7 @@ $rating-icons-paths: (
   @if not index(clickable representative, $interaction-type) {
     @error "Interaction type must be either `clickable` or `representative`.";
   }
-  
+
   #{$star-element} {
     display: inline-block;
     float: left;
