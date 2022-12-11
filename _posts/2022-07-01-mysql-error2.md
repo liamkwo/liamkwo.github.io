@@ -5,7 +5,7 @@ title: "(문제해결)You do not have the SUPER privilege and binary logging is 
 date: '2022-07-01 16:42:29'
 author: Liam
 categories: [ MySQL, AWS RDS ]
-image: assets/images/default-logo.png
+image: assets/images/logo-background2.png
 ---
 
 <br>

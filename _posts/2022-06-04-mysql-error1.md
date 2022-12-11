@@ -5,7 +5,7 @@ title: "(문제해결)ERROR 1227 (42000) at line 18 - Access denied; you need (a
 date: '2022-06-04 16:20:18'
 author: Liam
 categories: [ MySQL ]
-image: assets/images/default-logo.png
+image: assets/images/logo-background2.png
 ---
 
 <br>

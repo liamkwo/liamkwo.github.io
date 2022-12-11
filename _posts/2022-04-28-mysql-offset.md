@@ -5,7 +5,7 @@ title: "MySQL offset 활용"
 date: '2022-04-28 19:48:52'
 author: Liam
 categories: [ MySQL, Python ]
-image: assets/images/default-logo.png
+image: assets/images/logo-background2.png
 ---
 
 <br>

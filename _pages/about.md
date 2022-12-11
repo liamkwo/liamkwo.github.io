@@ -28,7 +28,12 @@ comments: true
 
 <p>Thank you for visiting my blog!<br> If you want to contact me, <br> 📬 <a href="mailto:dnwjd6452@gmail.com">dnwjd6452@gmail.com</a> </p>
 
-<a target="_blank" href="https://www.linkedin.com/in/kwongmin-lim-32b828247/" class="btn btn-danger">LinkedIn</a> <a target="_blank" href="https://fringe-comte-9ed.notion.site/e8d7aa586cd34e29b59de401774d28e6" class="btn btn-warning">Notion-Portfolio</a>
+<a target="_blank" href="https://www.linkedin.com/in/kwongmin-lim-32b828247/" class="btn btn-danger">LinkedIn</a>
+
+<br>
+<br>
+
+<a target="_blank" href="https://fringe-comte-9ed.notion.site/e8d7aa586cd34e29b59de401774d28e6" class="btn btn-warning">Notion-Portfolio</a>
 
 </div>
 </div>

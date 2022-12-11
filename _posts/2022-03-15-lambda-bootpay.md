@@ -5,7 +5,7 @@ title: "AWS Lambda에 Bootpay연동하기 - 결제 검증"
 date: '2022-03-15 19:25:44'
 author: Liam
 categories: [ AWS, Python, Bootpay ]
-image: assets/images/default-logo.png
+image: assets/images/logo-background2.png
 ---
 
 <br>

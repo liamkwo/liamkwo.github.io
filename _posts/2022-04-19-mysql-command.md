@@ -5,7 +5,7 @@ title: "알아두면 쓸모있는 MySQL 명령어 모음"
 date: '2022-04-19 20:11:23'
 author: Liam
 categories: [ MySQL ]
-image: assets/images/default-logo.png
+image: assets/images/logo-background2.png
 ---
 
 <br>

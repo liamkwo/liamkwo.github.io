@@ -8,7 +8,7 @@ var documents = [{
     "id": 1,
     "url": "http://localhost:4000/about",
     "title": "",
-    "body": "Notion 포트폴리오 입니다.  자세한 사항은 우측의 Portfolio를 클릭해주세요!  Learn More: Please, read the my portfolio here. Hello, World!Thank you for visiting my blog! If you want to contact me, 📬 dnwjd6452@gmail. com LinkedIn Notion-Portfolio"
+    "body": "Notion 포트폴리오 입니다.  자세한 사항은 우측의 Portfolio를 클릭해주세요! Learn More: Please, read the my portfolio here. Hello, World!Thank you for visiting my blog! If you want to contact me, 📬 dnwjd6452@gmail. com LinkedInNotion-Portfolio"
     }, {
     "id": 2,
     "url": "http://localhost:4000/categories",

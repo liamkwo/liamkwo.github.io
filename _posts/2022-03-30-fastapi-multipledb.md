@@ -5,7 +5,7 @@ title: "FastAPI에 2개 이상의 DB연동하기"
 date: '2022-03-30 21:33:15'
 author: Liam
 categories: [ Python, FastAPI ]
-image: assets/images/default-logo.png
+image: assets/images/logo-background2.png
 ---
 
 <br>
