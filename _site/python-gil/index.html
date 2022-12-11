@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="icon" href="/liampoet.github.io/assets/images/logo.png">
+
+<title>Python GIL, Global interpreter Lock | Liam</title>
+
+<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Python GIL, Global interpreter Lock | LiamCoding</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Python GIL, Global interpreter Lock" />
+<meta name="author" content="Liam" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="💡 Intro 오늘은 Python의 가장 큰 특징중 하나인 GIL(Global interpreter Lock)에 대해 알아보려고 합니다. Python을 사용하는 개발자라면 누구나 다 한번쯤은 들어봤을 것이고, 저 또한 GIL에 대해 공부해 본적이 있지만 다시 한번 정리해 보려고 합니다. 🔎 Python 인터프리터란? 우선 GIL이란 Global Interpreter Lock의 약자로 파이썬 인터프리터가 한 쓰레드만이 하나의 바이트코드를 실행 시킬 수 있도록 해주는 Lock입니다. 즉, Python 인터프리터는 한 번에 한 쓰레드만 실행될 수 있다는 것을 의미합니다. 그렇다면 파이썬 인터프리터란 무엇일까요? Python 인터프리터란, Python으로 작성된 코드를 한 줄씩 읽으면서 실행하는 프로그램을 뜻 합니다. Python 인터프리터에 대한 자세한 내용은 파이썬은 인터프리터언어입니까? 블로그에서 조금 더 심도깊게 생각해보실 수 있습니다. 🔎 GIL(Global Interpreter Lock) GIL (Global Interpreter Lock)을 🌎Python 위키에서는 다음과 같이 정의하고 있습니다. In CPython, the global interpreter lock, or GIL, is a mutex that protects access to Python objects, preventing multiple threads from executing Python bytecodes at once. The GIL prevents race conditions and ensures thread safety. A nice explanation of 🌎how the Python GIL helps in these areas can be found here. In short, this mutex is necessary mainly because CPython’s memory management is not thread-safe. 해석을 해보면, Python의 객체들에 대한 접근을 보호하는 일종의 Mutex로서 여러 개의 쓰레드가 파이썬 코드를 동시에 실행하지 못하도록 하는 것을 의미합니다. 즉, 한 프로세스 내에서 Python 인터프리터는 한 시점에 하나의 쓰레드에 의해서만 실행될 수 있습니다. 멀티 쓰레딩이 불가능하다는 것이 아니나, 원래 멀티 코어라면 멀티 쓰레딩 시에 여러 개의 쓰레드가 여러 코어 상에서 병렬실행될 수 있는데, Python에서는 그러한 병렬 실행이 불가능하다는 것입니다. 간단하게 설명을 해보자면, 3개의 쓰레드를 통해 작업을 한다고 가정했을 때 하나의 쓰레드에 모든 자원을 허락하고 그 후에는 Lock을 걸어 다른 스레드는 실행할 수 없게 막아버림으로써, 각각의 쓰레드는 GIL을 얻고 동작하지만 이 때 다른 쓰레드는 모두 동작을 멈추게 됩니다. 이를 그림으로 나타내면 다음과 같습니다. 🔎 그럼 GIL이 왜 생긴걸까? Python에서 모든 것은 객체(Object)입니다. 그리고 각 객체는 Reference Count를 저장하기 위한 필드를 가지고 있습니다. Reference Count란 그 객체를 가리키는 Reference가 몇 개 존재하는지를 나타내는 것으로, Python에서의 GC(Garbage Collection)는 이러한 Reference Count가 0이 되면 해당 객체를 메모리에서 삭제시키는 메커니즘으로 동작하고 있습니다. 따라서 파이썬의 모든 객체는 Reference count, 즉 해당 변수가 참조된 수를 저장하고 있습니다. 여기서 문제가 발생하게 되는데, 멀티 쓰레드인 경우 여러 쓰레드가 하나의 객체를 사용한다면 Reference count를 관리하기 위해서 모든 객체에 대한 lock이 필요할 것입니다. 이러한 비효율을 막기 위해서 Python에서 GIL을 사용하게 되었습니다. 그 당시 GIL을 선택해야 했던 이유는 🌎What Is the Python Global Interpreter Lock (GIL)? 에서 찾을 수 있었습니다. Python has been around since the days when operating systems did not have a concept of threads. Python was designed to be easy-to-use in order to make development quicker and more and more developers started using it. A lot of extensions were being written for the existing C libraries whose features were needed in Python. To prevent inconsistent changes, these C extensions required a thread-safe memory management which the GIL provided. The GIL is simple to implement and was easily added to Python. It provides a performance increase to single-threaded programs as only one lock needs to be managed. C libraries that were not thread-safe became easier to integrate. And these C extensions became one of the reasons why Python was readily adopted by different communities. As you can see, the GIL was a pragmatic solution to a difficult problem that the CPython developers faced early on in Python’s life. 📚 그렇다면 Python 멀티쓰레딩은 무조건 느릴까? CPU 연산의 비중이 큰 작업을 할 때, Context Switching으로 인해 괜한 Cost만 잡아먹기 때문에 멀티 쓰레딩은 오히려 성능을 떨어뜨리게 됩니다. 하지만 I/O, Sleep 등의 외부 연산을 하느라 CPU가 아무것도 하지 않고 기다리기만 할 때는 다른 쓰레드로 Context Switching을 하게 됩니다. 그러한 이유로 CPU 연산의 비중이 적은 I/O, Sleep 등의 외부 연산 같이 비중이 큰 작업을 할 때는 멀티 쓰레딩이 굉장히 좋은 성능을 보여주게 됩니다. 즉, Python 멀티쓰레딩은 무조건 느리다라는 말은 맞는 말이 아닙니다. 다음 예시를 통해 설명이 가능합니다. 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 import random import threading import time def working(): time.sleep(1) max([random.random() for i in range(10000000)]) time.sleep(1) max([random.random() for i in range(10000000)]) time.sleep(1) # Single Thread s_time = time.time() working() working() e_time = time.time() print(f&#39;{e_time - s_time:.5f}&#39;) # Multi Thread s_time = time.time() threads = [] for i in range(2): threads.append(threading.Thread(target=working)) threads[-1].start() for t in threads: t.join() e_time = time.time() print(f&#39;{e_time - s_time:.5f}&#39;) 아래와 같이 확연한 차이를 볼 수 있습니다. 1 2 3 4 5 Single Thread -&gt; 10.77272 Multi Thread -&gt; 7.17564 Single Thread는 sleep으로 인해 아무 것도 못하고 동작을 대기하게 되고, Multi Thread는 sleep으로 멈춘 상태에서 다른 스레드로 Context Switching하여 Single Thread의 효율을 개선하게 됩니다. 끝맺음 Python으로 작업하는 개발자의 입장으로써 지금까지는 GIL로 인한 불편한점은 느낄 수 없었습니다. 하지만 뜻하지 않은 계기로 오랜만에 다시 GIL(Global Interpreter Lock)을 공부하게 되었는데, GIL에 대한 역사와 Python의 GC에 대해 충분히 이해할 수 있었던것 만으로도 매우 의미있는 시간이었다고 생각합니다.😊 [참고자료] 파이썬은 인터프리터언어입니까? 파이썬이 마침내 ‘GIL’을 제거할 수 있을까? Python 위키 왜 Python에는 GIL이 있는가 Davie Beazley의 Understanding the Python GIL" />
+<meta property="og:description" content="💡 Intro 오늘은 Python의 가장 큰 특징중 하나인 GIL(Global interpreter Lock)에 대해 알아보려고 합니다. Python을 사용하는 개발자라면 누구나 다 한번쯤은 들어봤을 것이고, 저 또한 GIL에 대해 공부해 본적이 있지만 다시 한번 정리해 보려고 합니다. 🔎 Python 인터프리터란? 우선 GIL이란 Global Interpreter Lock의 약자로 파이썬 인터프리터가 한 쓰레드만이 하나의 바이트코드를 실행 시킬 수 있도록 해주는 Lock입니다. 즉, Python 인터프리터는 한 번에 한 쓰레드만 실행될 수 있다는 것을 의미합니다. 그렇다면 파이썬 인터프리터란 무엇일까요? Python 인터프리터란, Python으로 작성된 코드를 한 줄씩 읽으면서 실행하는 프로그램을 뜻 합니다. Python 인터프리터에 대한 자세한 내용은 파이썬은 인터프리터언어입니까? 블로그에서 조금 더 심도깊게 생각해보실 수 있습니다. 🔎 GIL(Global Interpreter Lock) GIL (Global Interpreter Lock)을 🌎Python 위키에서는 다음과 같이 정의하고 있습니다. In CPython, the global interpreter lock, or GIL, is a mutex that protects access to Python objects, preventing multiple threads from executing Python bytecodes at once. The GIL prevents race conditions and ensures thread safety. A nice explanation of 🌎how the Python GIL helps in these areas can be found here. In short, this mutex is necessary mainly because CPython’s memory management is not thread-safe. 해석을 해보면, Python의 객체들에 대한 접근을 보호하는 일종의 Mutex로서 여러 개의 쓰레드가 파이썬 코드를 동시에 실행하지 못하도록 하는 것을 의미합니다. 즉, 한 프로세스 내에서 Python 인터프리터는 한 시점에 하나의 쓰레드에 의해서만 실행될 수 있습니다. 멀티 쓰레딩이 불가능하다는 것이 아니나, 원래 멀티 코어라면 멀티 쓰레딩 시에 여러 개의 쓰레드가 여러 코어 상에서 병렬실행될 수 있는데, Python에서는 그러한 병렬 실행이 불가능하다는 것입니다. 간단하게 설명을 해보자면, 3개의 쓰레드를 통해 작업을 한다고 가정했을 때 하나의 쓰레드에 모든 자원을 허락하고 그 후에는 Lock을 걸어 다른 스레드는 실행할 수 없게 막아버림으로써, 각각의 쓰레드는 GIL을 얻고 동작하지만 이 때 다른 쓰레드는 모두 동작을 멈추게 됩니다. 이를 그림으로 나타내면 다음과 같습니다. 🔎 그럼 GIL이 왜 생긴걸까? Python에서 모든 것은 객체(Object)입니다. 그리고 각 객체는 Reference Count를 저장하기 위한 필드를 가지고 있습니다. Reference Count란 그 객체를 가리키는 Reference가 몇 개 존재하는지를 나타내는 것으로, Python에서의 GC(Garbage Collection)는 이러한 Reference Count가 0이 되면 해당 객체를 메모리에서 삭제시키는 메커니즘으로 동작하고 있습니다. 따라서 파이썬의 모든 객체는 Reference count, 즉 해당 변수가 참조된 수를 저장하고 있습니다. 여기서 문제가 발생하게 되는데, 멀티 쓰레드인 경우 여러 쓰레드가 하나의 객체를 사용한다면 Reference count를 관리하기 위해서 모든 객체에 대한 lock이 필요할 것입니다. 이러한 비효율을 막기 위해서 Python에서 GIL을 사용하게 되었습니다. 그 당시 GIL을 선택해야 했던 이유는 🌎What Is the Python Global Interpreter Lock (GIL)? 에서 찾을 수 있었습니다. Python has been around since the days when operating systems did not have a concept of threads. Python was designed to be easy-to-use in order to make development quicker and more and more developers started using it. A lot of extensions were being written for the existing C libraries whose features were needed in Python. To prevent inconsistent changes, these C extensions required a thread-safe memory management which the GIL provided. The GIL is simple to implement and was easily added to Python. It provides a performance increase to single-threaded programs as only one lock needs to be managed. C libraries that were not thread-safe became easier to integrate. And these C extensions became one of the reasons why Python was readily adopted by different communities. As you can see, the GIL was a pragmatic solution to a difficult problem that the CPython developers faced early on in Python’s life. 📚 그렇다면 Python 멀티쓰레딩은 무조건 느릴까? CPU 연산의 비중이 큰 작업을 할 때, Context Switching으로 인해 괜한 Cost만 잡아먹기 때문에 멀티 쓰레딩은 오히려 성능을 떨어뜨리게 됩니다. 하지만 I/O, Sleep 등의 외부 연산을 하느라 CPU가 아무것도 하지 않고 기다리기만 할 때는 다른 쓰레드로 Context Switching을 하게 됩니다. 그러한 이유로 CPU 연산의 비중이 적은 I/O, Sleep 등의 외부 연산 같이 비중이 큰 작업을 할 때는 멀티 쓰레딩이 굉장히 좋은 성능을 보여주게 됩니다. 즉, Python 멀티쓰레딩은 무조건 느리다라는 말은 맞는 말이 아닙니다. 다음 예시를 통해 설명이 가능합니다. 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 import random import threading import time def working(): time.sleep(1) max([random.random() for i in range(10000000)]) time.sleep(1) max([random.random() for i in range(10000000)]) time.sleep(1) # Single Thread s_time = time.time() working() working() e_time = time.time() print(f&#39;{e_time - s_time:.5f}&#39;) # Multi Thread s_time = time.time() threads = [] for i in range(2): threads.append(threading.Thread(target=working)) threads[-1].start() for t in threads: t.join() e_time = time.time() print(f&#39;{e_time - s_time:.5f}&#39;) 아래와 같이 확연한 차이를 볼 수 있습니다. 1 2 3 4 5 Single Thread -&gt; 10.77272 Multi Thread -&gt; 7.17564 Single Thread는 sleep으로 인해 아무 것도 못하고 동작을 대기하게 되고, Multi Thread는 sleep으로 멈춘 상태에서 다른 스레드로 Context Switching하여 Single Thread의 효율을 개선하게 됩니다. 끝맺음 Python으로 작업하는 개발자의 입장으로써 지금까지는 GIL로 인한 불편한점은 느낄 수 없었습니다. 하지만 뜻하지 않은 계기로 오랜만에 다시 GIL(Global Interpreter Lock)을 공부하게 되었는데, GIL에 대한 역사와 Python의 GC에 대해 충분히 이해할 수 있었던것 만으로도 매우 의미있는 시간이었다고 생각합니다.😊 [참고자료] 파이썬은 인터프리터언어입니까? 파이썬이 마침내 ‘GIL’을 제거할 수 있을까? Python 위키 왜 Python에는 GIL이 있는가 Davie Beazley의 Understanding the Python GIL" />
+<link rel="canonical" href="http://localhost:4000/liampoet.github.io/python-gil/" />
+<meta property="og:url" content="http://localhost:4000/liampoet.github.io/python-gil/" />
+<meta property="og:site_name" content="LiamCoding" />
+<meta property="og:image" content="http://localhost:4000/liampoet.github.io/assets/images/gil/GIL1.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-06-16T14:30:28+09:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","headline":"Python GIL, Global interpreter Lock","dateModified":"2022-06-16T14:30:28+09:00","datePublished":"2022-06-16T14:30:28+09:00","image":"http://localhost:4000/liampoet.github.io/assets/images/gil/GIL1.png","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/liampoet.github.io/assets/images/logo.png"},"name":"Liam"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/liampoet.github.io/python-gil/"},"author":{"@type":"Person","name":"Liam"},"description":"💡 Intro 오늘은 Python의 가장 큰 특징중 하나인 GIL(Global interpreter Lock)에 대해 알아보려고 합니다. Python을 사용하는 개발자라면 누구나 다 한번쯤은 들어봤을 것이고, 저 또한 GIL에 대해 공부해 본적이 있지만 다시 한번 정리해 보려고 합니다. 🔎 Python 인터프리터란? 우선 GIL이란 Global Interpreter Lock의 약자로 파이썬 인터프리터가 한 쓰레드만이 하나의 바이트코드를 실행 시킬 수 있도록 해주는 Lock입니다. 즉, Python 인터프리터는 한 번에 한 쓰레드만 실행될 수 있다는 것을 의미합니다. 그렇다면 파이썬 인터프리터란 무엇일까요? Python 인터프리터란, Python으로 작성된 코드를 한 줄씩 읽으면서 실행하는 프로그램을 뜻 합니다. Python 인터프리터에 대한 자세한 내용은 파이썬은 인터프리터언어입니까? 블로그에서 조금 더 심도깊게 생각해보실 수 있습니다. 🔎 GIL(Global Interpreter Lock) GIL (Global Interpreter Lock)을 🌎Python 위키에서는 다음과 같이 정의하고 있습니다. In CPython, the global interpreter lock, or GIL, is a mutex that protects access to Python objects, preventing multiple threads from executing Python bytecodes at once. The GIL prevents race conditions and ensures thread safety. A nice explanation of 🌎how the Python GIL helps in these areas can be found here. In short, this mutex is necessary mainly because CPython’s memory management is not thread-safe. 해석을 해보면, Python의 객체들에 대한 접근을 보호하는 일종의 Mutex로서 여러 개의 쓰레드가 파이썬 코드를 동시에 실행하지 못하도록 하는 것을 의미합니다. 즉, 한 프로세스 내에서 Python 인터프리터는 한 시점에 하나의 쓰레드에 의해서만 실행될 수 있습니다. 멀티 쓰레딩이 불가능하다는 것이 아니나, 원래 멀티 코어라면 멀티 쓰레딩 시에 여러 개의 쓰레드가 여러 코어 상에서 병렬실행될 수 있는데, Python에서는 그러한 병렬 실행이 불가능하다는 것입니다. 간단하게 설명을 해보자면, 3개의 쓰레드를 통해 작업을 한다고 가정했을 때 하나의 쓰레드에 모든 자원을 허락하고 그 후에는 Lock을 걸어 다른 스레드는 실행할 수 없게 막아버림으로써, 각각의 쓰레드는 GIL을 얻고 동작하지만 이 때 다른 쓰레드는 모두 동작을 멈추게 됩니다. 이를 그림으로 나타내면 다음과 같습니다. 🔎 그럼 GIL이 왜 생긴걸까? Python에서 모든 것은 객체(Object)입니다. 그리고 각 객체는 Reference Count를 저장하기 위한 필드를 가지고 있습니다. Reference Count란 그 객체를 가리키는 Reference가 몇 개 존재하는지를 나타내는 것으로, Python에서의 GC(Garbage Collection)는 이러한 Reference Count가 0이 되면 해당 객체를 메모리에서 삭제시키는 메커니즘으로 동작하고 있습니다. 따라서 파이썬의 모든 객체는 Reference count, 즉 해당 변수가 참조된 수를 저장하고 있습니다. 여기서 문제가 발생하게 되는데, 멀티 쓰레드인 경우 여러 쓰레드가 하나의 객체를 사용한다면 Reference count를 관리하기 위해서 모든 객체에 대한 lock이 필요할 것입니다. 이러한 비효율을 막기 위해서 Python에서 GIL을 사용하게 되었습니다. 그 당시 GIL을 선택해야 했던 이유는 🌎What Is the Python Global Interpreter Lock (GIL)? 에서 찾을 수 있었습니다. Python has been around since the days when operating systems did not have a concept of threads. Python was designed to be easy-to-use in order to make development quicker and more and more developers started using it. A lot of extensions were being written for the existing C libraries whose features were needed in Python. To prevent inconsistent changes, these C extensions required a thread-safe memory management which the GIL provided. The GIL is simple to implement and was easily added to Python. It provides a performance increase to single-threaded programs as only one lock needs to be managed. C libraries that were not thread-safe became easier to integrate. And these C extensions became one of the reasons why Python was readily adopted by different communities. As you can see, the GIL was a pragmatic solution to a difficult problem that the CPython developers faced early on in Python’s life. 📚 그렇다면 Python 멀티쓰레딩은 무조건 느릴까? CPU 연산의 비중이 큰 작업을 할 때, Context Switching으로 인해 괜한 Cost만 잡아먹기 때문에 멀티 쓰레딩은 오히려 성능을 떨어뜨리게 됩니다. 하지만 I/O, Sleep 등의 외부 연산을 하느라 CPU가 아무것도 하지 않고 기다리기만 할 때는 다른 쓰레드로 Context Switching을 하게 됩니다. 그러한 이유로 CPU 연산의 비중이 적은 I/O, Sleep 등의 외부 연산 같이 비중이 큰 작업을 할 때는 멀티 쓰레딩이 굉장히 좋은 성능을 보여주게 됩니다. 즉, Python 멀티쓰레딩은 무조건 느리다라는 말은 맞는 말이 아닙니다. 다음 예시를 통해 설명이 가능합니다. 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 import random import threading import time def working(): time.sleep(1) max([random.random() for i in range(10000000)]) time.sleep(1) max([random.random() for i in range(10000000)]) time.sleep(1) # Single Thread s_time = time.time() working() working() e_time = time.time() print(f&#39;{e_time - s_time:.5f}&#39;) # Multi Thread s_time = time.time() threads = [] for i in range(2): threads.append(threading.Thread(target=working)) threads[-1].start() for t in threads: t.join() e_time = time.time() print(f&#39;{e_time - s_time:.5f}&#39;) 아래와 같이 확연한 차이를 볼 수 있습니다. 1 2 3 4 5 Single Thread -&gt; 10.77272 Multi Thread -&gt; 7.17564 Single Thread는 sleep으로 인해 아무 것도 못하고 동작을 대기하게 되고, Multi Thread는 sleep으로 멈춘 상태에서 다른 스레드로 Context Switching하여 Single Thread의 효율을 개선하게 됩니다. 끝맺음 Python으로 작업하는 개발자의 입장으로써 지금까지는 GIL로 인한 불편한점은 느낄 수 없었습니다. 하지만 뜻하지 않은 계기로 오랜만에 다시 GIL(Global Interpreter Lock)을 공부하게 되었는데, GIL에 대한 역사와 Python의 GC에 대해 충분히 이해할 수 있었던것 만으로도 매우 의미있는 시간이었다고 생각합니다.😊 [참고자료] 파이썬은 인터프리터언어입니까? 파이썬이 마침내 ‘GIL’을 제거할 수 있을까? Python 위키 왜 Python에는 GIL이 있는가 Davie Beazley의 Understanding the Python GIL","url":"http://localhost:4000/liampoet.github.io/python-gil/","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    
+<link href="/liampoet.github.io/assets/css/screen.css" rel="stylesheet">
+
+<link href="/liampoet.github.io/assets/css/main.css" rel="stylesheet">
+
+<script src="/liampoet.github.io/assets/js/jquery.min.js"></script>
+
+</head>
+
+
+
+
+<body class="layout-post">
+	<!-- defer loading of font and font awesome -->
+	<noscript id="deferred-styles">
+		<link href="https://fonts.googleapis.com/css?family=Righteous%7CMerriweather:300,300i,400,400i,700,700i" rel="stylesheet">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+	</noscript>
+
+
+<!-- Begin Menu Navigation
+================================================== -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top mediumnavigation nav-down">
+
+    <div class="container pr-0">
+
+    <!-- Begin Logo -->
+    <a class="navbar-brand" href="/liampoet.github.io/">
+    <img src="/liampoet.github.io/assets/images/logo.png" alt="Liam">
+    </a>
+    <!-- End Logo -->
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMediumish" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarMediumish">
+
+        <!-- Begin Menu -->
+
+            <ul class="navbar-nav ml-auto">
+
+                
+                <li class="nav-item">
+                
+                <a class="nav-link" href="/liampoet.github.io/index.html">Blog</a>
+                </li>
+
+                <li class="nav-item">
+                <a class="nav-link" href="/liampoet.github.io/about">About</a>
+                </li>
+
+                <li class="nav-item">
+                <a target="_blank" class="nav-link" href="https://github.com/liampoet"><i class="fab fa-github"></i> Github</a>
+                </li>
+
+                <script src="/liampoet.github.io/assets/js/lunr.js"></script>
+
+
+<style>
+    .lunrsearchresult .title {color: #d9230f;}
+    .lunrsearchresult .url {color: silver;}
+    .lunrsearchresult a {display: block; color: #777;}
+    .lunrsearchresult a:hover, .lunrsearchresult a:focus {text-decoration: none;}
+    .lunrsearchresult a:hover .title {text-decoration: underline;}
+</style>
+
+
+<form class="bd-search" onSubmit="return lunr_search(document.getElementById('lunrsearch').value);">
+    <input type="text" class="form-control text-small launch-modal-search" id="lunrsearch" name="q" maxlength="255" value="" placeholder="Type and enter..."/>
+</form>
+
+<div id="lunrsearchresults">
+    <ul></ul>
+</div>
+
+<script src="/liampoet.github.io/assets/js/lunrsearchengine.js"></script>
+
+            </ul>
+
+        <!-- End Menu -->
+
+    </div>
+
+    </div>
+</nav>
+<!-- End Navigation
+================================================== -->
+
+<div class="site-content">
+
+<div class="container">
+
+<!-- Site Title
+================================================== -->
+<div class="mainheading">
+    <h1 class="sitetitle">Liam</h1>
+    <p class="lead">
+        Hello! I'm Liam 👋I'm a developer working at ./-
+    </p>
+</div>
+
+<!-- Content
+================================================== -->
+<div class="main-content">
+    <!-- Begin Article
+================================================== -->
+<div class="container">
+    <div class="row">
+
+        <!-- Post Share -->
+        <div class="col-md-2 pl-0">
+            <div class="share sticky-top sticky-top-offset">
+    <p>
+        Share
+    </p>
+    <ul>
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://twitter.com/intent/tweet?text=Python GIL, Global interpreter Lock&url=http://localhost:4000/liampoet.github.io/python-gil/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fab fa-twitter"></i>
+            </a>
+        </li>
+
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://facebook.com/sharer.php?u=http://localhost:4000/liampoet.github.io/python-gil/" onclick="window.open(this.href, 'facebook-share', 'width=550,height=435');return false;">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+        </li>
+
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/liampoet.github.io/python-gil/" onclick="window.open(this.href, 'width=550,height=435');return false;">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+        </li>
+
+    </ul>
+    
+    <div class="sep">
+    </div>
+    <ul>
+        <li>
+        <a class="small smoothscroll" href="#disqus_thread"></a>
+        </li>
+    </ul>
+    
+</div>
+
+        </div>
+
+        <!-- Post -->
+        
+
+        <div class="col-md-9 flex-first flex-md-unordered">
+            <div class="mainheading">
+
+                <!-- Author Box -->
+                
+                <div class="row post-top-meta">
+                    <div class="col-xs-12 col-md-3 col-lg-2 text-center text-md-left mb-4 mb-md-0">
+                        
+                        <img class="author-thumb" src="https://www.gravatar.com/avatar/341e587e52b4402086ddb8d2ffc9e48b?s=250&d=mm&r=x" alt="Liam">
+                        
+                    </div>
+                    <div class="col-xs-12 col-md-9 col-lg-10 text-center text-md-left">
+                        <a target="_blank" class="link-dark" href="https://www.linkedin.com/in/kwongmin-lim-32b828247/">Liam</a><a target="_blank" href="" class="btn follow">Follow</a>
+                        <span class="author-description">공부하는 중입니다.🥸</span>
+                    </div>
+                </div>
+                
+
+                <!-- Post Title -->
+                <h1 class="posttitle">Python GIL, Global interpreter Lock</h1>
+
+            </div>
+
+            <!-- Adsense if enabled from _config.yml (change your pub id and slot) -->
+            
+            <!-- End Adsense -->
+
+            <!-- Post Featured Image -->
+            
+
+            
+            <img class="featured-image img-fluid lazyimg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAACCAQAAAA3fa6RAAAADklEQVR42mNkAANGCAUAACMAA2w/AMgAAAAASUVORK5CYII=" data-src="/liampoet.github.io/assets/images/gil/GIL1.png" alt="Python GIL, Global interpreter Lock">
+            
+
+            
+            <!-- End Featured Image -->
+
+            <!-- Post Content -->
+            <div class="article-post">
+                <!-- Toc if any -->
+                
+                <!-- End Toc -->
+                <p><br />
+<br /></p>
+
+<h2 id="-intro">💡 Intro</h2>
+
+<p>오늘은 Python의 가장 큰 특징중 하나인 GIL(Global interpreter Lock)에 대해 알아보려고 합니다. Python을 사용하는 개발자라면 누구나 다 한번쯤은 들어봤을 것이고, 저 또한 GIL에 대해 공부해 본적이 있지만 다시 한번 정리해 보려고 합니다.</p>
+
+<p><br />
+<br /></p>
+
+<h2 id="-python-인터프리터란">🔎 Python 인터프리터란?</h2>
+
+<p>우선 GIL이란 Global Interpreter Lock의 약자로 파이썬 인터프리터가 한 쓰레드만이 하나의 바이트코드를 실행 시킬 수 있도록 해주는 Lock입니다. 즉, Python 인터프리터는 한 번에 한 쓰레드만 실행될 수 있다는 것을 의미합니다.</p>
+
+<p><br /></p>
+
+<p>그렇다면 파이썬 인터프리터란 무엇일까요? Python 인터프리터란, Python으로 작성된 코드를 한 줄씩 읽으면서 실행하는 프로그램을 뜻 합니다. Python 인터프리터에 대한 자세한 내용은 <a href="https://soooprmx.com/%ED%8C%8C%EC%9D%B4%EC%8D%AC%EC%9D%80-%EC%9D%B8%ED%84%B0%ED%94%84%EB%A6%AC%ED%84%B0%EC%96%B8%EC%96%B4%EC%9E%85%EB%8B%88%EA%B9%8C/">파이썬은 인터프리터언어입니까?</a> 블로그에서 조금 더 심도깊게 생각해보실 수 있습니다.</p>
+
+<p><br />
+<br /></p>
+
+<h2 id="-gilglobal-interpreter-lock">🔎 GIL(Global Interpreter Lock)</h2>
+
+<p>GIL (Global Interpreter Lock)을 🌎<a href="https://wiki.python.org/moin/GlobalInterpreterLock">Python 위키</a>에서는 다음과 같이 정의하고 있습니다.</p>
+
+<blockquote>
+  <p>In CPython, the <strong>global interpreter lock</strong>, or <strong>GIL</strong>, is a mutex that protects access to Python objects, preventing multiple threads from executing Python bytecodes at once. The GIL prevents race conditions and ensures thread safety. A nice explanation of 🌎<a href="https://python.land/python-concurrency/the-python-gil">how the Python GIL helps in these areas can be found here</a>. In short, this mutex is necessary mainly because CPython’s memory management is not thread-safe.</p>
+</blockquote>
+
+<p><br /></p>
+
+<p>해석을 해보면, Python의 객체들에 대한 접근을 보호하는 일종의 Mutex로서 여러 개의 쓰레드가 파이썬 코드를 동시에 실행하지 못하도록 하는 것을 의미합니다. 즉, 한 프로세스 내에서 Python 인터프리터는 한 시점에 하나의 쓰레드에 의해서만 실행될 수 있습니다. 멀티 쓰레딩이 불가능하다는 것이 아니나, 원래 멀티 코어라면 멀티 쓰레딩 시에 여러 개의 쓰레드가 여러 코어 상에서 병렬실행될 수 있는데, Python에서는 그러한 병렬 실행이 불가능하다는 것입니다.</p>
+
+<p><br /></p>
+
+<p>간단하게 설명을 해보자면, 3개의 쓰레드를 통해 작업을 한다고 가정했을 때 하나의 쓰레드에 모든 자원을 허락하고 그 후에는 Lock을 걸어 다른 스레드는 실행할 수 없게 막아버림으로써, 각각의 쓰레드는 GIL을 얻고 동작하지만 이 때 다른 쓰레드는 모두 동작을 멈추게 됩니다. 이를 그림으로 나타내면 다음과 같습니다.</p>
+
+<p><br /></p>
+
+<p><img src="/liampoet.github.io/assets/images/gil/GIL1.png" alt="GIL1.png" /></p>
+
+<p><br />
+<br /></p>
+
+<h2 id="-그럼-gil이-왜-생긴걸까">🔎 그럼 GIL이 왜 생긴걸까?</h2>
+
+<p>Python에서 모든 것은 객체(Object)입니다. 그리고 각 객체는 Reference Count를 저장하기 위한 필드를 가지고 있습니다.</p>
+<blockquote>
+  <p>Reference Count란 그 객체를 가리키는 Reference가 몇 개 존재하는지를 나타내는 것으로, Python에서의 GC(Garbage Collection)는 이러한 Reference Count가 0이 되면 해당 객체를 메모리에서 삭제시키는 메커니즘으로 동작하고 있습니다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<p>따라서 파이썬의 모든 객체는 Reference count, 즉 해당 변수가 참조된 수를 저장하고 있습니다. 여기서 문제가 발생하게 되는데, 멀티 쓰레드인 경우 여러 쓰레드가 하나의 객체를 사용한다면 Reference count를 관리하기 위해서 모든 객체에 대한 lock이 필요할 것입니다.</p>
+
+<p><br /></p>
+
+<p>이러한 비효율을 막기 위해서 Python에서 GIL을 사용하게 되었습니다. 그 당시 GIL을 선택해야 했던 이유는 🌎<a href="https://realpython.com/python-gil/">What Is the Python Global Interpreter Lock (GIL)?</a> 에서 찾을 수 있었습니다.</p>
+
+<blockquote>
+  <p>Python has been around since the days when operating systems did not have a concept of threads. Python was designed to be easy-to-use in order to make development quicker and more and more developers started using it. A lot of extensions were being written for the existing C libraries whose features were needed in Python. To prevent inconsistent changes, these C extensions required a thread-safe memory management which the GIL provided. The GIL is simple to implement and was easily added to Python. It provides a performance increase to single-threaded programs as only one lock needs to be managed. C libraries that were not thread-safe became easier to integrate. And these C extensions became one of the reasons why Python was readily adopted by different communities. As you can see, the GIL was a pragmatic solution to a difficult problem that the CPython developers faced early on in Python’s life.</p>
+</blockquote>
+
+<p><br />
+<br /></p>
+
+<h2 id="-그렇다면-python-멀티쓰레딩은-무조건-느릴까">📚 그렇다면 Python 멀티쓰레딩은 무조건 느릴까?</h2>
+
+<p>CPU 연산의 비중이 큰 작업을 할 때, Context Switching으로 인해 괜한 Cost만 잡아먹기 때문에 멀티 쓰레딩은 오히려 성능을 떨어뜨리게 됩니다. 하지만 I/O, Sleep 등의 외부 연산을 하느라 CPU가 아무것도 하지 않고 기다리기만 할 때는 다른 쓰레드로 Context Switching을 하게 됩니다.</p>
+
+<p><br /></p>
+
+<p>그러한 이유로 CPU 연산의 비중이 적은 I/O, Sleep 등의 외부 연산 같이 비중이 큰 작업을 할 때는 멀티 쓰레딩이 굉장히 좋은 성능을 보여주게 됩니다. 즉, <strong>Python 멀티쓰레딩은 무조건 느리다라는 말은 맞는 말이 아닙니다.</strong> 다음 예시를 통해 설명이 가능합니다.</p>
+
+<p><br /></p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+</pre></td><td class="rouge-code"><pre>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+
+<span class="k">def</span> <span class="nf">working</span><span class="p">():</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="nb">max</span><span class="p">([</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10000000</span><span class="p">)])</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="nb">max</span><span class="p">([</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10000000</span><span class="p">)])</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="c1"># Single Thread
+</span><span class="n">s_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">working</span><span class="p">()</span>
+<span class="n">working</span><span class="p">()</span>
+<span class="n">e_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">'{e_time - s_time:.5f}'</span><span class="p">)</span>
+
+
+<span class="c1"># Multi Thread
+</span><span class="n">s_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">threads</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">threads</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">working</span><span class="p">))</span>
+    <span class="n">threads</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+<span class="n">e_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s">'{e_time - s_time:.5f}'</span><span class="p">)</span>
+
+
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><br /></p>
+
+<p>아래와 같이 확연한 차이를 볼 수 있습니다.</p>
+
+<p><br /></p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre>
+<span class="n">Single</span> <span class="n">Thread</span> <span class="o">-&gt;</span> <span class="mf">10.77272</span>
+<span class="n">Multi</span> <span class="n">Thread</span> <span class="o">-&gt;</span> <span class="mf">7.17564</span>
+
+
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><br /></p>
+
+<p>Single Thread는 <code class="highlighter-rouge">sleep</code>으로 인해 <em>아무 것도 못하고 동작을 대기</em>하게 되고, Multi Thread는 <code class="highlighter-rouge">sleep</code>으로 멈춘 상태에서 다른 스레드로 <em>Context Switching하여 Single Thread의 효율을 개선</em>하게 됩니다.</p>
+
+<p><br />
+<br /></p>
+
+<blockquote>
+  <p>끝맺음
+Python으로 작업하는 개발자의 입장으로써 지금까지는 GIL로 인한 불편한점은 느낄 수 없었습니다. 하지만 뜻하지 않은 계기로 오랜만에 다시 GIL(Global Interpreter Lock)을 공부하게 되었는데, GIL에 대한 역사와 Python의 GC에 대해 충분히 이해할 수 있었던것 만으로도 매우 의미있는 시간이었다고 생각합니다.😊</p>
+</blockquote>
+
+<p><br />
+<br /></p>
+
+<p><strong>[참고자료]</strong></p>
+<ul>
+  <li><a href="https://soooprmx.com/%ED%8C%8C%EC%9D%B4%EC%8D%AC%EC%9D%80-%EC%9D%B8%ED%84%B0%ED%94%84%EB%A6%AC%ED%84%B0%EC%96%B8%EC%96%B4%EC%9E%85%EB%8B%88%EA%B9%8C/">파이썬은 인터프리터언어입니까?</a></li>
+  <li><a href="https://www.ciokorea.com/news/210764">파이썬이 마침내 ‘GIL’을 제거할 수 있을까?</a></li>
+  <li><a href="https://soooprmx.com/%ED%8C%8C%EC%9D%B4%EC%8D%AC%EC%9D%80-%EC%9D%B8%ED%84%B0%ED%94%84%EB%A6%AC%ED%84%B0%EC%96%B8%EC%96%B4%EC%9E%85%EB%8B%88%EA%B9%8C/">Python 위키</a></li>
+  <li><a href="https://dgkim5360.tistory.com/entry/understanding-the-global-interpreter-lock-of-cpython">왜 Python에는 GIL이 있는가</a></li>
+  <li><a href="http://www.dabeaz.com/python/UnderstandingGIL.pdf">Davie Beazley의 Understanding the Python GIL</a></li>
+</ul>
+
+            </div>
+
+            <!-- Rating -->
+            
+
+            <!-- Post Date -->
+            <p>
+            <small>
+                <span class="post-date"><time class="post-date" datetime="2022-06-16">16 Jun 2022</time></span>           
+                
+                </small>
+            </p>
+
+            <!-- Post Categories -->
+            <div class="after-post-cats">
+                <ul class="tags mb-4">
+                    
+                    
+                    <li>
+                        <a class="smoothscroll" href="/liampoet.github.io/categories#Python">Python</a>
+                    </li>
+                    
+                </ul>
+            </div>
+            <!-- End Categories -->
+
+            <!-- Post Tags -->
+            <div class="after-post-tags">
+                <ul class="tags">
+                    
+                    
+                </ul>
+            </div>
+            <!-- End Tags -->
+
+            <!-- Prev/Next -->
+            <div class="row PageNavigation d-flex justify-content-between font-weight-bold">
+            
+            <a class="prev d-block col-md-6" href="/liampoet.github.io//mysql-error1/"> &laquo; (문제해결)ERROR 1227 (42000) at line 18 - Access denied; you need (at least one of) the SUPER privilege(s) for this operation</a>
+            
+            
+            <a class="next d-block col-md-6 text-lg-right" href="/liampoet.github.io//mysql-error2/">(문제해결)You do not have the SUPER privilege and binary logging is enabled (you *might* want to use the less safe log_bin_trust_function_creators variable) &raquo; </a>
+            
+            <div class="clearfix"></div>
+            </div>
+            <!-- End Categories -->
+
+        </div>
+        <!-- End Post -->
+
+    </div>
+</div>
+<!-- End Article
+================================================== -->
+
+<!-- Begin Comments
+================================================== -->
+
+    <div class="container">
+        <div id="comments" class="row justify-content-center mb-5">
+            <div class="col-md-8">
+                <section class="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'demowebsite'; 
+        var disqus_developer = 0;
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = window.location.protocol + '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+            </div>
+        </div>
+    </div>
+
+<!--End Comments
+================================================== -->
+
+<!-- Review with LD-JSON, adapt it for your needs if you like, but make sure you test the generated HTML source code first: 
+https://search.google.com/structured-data/testing-tool/u/0/
+================================================== -->
+
+</div>
+
+
+<!-- Bottom Alert Bar
+================================================== -->
+<div class="alertbar">
+	<div class="container text-center">
+		<span><img src="/liampoet.github.io/assets/images/logo.png" alt="LiamCoding"> &nbsp; Never miss a <b>story</b> from us, subscribe to our newsletter</span>
+        <form action="https://wowthemes.us11.list-manage.com/subscribe/post?u=8aeb20a530e124561927d3bd8&amp;id=8c3d2d214b" method="post" name="mc-embedded-subscribe-form" class="wj-contact-form validate" target="_blank" novalidate>
+            <div class="mc-field-group">
+            <input type="email" placeholder="Email" name="EMAIL" class="required email" id="mce-EMAIL" autocomplete="on" required>
+            <input type="submit" value="Subscribe" name="subscribe" class="heart">
+            </div>
+        </form>
+	</div>
+</div>
+
+    
+</div>
+
+<!-- Categories Jumbotron
+================================================== -->
+<div class="jumbotron fortags">
+	<div class="d-md-flex h-100">
+		<div class="col-md-4 transpdark align-self-center text-center h-100">
+            <div class="d-md-flex align-items-center justify-content-center h-100">
+                <h2 class="d-md-block align-self-center py-1 font-weight-light">Explore <span class="d-none d-md-inline">→</span></h2>
+            </div>
+		</div>
+		<div class="col-md-8 p-5 align-self-center text-center">
+            
+            
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#AWS">AWS (7)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Python">Python (6)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Bootpay">Bootpay (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#FastAPI">FastAPI (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#AWS-Lambda">AWS Lambda (3)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#EventBridge">EventBridge (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Aamazon-Cloudwatch">Aamazon Cloudwatch (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Javascript">Javascript (3)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#jQuery">jQuery (3)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#MySQL">MySQL (4)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#HTML">HTML (2)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Json">Json (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Postman">Postman (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#AWS-RDS">AWS RDS (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Interview">Interview (3)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Docker">Docker (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#K8S">K8S (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#ALB">ALB (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#CDN">CDN (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Diary">Diary (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Kafka">Kafka (1)</a>
+                
+            
+            
+		</div>
+	</div>
+</div>
+
+<!-- Begin Footer
+================================================== -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 text-center text-lg-left">
+                Copyright © 2022 Liam 
+            </div>
+            <div class="col-md-6 col-sm-6 text-center text-lg-right">    
+                <a target="_blank" href="https://www.wowthemes.net/mediumish-free-jekyll-template/">Mediumish Jekyll Theme</a> by WowThemes.net
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- End Footer
+================================================== -->
+
+</div> <!-- /.site-content -->
+
+<!-- Scripts
+================================================== -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+<script src="/liampoet.github.io/assets/js/mediumish.js"></script>
+
+
+<script src="/liampoet.github.io/assets/js/lazyload.js"></script>
+
+
+<script src="/liampoet.github.io/assets/js/ie10-viewport-bug-workaround.js"></script> 
+
+
+<script id="dsq-count-scr" src="//demowebsite.disqus.com/count.js"></script>
+
+
+</body>
+</html>

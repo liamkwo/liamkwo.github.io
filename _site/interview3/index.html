@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="icon" href="/liampoet.github.io/assets/images/logo.png">
+
+<title>신입 백앤드 개발자를 위한 면접 질문 정리 - 기타(공통, 인프라/클라우드(AWS), 컨테이너) | Liam</title>
+
+<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>신입 백앤드 개발자를 위한 면접 질문 정리 - 기타(공통, 인프라/클라우드(AWS), 컨테이너) | LiamCoding</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="신입 백앤드 개발자를 위한 면접 질문 정리 - 기타(공통, 인프라/클라우드(AWS), 컨테이너)" />
+<meta name="author" content="Liam" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="💡 Intro 신입 백앤드 개발자를 위한 면접 질문 정리 - 기타(공통, 인프라/클라우드(AWS), 컨테이너) 에서는 프로그래밍 공통 질문과 트러블 슈팅, 인프라/클라우드, 컨테이너 등에 대한 면접 질문을 다루어 보려고 합니다. 🔎 개발 면접 질문 - 공통 1. DevOps란 무엇인가요? 데브옵스(Dev(개발) Ops(운영))란, 애플리케이션 개발-운영 간의 협업 프로세스를 자동화하는 것을 말하는 개발 방법론 이며, 결과적으로 애플리케이션의 개발과 개선 속도를 빠르게 합니다. 과거 새로운 서비스를 출시하기 위해서 오랜기간 작업 후 배포했던 것과 달리, 현재는 서비스 출시 속도가 다르고 업데이트 주기 또한 빈번해 졌습니다. 때문에 개발된 소프트웨어가 시스템의 안정성을 유지하면서 사용자에게 빠르게 제공될 수 있도록 업무 사이클을 자동화 시킬 수 있도록 하는 데브옵스와 같은 개발 방법론이 등장 했습니다. 2. CI/CD란 무엇인가요? 적용해 본 적이있다면 설명해 주세요. CI(Continuous Integration)/CD(Continuous Deployment)란, 서비스 빌드부터 배포까지 애플리케이션 개발 단계를 자동화 하는 과정입니다. 예를 들어 Github으로 코드를 커밋하고 Jenkins가 자동으로 빌드하도록 설계해본 경험 등에 대해 설명하면 될 것 같습니다. CI/CD에 대한 경험이 부족하거나 깊이 있게 공부하고 싶으면 🌎CI/CD가 뭔가요? 이론편과, 🌎CI/CD가 뭔가요? 실전편에서 자세하게 다루어 볼 수 있습니다. 3. Test Code에 대해서 알고 계신가요? 그렇다면 왜 작성해야 할까요? 테스트 코드란 내가 작성한 메서드가 실제로 제대로 동작하는지에 대해 테스트를 하는 코드입니다. 테스트 코드는 잘 작동하고, 깔끔한 코드를 얻기 위해서 작성합니다. 필자의 예시 : 저는 테스트 코드에 대해 잘 알지 못할 때 코드를 배포하기 전, 코드 수정 -&gt; 서버동작 -&gt; 테스트에 필요한 데이터를 DB에 입력 -&gt; 테스트 -&gt; DB 데이터 정리 -&gt; 과정 반복등의 단계를 겪었습니다. 그 후 테스트 코드를 알고 나서 코드 수정 -&gt; 테스트 코드 실행 -&gt; 결과 확인 정도로 많은 시간을 절약할 수 있었습니다. 이러한 테스트 코드의 장점은 시간절약, 문서로서의 역할 가능(보통 값이 주어짐(given), 무엇을 했을 때(when) 어떤 값을 원함(then)의 구조이기 때문에 가독성이 뛰어남), 깔끔한 인터페이스등이 있습니다. 4. TDD(Test-Driven Development)에 대해 설명해 주세요. TDD란 작은 단위의 테스트 케이스를 작성하고 그에 맞는 코드를 작성하여 테스트를 통과한 후에 상황에 맞게 리팩토링하는 테스트 주도 개발 방식을 말합니다. 레드 그린 사이클이라는 3가지 과정을 거치는데, Red - 항상 실패하는 테스트를 먼저 작성하고, Green - 테스트가 통과하는 프로덕션 코드를 작성한 후, Refactor - 작성한 프로덕션 코드를 깨끗하고 가독성 좋게 리펙토링합니다. 5. DDD(Domain-Driven Design)에 대해 설명해 주세요. DDD란, 각 비즈니스 도메인이 중심이 되어 진행하는 개발 방식으로 소프트웨어의 연관된 부분들을 연결하여 계속해서 진화하는 새로운 모델을 만들어나가 복잡한 애플리케이션을 만드는 것을 쉽게 해주는 것에 있습니다. 도메인 전문가와 IT 개발자 간의 커뮤니케이션과 협업을 통해서 모델을 발전시키는 것을 추구합니다. 쇼핑몰을 예로 들면 손님들이 주문하는 도메인, 점주들이 관리하는 도메인 등이 있을 수 있습니다. 이러한 도메인들이 서로 상호작용하며 설계하는 것이 도메인 주도 설계입니다. 이미지 1. DDD(Domain-Driven Design) 6. Monolithic Architecture와 MSA(Microservice Architecture)의 차이점에 대해 설명해 주세요. 모놀리식 아키텍쳐는 모든 시스템의 구성요소가 한 프로젝트에 통합되어 있는 하나의 통합된 패키지로 개발하는 방식입니다. 반면에, 마이크로 서비스는 1개의 시스템을 독립적으로 배포가능한 각각의 서비스로 분할하는 개별 서비스 단위로 개발하는 방식입니다. 때문에 마이크로 서비스는 개별 서비스 단위로 나뉘어져 있어서 해당 부분만 수정 또는 배포하기 좋고, 필요한 부분만 확장하기에도 용이하다는 장점이 있습니다. 이미지 2. MSA(Microservice Architecture) 7. 트러블슈팅(troubleshooting)을 경험해 보셨나요? 개발을 하면서 발생한 문제를 어떻게 해결했는지, 원인 규명 -&gt; 사실 정리 -&gt; 원인 추론 -&gt; 조치 및 방안 검토 -&gt; 해결 과정을 차근차근 설명하시면 될 것같습니다. 추가로 알게 된 개념 혹은 방법을 곁들여서 함께 설명할 수 있으면 더 좋을 것 같습니다. 🔎 개발 면접 질문 - 컨테이너 1. Docker에 대해 설명해 주세요. 도커는 컨테이너 기술을 기반으로한 가상화 플랫폼입니다. 기존의 가상화는 하드웨어를 가상화하여 무거운데다, 반드시 하이퍼바이저를 거쳐야 하기 때문에 속도 저하가 발생했습니다. 이러한 이유로 베이스 환경의 OS를 공유하면서 필요한 프로세스만 격리시킨 컨테이너를 통해 가상화를 하는 Docker같은 기술이 등장했습니다. 이미지 3. VM과 Docker의 차이 가상 머신을 생성하기 위해서는 하이퍼바이저 또는 가상 머신 모니터라고 불리는 소프트웨어를 이용합니다. 하이퍼바이저는 호스트 하드웨어에 설치되어 호스트와 게스트를 나누는 역할을 하고, 각각의 게스트는 하이퍼바이저에 의해 관리되며 시스템 자원을 할당받게 됩니다. 하이퍼바이저와 달리 컨테이너는 가상의 OS를 만드는 것이 아닙니다. 컨테이너는 베이스 환경의 OS를 공유하면서 필요한 프로세스만 격리하는 방식으로, 커널을 공유하기 때문에 호스트 OS의 기능을 모두 사용할 수 있습니다. 그렇기 때문에 컨테이너 위에서는 호스트 OS와 다른 OS를 구동할 수 없습니다. 대신 격리시킬 애플리케이션과 거기에 필요한 파일이나 특정 라이브러리 등 종속 항목만 포함하기 때문에 배포를 위해 생성되는 이미지의 용량이 작아진다는 장점이 있습니다. 운영체제가 아닌 프로세스이며, 하이퍼바이저를 거칠 필요가 없어 실행 속도가 빠르기도 합니다. 2. Dockerfile, Docker-Compose, Docker Image와 Container의 차이, Docker Hub Dockerfile : Dockerfile은 이미지를 생성하기 위한 용도로 컨테이너에 설치해야하는 패키지, 소스코드, 명령어, 환경변수설정 등을 기록한 하나의 파일 Docker-Compose : 여러 컨테이너들을 한 번에 관리를 할 수있게 도와주는 파일 Docker Image와 Container의 차이 : 서비스 운영에 필요한 서버 프로그램, 소스코드 및 라이브러리, 컴파일된 실행 파일을 묶은 것을 Docker image라 하며, Image를 실행한 상태를 Container라고 함 Docker Hub : Docker에서 운영하는 Docker 이미지 저장소 서비스 3. k8s(Kubernetes)에 대해서 설명해 주세요. 쿠버네티스(Kubernetes)란, 컨테이너화된 애플리케이션의 배포, 확장 및 관리를 자동화하는 오픈 소스 시스템입니다. 3-1. 쿠버네티스 클러스터의 기본 아키텍처에 대해 설명해 주세요. 3-2. 쿠버네티스에서 Auto Scaling의 원리에 대해 설명해 주세요. 아직 k8s에 대해 익숙하지 않아서 열심히 공부하는 중입니다;ㅅ;. 🌎kubernetes 공식 문서에서 깊이 있게 공부하실 수 있습니다. 🔎 개발 면접 질문 - 인프라/클라우드 **1. AWS 인프라를 구축해본 경험에 대해 설명해 주세요.&lt;/Font&gt;** AWS를 사용해본 경험에 대하여 설명해 주시면 될 것 같습니다. **2. 서버리스(Serverless)란 무엇인가요?&lt;/Font&gt;** 서버리스 컴퓨팅(Serverless Computing)이란 IT 인프라를 데이터센터 또는 클라우드에 준비 없이 필요한 기능을 함수로 구현해서 관리하는 것을 의미 합니다. 추가로 서버리스 컴퓨팅을 사용해본 경험에 대해 질문이 들어온다면, AWS Lambda와 같은 서버리스 컴퓨팅 플랫폼을 사용해본 경험에 대해 설명하시면 될 것 같습니다. 서버리스 컴퓨팅은 IT 인프라를 데이터센터 또는 클라우드에 준비 없이, 필요한 기능을 함수(Function) 형태로 구현하고, 자동 스케일링 방식으로 시시각각 변하는 자원 수요를 지원하며 전통적인 백엔드를 대신합니다. 따라서 서버리스 컴퓨팅을 FaaS(Function as a Service) 라고도 하고 백엔드 시스템을 보이지 않는 서비스로 추상화하였기 때문에 BaaS(Backend as a Service) 라고도 합니다. 이미지 4. 기술의 발전 **3. Amazon VPC(Amazon Virtual Private Cloud)란 무엇인가요?&lt;/Font&gt;** AWS 클라우드에서 다른 고객과 완벽하게 논리적으로 격리된 네트워크 공간을 제공하여 프로비저닝하여 가상 네트워크에서 AWS 리소스를 만드는데 사용하는 리소스입니다. 쉽게 풀어서 설명하자면, 자신이 사용할 AWS Resource들을 격리 되어진 하나의 네트워크로 묶는 서비스를 의미하며 격리되어 있기 때문에 다른 사람들은 접근하고 보는 것이 불가능해집니다. 만약, VPC 없이 인스턴스를 생성한다면 인스턴스끼리의 구분없는 연결로 인해 시스템 복잡도가 증가할 것이며, 인터넷을 통해 전달되는 트래픽의 전송이 굉장히 비효율적이게 될 것 입니다. VPC를 적용하면 인스턴스가 VPC에 속함으로써 네트워크를 구분할 수 있고, VPC 별로 필요한 설정을 통해 인스턴스에 네트워크 설정을 적용할 수 있습니다. AWS는 VPC의 중요성을 강조하여 2019년부터 거의 모든 서비스에 VPC를 적용하도록 강제하였습니다. **3-1. Amazon VPC에 따른 AWS Lambda의 상태에 대해 설명해주세요.&lt;/Font&gt;** VPC가 없는 상태 : 웹에 자유롭게 접속할 수 있지만, 로컬 네트워크로 AWS 서비스들과 연결할 수 없습니다. VPC가 있는 상태 : 기본적인 설정으로 로컬 네트워크에 연결이 가능하지만, 웹에는 접속할 수 없습니다. VPC와 NAT이 있는 상태 : AWS 서비스와 웹 둘 다 접속이 가능합니다. **3-2. NAT(Network Address Translation, 네트워크 주소 변환) Gateway란 무엇인가요?&lt;/Font&gt;** NAT(Network Address Translation, 네트워크 주소 변환) Gateway란, 외부 서비스에서 프라이빗 서브넷의 인스턴스로 접근할 수 없게 하되, 프라이빗 서브넷의 인스턴스에서는 외부 서비스로 접근할 수 있게 해주는 서비스 입니다. 이미지 5. NAT GW (Network Address Translation Gateway) **4. 만약 클라이언트의 수가 늘어나게 되면서 기존 서버만으로는 정상적인 서비스가 불가능하게 되었습니다. 이럴 때는 어떠한 방법이 있을까요?&lt;/Font&gt;** 증가한 트래픽에 대처할 수 있는 방법은 크게 서버 자체의 성능을 확장하는 Scale-up 방식과 서버를 여러대로 나눠서 트래픽을 처리하는 Scale-out의 방법이 있습니다. 또한, Scale-out의 방식은 여러 대의 서버로 트래픽을 균등하게 분산해주는 로드밸런싱이 반드시 필요합니다. **4-1. 로드 밸런서(Load Balancer)에 대해서 설명해 주세요.&lt;/Font&gt;** 로드 밸런서란, 서버에 가해지는 트래픽을 여러 대의 서버에게 균등하게 분산시켜주는 역할을 합니다. 또한, 여러 대의 서버 덕분에 무중단 서비스 제공할 수 있습니다. 로드 밸런싱의 종류와 알고리즘, 장애 대비 및 ELB(Elastic Load Balancer), ALB(Application Load Balancer), NLB(Network Load Balancer)에 대해서 미리 공부하고 가시는 것을 추천드립니다. 🌎[AWS] 로드 밸런서란?, Load Balancer 장애 대비 **5. 무중단 시스템으로 가기 위해 필요한 방법에 대한 본인의 생각을 말해주세요.&lt;/Font&gt;** 다운 타임이 발생하지 않도록 기본적으로 두 대 이상의 서버를 서비스해야 합니다. 비용 절감을 위해 배포할 때에만 새롭게 서비스를 띄우고, 배포가 완료된 후에는 기존 서버는 셧다운 시키면 될 것 같습니다. **6. Forward Proxy와 Reverse Proxy에 대해 설명해 주세요.&lt;/Font&gt;** Forward Proxy : 클라이언트에서 서버로 리소스를 요청할 때 직접 요청하지 않고 프록시 서버를 거쳐서 요청합니다. 특정 컨텐츠에 접근하는 것을 방지할 수 있으며, 유저의 정체를 숨겨줄 수도 있습니다. 이미지 6. Forward Proxy Reverse Proxy : 애플리케이션 서버의 앞에 위치하여 클라이언트가 서버를 요청할 때 리버스 프록시를 호출하고, 리버스 프록시가 서버로부터 응답을 전달받아 다시 클라이언트에게 전송하는 역할을 합니다. 로드 밸런싱(load balancing)에 사용되고 있으며, SSL 암호화와 보안에 좋다는 장점이 있습니다. NginX, Apache Web Server 등의 오픈 소스 소프트웨어에서 지원하고 CloudFlare, AWS CloudFront 같은 CDN 서비스도 마찬가지로 리버스 프록시 서버를 사용하고 있습니다. 이미지 7. Reverse Proxy **7. AWS 리전(Region)과 가용 영역(Availability Zone, AZ)에 대해 설명해 주세요.&lt;/Font&gt;** **8. Snapshot에 대해 설명해 주세요.&lt;/Font&gt;** **8-1. EC2 AMI(Amazon Machine Image)와 Snapshot의 차이점에 대해 설명해 주세요.&lt;/Font&gt;** 기본적으로 EBS(Elastic Block Store)를 백업한다는 점에서는 AMI(Amazon Machine Image)와 Snapshot은 동일하지만, AMI는 EC2 인스턴스에 연결되어 있는 모든 EBS Volume을 동시에 백업하는 것이라면 Snapshot 기능은 여러분들이 선택한 EBS Volume을 백업한다는 점에서 차이점이 있습니다. 또한 Snapshot은 AMI 주기적인 백업 기능을 제공해주지만, AMI는 제공하지 않습니다. 끝맺음 공부를 하면서 질문에 괜찮은 내용이 있으면 요약하면서 계속 추가하고 있습니다. 또한, 기본적인 이론에 대해 다시 공부를 하려고 정리한 내용이기 때문에 잘못된 부분들이 있을 수도 있습니다. 잘못된 정보가 보이거나, 부족한 내용, 추가되면 좋을 것 같은 내용이 있다면 댓글에 적어주시면 감사하겠습니다!😊 [참고자료] CI/CD가 뭔가요? 실전편, CI/CD가 뭔가요? 이론편 Domain Driven Design 이란 무엇인가? https://kubernetes.io/ko/docs/home/ [AWS] 로드 밸런서란? [Infra] 리버스 프록시(reverse proxy) 서버 개념 https://docs.aws.amazon.com/ko_kr/vpc/latest/userguide/what-is-amazon-vpc.html https://aws.amazon.com/ko/premiumsupport/knowledge-center/internet-access-lambda-function/ JIPA님 블로그 WS DevOps와 ECR을 통한 Elastic Beanstalk 배포 환경 구축 및 타 환경과의 비교" />
+<meta property="og:description" content="💡 Intro 신입 백앤드 개발자를 위한 면접 질문 정리 - 기타(공통, 인프라/클라우드(AWS), 컨테이너) 에서는 프로그래밍 공통 질문과 트러블 슈팅, 인프라/클라우드, 컨테이너 등에 대한 면접 질문을 다루어 보려고 합니다. 🔎 개발 면접 질문 - 공통 1. DevOps란 무엇인가요? 데브옵스(Dev(개발) Ops(운영))란, 애플리케이션 개발-운영 간의 협업 프로세스를 자동화하는 것을 말하는 개발 방법론 이며, 결과적으로 애플리케이션의 개발과 개선 속도를 빠르게 합니다. 과거 새로운 서비스를 출시하기 위해서 오랜기간 작업 후 배포했던 것과 달리, 현재는 서비스 출시 속도가 다르고 업데이트 주기 또한 빈번해 졌습니다. 때문에 개발된 소프트웨어가 시스템의 안정성을 유지하면서 사용자에게 빠르게 제공될 수 있도록 업무 사이클을 자동화 시킬 수 있도록 하는 데브옵스와 같은 개발 방법론이 등장 했습니다. 2. CI/CD란 무엇인가요? 적용해 본 적이있다면 설명해 주세요. CI(Continuous Integration)/CD(Continuous Deployment)란, 서비스 빌드부터 배포까지 애플리케이션 개발 단계를 자동화 하는 과정입니다. 예를 들어 Github으로 코드를 커밋하고 Jenkins가 자동으로 빌드하도록 설계해본 경험 등에 대해 설명하면 될 것 같습니다. CI/CD에 대한 경험이 부족하거나 깊이 있게 공부하고 싶으면 🌎CI/CD가 뭔가요? 이론편과, 🌎CI/CD가 뭔가요? 실전편에서 자세하게 다루어 볼 수 있습니다. 3. Test Code에 대해서 알고 계신가요? 그렇다면 왜 작성해야 할까요? 테스트 코드란 내가 작성한 메서드가 실제로 제대로 동작하는지에 대해 테스트를 하는 코드입니다. 테스트 코드는 잘 작동하고, 깔끔한 코드를 얻기 위해서 작성합니다. 필자의 예시 : 저는 테스트 코드에 대해 잘 알지 못할 때 코드를 배포하기 전, 코드 수정 -&gt; 서버동작 -&gt; 테스트에 필요한 데이터를 DB에 입력 -&gt; 테스트 -&gt; DB 데이터 정리 -&gt; 과정 반복등의 단계를 겪었습니다. 그 후 테스트 코드를 알고 나서 코드 수정 -&gt; 테스트 코드 실행 -&gt; 결과 확인 정도로 많은 시간을 절약할 수 있었습니다. 이러한 테스트 코드의 장점은 시간절약, 문서로서의 역할 가능(보통 값이 주어짐(given), 무엇을 했을 때(when) 어떤 값을 원함(then)의 구조이기 때문에 가독성이 뛰어남), 깔끔한 인터페이스등이 있습니다. 4. TDD(Test-Driven Development)에 대해 설명해 주세요. TDD란 작은 단위의 테스트 케이스를 작성하고 그에 맞는 코드를 작성하여 테스트를 통과한 후에 상황에 맞게 리팩토링하는 테스트 주도 개발 방식을 말합니다. 레드 그린 사이클이라는 3가지 과정을 거치는데, Red - 항상 실패하는 테스트를 먼저 작성하고, Green - 테스트가 통과하는 프로덕션 코드를 작성한 후, Refactor - 작성한 프로덕션 코드를 깨끗하고 가독성 좋게 리펙토링합니다. 5. DDD(Domain-Driven Design)에 대해 설명해 주세요. DDD란, 각 비즈니스 도메인이 중심이 되어 진행하는 개발 방식으로 소프트웨어의 연관된 부분들을 연결하여 계속해서 진화하는 새로운 모델을 만들어나가 복잡한 애플리케이션을 만드는 것을 쉽게 해주는 것에 있습니다. 도메인 전문가와 IT 개발자 간의 커뮤니케이션과 협업을 통해서 모델을 발전시키는 것을 추구합니다. 쇼핑몰을 예로 들면 손님들이 주문하는 도메인, 점주들이 관리하는 도메인 등이 있을 수 있습니다. 이러한 도메인들이 서로 상호작용하며 설계하는 것이 도메인 주도 설계입니다. 이미지 1. DDD(Domain-Driven Design) 6. Monolithic Architecture와 MSA(Microservice Architecture)의 차이점에 대해 설명해 주세요. 모놀리식 아키텍쳐는 모든 시스템의 구성요소가 한 프로젝트에 통합되어 있는 하나의 통합된 패키지로 개발하는 방식입니다. 반면에, 마이크로 서비스는 1개의 시스템을 독립적으로 배포가능한 각각의 서비스로 분할하는 개별 서비스 단위로 개발하는 방식입니다. 때문에 마이크로 서비스는 개별 서비스 단위로 나뉘어져 있어서 해당 부분만 수정 또는 배포하기 좋고, 필요한 부분만 확장하기에도 용이하다는 장점이 있습니다. 이미지 2. MSA(Microservice Architecture) 7. 트러블슈팅(troubleshooting)을 경험해 보셨나요? 개발을 하면서 발생한 문제를 어떻게 해결했는지, 원인 규명 -&gt; 사실 정리 -&gt; 원인 추론 -&gt; 조치 및 방안 검토 -&gt; 해결 과정을 차근차근 설명하시면 될 것같습니다. 추가로 알게 된 개념 혹은 방법을 곁들여서 함께 설명할 수 있으면 더 좋을 것 같습니다. 🔎 개발 면접 질문 - 컨테이너 1. Docker에 대해 설명해 주세요. 도커는 컨테이너 기술을 기반으로한 가상화 플랫폼입니다. 기존의 가상화는 하드웨어를 가상화하여 무거운데다, 반드시 하이퍼바이저를 거쳐야 하기 때문에 속도 저하가 발생했습니다. 이러한 이유로 베이스 환경의 OS를 공유하면서 필요한 프로세스만 격리시킨 컨테이너를 통해 가상화를 하는 Docker같은 기술이 등장했습니다. 이미지 3. VM과 Docker의 차이 가상 머신을 생성하기 위해서는 하이퍼바이저 또는 가상 머신 모니터라고 불리는 소프트웨어를 이용합니다. 하이퍼바이저는 호스트 하드웨어에 설치되어 호스트와 게스트를 나누는 역할을 하고, 각각의 게스트는 하이퍼바이저에 의해 관리되며 시스템 자원을 할당받게 됩니다. 하이퍼바이저와 달리 컨테이너는 가상의 OS를 만드는 것이 아닙니다. 컨테이너는 베이스 환경의 OS를 공유하면서 필요한 프로세스만 격리하는 방식으로, 커널을 공유하기 때문에 호스트 OS의 기능을 모두 사용할 수 있습니다. 그렇기 때문에 컨테이너 위에서는 호스트 OS와 다른 OS를 구동할 수 없습니다. 대신 격리시킬 애플리케이션과 거기에 필요한 파일이나 특정 라이브러리 등 종속 항목만 포함하기 때문에 배포를 위해 생성되는 이미지의 용량이 작아진다는 장점이 있습니다. 운영체제가 아닌 프로세스이며, 하이퍼바이저를 거칠 필요가 없어 실행 속도가 빠르기도 합니다. 2. Dockerfile, Docker-Compose, Docker Image와 Container의 차이, Docker Hub Dockerfile : Dockerfile은 이미지를 생성하기 위한 용도로 컨테이너에 설치해야하는 패키지, 소스코드, 명령어, 환경변수설정 등을 기록한 하나의 파일 Docker-Compose : 여러 컨테이너들을 한 번에 관리를 할 수있게 도와주는 파일 Docker Image와 Container의 차이 : 서비스 운영에 필요한 서버 프로그램, 소스코드 및 라이브러리, 컴파일된 실행 파일을 묶은 것을 Docker image라 하며, Image를 실행한 상태를 Container라고 함 Docker Hub : Docker에서 운영하는 Docker 이미지 저장소 서비스 3. k8s(Kubernetes)에 대해서 설명해 주세요. 쿠버네티스(Kubernetes)란, 컨테이너화된 애플리케이션의 배포, 확장 및 관리를 자동화하는 오픈 소스 시스템입니다. 3-1. 쿠버네티스 클러스터의 기본 아키텍처에 대해 설명해 주세요. 3-2. 쿠버네티스에서 Auto Scaling의 원리에 대해 설명해 주세요. 아직 k8s에 대해 익숙하지 않아서 열심히 공부하는 중입니다;ㅅ;. 🌎kubernetes 공식 문서에서 깊이 있게 공부하실 수 있습니다. 🔎 개발 면접 질문 - 인프라/클라우드 **1. AWS 인프라를 구축해본 경험에 대해 설명해 주세요.&lt;/Font&gt;** AWS를 사용해본 경험에 대하여 설명해 주시면 될 것 같습니다. **2. 서버리스(Serverless)란 무엇인가요?&lt;/Font&gt;** 서버리스 컴퓨팅(Serverless Computing)이란 IT 인프라를 데이터센터 또는 클라우드에 준비 없이 필요한 기능을 함수로 구현해서 관리하는 것을 의미 합니다. 추가로 서버리스 컴퓨팅을 사용해본 경험에 대해 질문이 들어온다면, AWS Lambda와 같은 서버리스 컴퓨팅 플랫폼을 사용해본 경험에 대해 설명하시면 될 것 같습니다. 서버리스 컴퓨팅은 IT 인프라를 데이터센터 또는 클라우드에 준비 없이, 필요한 기능을 함수(Function) 형태로 구현하고, 자동 스케일링 방식으로 시시각각 변하는 자원 수요를 지원하며 전통적인 백엔드를 대신합니다. 따라서 서버리스 컴퓨팅을 FaaS(Function as a Service) 라고도 하고 백엔드 시스템을 보이지 않는 서비스로 추상화하였기 때문에 BaaS(Backend as a Service) 라고도 합니다. 이미지 4. 기술의 발전 **3. Amazon VPC(Amazon Virtual Private Cloud)란 무엇인가요?&lt;/Font&gt;** AWS 클라우드에서 다른 고객과 완벽하게 논리적으로 격리된 네트워크 공간을 제공하여 프로비저닝하여 가상 네트워크에서 AWS 리소스를 만드는데 사용하는 리소스입니다. 쉽게 풀어서 설명하자면, 자신이 사용할 AWS Resource들을 격리 되어진 하나의 네트워크로 묶는 서비스를 의미하며 격리되어 있기 때문에 다른 사람들은 접근하고 보는 것이 불가능해집니다. 만약, VPC 없이 인스턴스를 생성한다면 인스턴스끼리의 구분없는 연결로 인해 시스템 복잡도가 증가할 것이며, 인터넷을 통해 전달되는 트래픽의 전송이 굉장히 비효율적이게 될 것 입니다. VPC를 적용하면 인스턴스가 VPC에 속함으로써 네트워크를 구분할 수 있고, VPC 별로 필요한 설정을 통해 인스턴스에 네트워크 설정을 적용할 수 있습니다. AWS는 VPC의 중요성을 강조하여 2019년부터 거의 모든 서비스에 VPC를 적용하도록 강제하였습니다. **3-1. Amazon VPC에 따른 AWS Lambda의 상태에 대해 설명해주세요.&lt;/Font&gt;** VPC가 없는 상태 : 웹에 자유롭게 접속할 수 있지만, 로컬 네트워크로 AWS 서비스들과 연결할 수 없습니다. VPC가 있는 상태 : 기본적인 설정으로 로컬 네트워크에 연결이 가능하지만, 웹에는 접속할 수 없습니다. VPC와 NAT이 있는 상태 : AWS 서비스와 웹 둘 다 접속이 가능합니다. **3-2. NAT(Network Address Translation, 네트워크 주소 변환) Gateway란 무엇인가요?&lt;/Font&gt;** NAT(Network Address Translation, 네트워크 주소 변환) Gateway란, 외부 서비스에서 프라이빗 서브넷의 인스턴스로 접근할 수 없게 하되, 프라이빗 서브넷의 인스턴스에서는 외부 서비스로 접근할 수 있게 해주는 서비스 입니다. 이미지 5. NAT GW (Network Address Translation Gateway) **4. 만약 클라이언트의 수가 늘어나게 되면서 기존 서버만으로는 정상적인 서비스가 불가능하게 되었습니다. 이럴 때는 어떠한 방법이 있을까요?&lt;/Font&gt;** 증가한 트래픽에 대처할 수 있는 방법은 크게 서버 자체의 성능을 확장하는 Scale-up 방식과 서버를 여러대로 나눠서 트래픽을 처리하는 Scale-out의 방법이 있습니다. 또한, Scale-out의 방식은 여러 대의 서버로 트래픽을 균등하게 분산해주는 로드밸런싱이 반드시 필요합니다. **4-1. 로드 밸런서(Load Balancer)에 대해서 설명해 주세요.&lt;/Font&gt;** 로드 밸런서란, 서버에 가해지는 트래픽을 여러 대의 서버에게 균등하게 분산시켜주는 역할을 합니다. 또한, 여러 대의 서버 덕분에 무중단 서비스 제공할 수 있습니다. 로드 밸런싱의 종류와 알고리즘, 장애 대비 및 ELB(Elastic Load Balancer), ALB(Application Load Balancer), NLB(Network Load Balancer)에 대해서 미리 공부하고 가시는 것을 추천드립니다. 🌎[AWS] 로드 밸런서란?, Load Balancer 장애 대비 **5. 무중단 시스템으로 가기 위해 필요한 방법에 대한 본인의 생각을 말해주세요.&lt;/Font&gt;** 다운 타임이 발생하지 않도록 기본적으로 두 대 이상의 서버를 서비스해야 합니다. 비용 절감을 위해 배포할 때에만 새롭게 서비스를 띄우고, 배포가 완료된 후에는 기존 서버는 셧다운 시키면 될 것 같습니다. **6. Forward Proxy와 Reverse Proxy에 대해 설명해 주세요.&lt;/Font&gt;** Forward Proxy : 클라이언트에서 서버로 리소스를 요청할 때 직접 요청하지 않고 프록시 서버를 거쳐서 요청합니다. 특정 컨텐츠에 접근하는 것을 방지할 수 있으며, 유저의 정체를 숨겨줄 수도 있습니다. 이미지 6. Forward Proxy Reverse Proxy : 애플리케이션 서버의 앞에 위치하여 클라이언트가 서버를 요청할 때 리버스 프록시를 호출하고, 리버스 프록시가 서버로부터 응답을 전달받아 다시 클라이언트에게 전송하는 역할을 합니다. 로드 밸런싱(load balancing)에 사용되고 있으며, SSL 암호화와 보안에 좋다는 장점이 있습니다. NginX, Apache Web Server 등의 오픈 소스 소프트웨어에서 지원하고 CloudFlare, AWS CloudFront 같은 CDN 서비스도 마찬가지로 리버스 프록시 서버를 사용하고 있습니다. 이미지 7. Reverse Proxy **7. AWS 리전(Region)과 가용 영역(Availability Zone, AZ)에 대해 설명해 주세요.&lt;/Font&gt;** **8. Snapshot에 대해 설명해 주세요.&lt;/Font&gt;** **8-1. EC2 AMI(Amazon Machine Image)와 Snapshot의 차이점에 대해 설명해 주세요.&lt;/Font&gt;** 기본적으로 EBS(Elastic Block Store)를 백업한다는 점에서는 AMI(Amazon Machine Image)와 Snapshot은 동일하지만, AMI는 EC2 인스턴스에 연결되어 있는 모든 EBS Volume을 동시에 백업하는 것이라면 Snapshot 기능은 여러분들이 선택한 EBS Volume을 백업한다는 점에서 차이점이 있습니다. 또한 Snapshot은 AMI 주기적인 백업 기능을 제공해주지만, AMI는 제공하지 않습니다. 끝맺음 공부를 하면서 질문에 괜찮은 내용이 있으면 요약하면서 계속 추가하고 있습니다. 또한, 기본적인 이론에 대해 다시 공부를 하려고 정리한 내용이기 때문에 잘못된 부분들이 있을 수도 있습니다. 잘못된 정보가 보이거나, 부족한 내용, 추가되면 좋을 것 같은 내용이 있다면 댓글에 적어주시면 감사하겠습니다!😊 [참고자료] CI/CD가 뭔가요? 실전편, CI/CD가 뭔가요? 이론편 Domain Driven Design 이란 무엇인가? https://kubernetes.io/ko/docs/home/ [AWS] 로드 밸런서란? [Infra] 리버스 프록시(reverse proxy) 서버 개념 https://docs.aws.amazon.com/ko_kr/vpc/latest/userguide/what-is-amazon-vpc.html https://aws.amazon.com/ko/premiumsupport/knowledge-center/internet-access-lambda-function/ JIPA님 블로그 WS DevOps와 ECR을 통한 Elastic Beanstalk 배포 환경 구축 및 타 환경과의 비교" />
+<link rel="canonical" href="http://localhost:4000/liampoet.github.io/interview3/" />
+<meta property="og:url" content="http://localhost:4000/liampoet.github.io/interview3/" />
+<meta property="og:site_name" content="LiamCoding" />
+<meta property="og:image" content="http://localhost:4000/liampoet.github.io/assets/images/interview/msa.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-08-13T18:55:46+09:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","headline":"신입 백앤드 개발자를 위한 면접 질문 정리 - 기타(공통, 인프라/클라우드(AWS), 컨테이너)","dateModified":"2022-08-13T18:55:46+09:00","datePublished":"2022-08-13T18:55:46+09:00","image":"http://localhost:4000/liampoet.github.io/assets/images/interview/msa.png","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/liampoet.github.io/assets/images/logo.png"},"name":"Liam"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/liampoet.github.io/interview3/"},"author":{"@type":"Person","name":"Liam"},"description":"💡 Intro 신입 백앤드 개발자를 위한 면접 질문 정리 - 기타(공통, 인프라/클라우드(AWS), 컨테이너) 에서는 프로그래밍 공통 질문과 트러블 슈팅, 인프라/클라우드, 컨테이너 등에 대한 면접 질문을 다루어 보려고 합니다. 🔎 개발 면접 질문 - 공통 1. DevOps란 무엇인가요? 데브옵스(Dev(개발) Ops(운영))란, 애플리케이션 개발-운영 간의 협업 프로세스를 자동화하는 것을 말하는 개발 방법론 이며, 결과적으로 애플리케이션의 개발과 개선 속도를 빠르게 합니다. 과거 새로운 서비스를 출시하기 위해서 오랜기간 작업 후 배포했던 것과 달리, 현재는 서비스 출시 속도가 다르고 업데이트 주기 또한 빈번해 졌습니다. 때문에 개발된 소프트웨어가 시스템의 안정성을 유지하면서 사용자에게 빠르게 제공될 수 있도록 업무 사이클을 자동화 시킬 수 있도록 하는 데브옵스와 같은 개발 방법론이 등장 했습니다. 2. CI/CD란 무엇인가요? 적용해 본 적이있다면 설명해 주세요. CI(Continuous Integration)/CD(Continuous Deployment)란, 서비스 빌드부터 배포까지 애플리케이션 개발 단계를 자동화 하는 과정입니다. 예를 들어 Github으로 코드를 커밋하고 Jenkins가 자동으로 빌드하도록 설계해본 경험 등에 대해 설명하면 될 것 같습니다. CI/CD에 대한 경험이 부족하거나 깊이 있게 공부하고 싶으면 🌎CI/CD가 뭔가요? 이론편과, 🌎CI/CD가 뭔가요? 실전편에서 자세하게 다루어 볼 수 있습니다. 3. Test Code에 대해서 알고 계신가요? 그렇다면 왜 작성해야 할까요? 테스트 코드란 내가 작성한 메서드가 실제로 제대로 동작하는지에 대해 테스트를 하는 코드입니다. 테스트 코드는 잘 작동하고, 깔끔한 코드를 얻기 위해서 작성합니다. 필자의 예시 : 저는 테스트 코드에 대해 잘 알지 못할 때 코드를 배포하기 전, 코드 수정 -&gt; 서버동작 -&gt; 테스트에 필요한 데이터를 DB에 입력 -&gt; 테스트 -&gt; DB 데이터 정리 -&gt; 과정 반복등의 단계를 겪었습니다. 그 후 테스트 코드를 알고 나서 코드 수정 -&gt; 테스트 코드 실행 -&gt; 결과 확인 정도로 많은 시간을 절약할 수 있었습니다. 이러한 테스트 코드의 장점은 시간절약, 문서로서의 역할 가능(보통 값이 주어짐(given), 무엇을 했을 때(when) 어떤 값을 원함(then)의 구조이기 때문에 가독성이 뛰어남), 깔끔한 인터페이스등이 있습니다. 4. TDD(Test-Driven Development)에 대해 설명해 주세요. TDD란 작은 단위의 테스트 케이스를 작성하고 그에 맞는 코드를 작성하여 테스트를 통과한 후에 상황에 맞게 리팩토링하는 테스트 주도 개발 방식을 말합니다. 레드 그린 사이클이라는 3가지 과정을 거치는데, Red - 항상 실패하는 테스트를 먼저 작성하고, Green - 테스트가 통과하는 프로덕션 코드를 작성한 후, Refactor - 작성한 프로덕션 코드를 깨끗하고 가독성 좋게 리펙토링합니다. 5. DDD(Domain-Driven Design)에 대해 설명해 주세요. DDD란, 각 비즈니스 도메인이 중심이 되어 진행하는 개발 방식으로 소프트웨어의 연관된 부분들을 연결하여 계속해서 진화하는 새로운 모델을 만들어나가 복잡한 애플리케이션을 만드는 것을 쉽게 해주는 것에 있습니다. 도메인 전문가와 IT 개발자 간의 커뮤니케이션과 협업을 통해서 모델을 발전시키는 것을 추구합니다. 쇼핑몰을 예로 들면 손님들이 주문하는 도메인, 점주들이 관리하는 도메인 등이 있을 수 있습니다. 이러한 도메인들이 서로 상호작용하며 설계하는 것이 도메인 주도 설계입니다. 이미지 1. DDD(Domain-Driven Design) 6. Monolithic Architecture와 MSA(Microservice Architecture)의 차이점에 대해 설명해 주세요. 모놀리식 아키텍쳐는 모든 시스템의 구성요소가 한 프로젝트에 통합되어 있는 하나의 통합된 패키지로 개발하는 방식입니다. 반면에, 마이크로 서비스는 1개의 시스템을 독립적으로 배포가능한 각각의 서비스로 분할하는 개별 서비스 단위로 개발하는 방식입니다. 때문에 마이크로 서비스는 개별 서비스 단위로 나뉘어져 있어서 해당 부분만 수정 또는 배포하기 좋고, 필요한 부분만 확장하기에도 용이하다는 장점이 있습니다. 이미지 2. MSA(Microservice Architecture) 7. 트러블슈팅(troubleshooting)을 경험해 보셨나요? 개발을 하면서 발생한 문제를 어떻게 해결했는지, 원인 규명 -&gt; 사실 정리 -&gt; 원인 추론 -&gt; 조치 및 방안 검토 -&gt; 해결 과정을 차근차근 설명하시면 될 것같습니다. 추가로 알게 된 개념 혹은 방법을 곁들여서 함께 설명할 수 있으면 더 좋을 것 같습니다. 🔎 개발 면접 질문 - 컨테이너 1. Docker에 대해 설명해 주세요. 도커는 컨테이너 기술을 기반으로한 가상화 플랫폼입니다. 기존의 가상화는 하드웨어를 가상화하여 무거운데다, 반드시 하이퍼바이저를 거쳐야 하기 때문에 속도 저하가 발생했습니다. 이러한 이유로 베이스 환경의 OS를 공유하면서 필요한 프로세스만 격리시킨 컨테이너를 통해 가상화를 하는 Docker같은 기술이 등장했습니다. 이미지 3. VM과 Docker의 차이 가상 머신을 생성하기 위해서는 하이퍼바이저 또는 가상 머신 모니터라고 불리는 소프트웨어를 이용합니다. 하이퍼바이저는 호스트 하드웨어에 설치되어 호스트와 게스트를 나누는 역할을 하고, 각각의 게스트는 하이퍼바이저에 의해 관리되며 시스템 자원을 할당받게 됩니다. 하이퍼바이저와 달리 컨테이너는 가상의 OS를 만드는 것이 아닙니다. 컨테이너는 베이스 환경의 OS를 공유하면서 필요한 프로세스만 격리하는 방식으로, 커널을 공유하기 때문에 호스트 OS의 기능을 모두 사용할 수 있습니다. 그렇기 때문에 컨테이너 위에서는 호스트 OS와 다른 OS를 구동할 수 없습니다. 대신 격리시킬 애플리케이션과 거기에 필요한 파일이나 특정 라이브러리 등 종속 항목만 포함하기 때문에 배포를 위해 생성되는 이미지의 용량이 작아진다는 장점이 있습니다. 운영체제가 아닌 프로세스이며, 하이퍼바이저를 거칠 필요가 없어 실행 속도가 빠르기도 합니다. 2. Dockerfile, Docker-Compose, Docker Image와 Container의 차이, Docker Hub Dockerfile : Dockerfile은 이미지를 생성하기 위한 용도로 컨테이너에 설치해야하는 패키지, 소스코드, 명령어, 환경변수설정 등을 기록한 하나의 파일 Docker-Compose : 여러 컨테이너들을 한 번에 관리를 할 수있게 도와주는 파일 Docker Image와 Container의 차이 : 서비스 운영에 필요한 서버 프로그램, 소스코드 및 라이브러리, 컴파일된 실행 파일을 묶은 것을 Docker image라 하며, Image를 실행한 상태를 Container라고 함 Docker Hub : Docker에서 운영하는 Docker 이미지 저장소 서비스 3. k8s(Kubernetes)에 대해서 설명해 주세요. 쿠버네티스(Kubernetes)란, 컨테이너화된 애플리케이션의 배포, 확장 및 관리를 자동화하는 오픈 소스 시스템입니다. 3-1. 쿠버네티스 클러스터의 기본 아키텍처에 대해 설명해 주세요. 3-2. 쿠버네티스에서 Auto Scaling의 원리에 대해 설명해 주세요. 아직 k8s에 대해 익숙하지 않아서 열심히 공부하는 중입니다;ㅅ;. 🌎kubernetes 공식 문서에서 깊이 있게 공부하실 수 있습니다. 🔎 개발 면접 질문 - 인프라/클라우드 **1. AWS 인프라를 구축해본 경험에 대해 설명해 주세요.&lt;/Font&gt;** AWS를 사용해본 경험에 대하여 설명해 주시면 될 것 같습니다. **2. 서버리스(Serverless)란 무엇인가요?&lt;/Font&gt;** 서버리스 컴퓨팅(Serverless Computing)이란 IT 인프라를 데이터센터 또는 클라우드에 준비 없이 필요한 기능을 함수로 구현해서 관리하는 것을 의미 합니다. 추가로 서버리스 컴퓨팅을 사용해본 경험에 대해 질문이 들어온다면, AWS Lambda와 같은 서버리스 컴퓨팅 플랫폼을 사용해본 경험에 대해 설명하시면 될 것 같습니다. 서버리스 컴퓨팅은 IT 인프라를 데이터센터 또는 클라우드에 준비 없이, 필요한 기능을 함수(Function) 형태로 구현하고, 자동 스케일링 방식으로 시시각각 변하는 자원 수요를 지원하며 전통적인 백엔드를 대신합니다. 따라서 서버리스 컴퓨팅을 FaaS(Function as a Service) 라고도 하고 백엔드 시스템을 보이지 않는 서비스로 추상화하였기 때문에 BaaS(Backend as a Service) 라고도 합니다. 이미지 4. 기술의 발전 **3. Amazon VPC(Amazon Virtual Private Cloud)란 무엇인가요?&lt;/Font&gt;** AWS 클라우드에서 다른 고객과 완벽하게 논리적으로 격리된 네트워크 공간을 제공하여 프로비저닝하여 가상 네트워크에서 AWS 리소스를 만드는데 사용하는 리소스입니다. 쉽게 풀어서 설명하자면, 자신이 사용할 AWS Resource들을 격리 되어진 하나의 네트워크로 묶는 서비스를 의미하며 격리되어 있기 때문에 다른 사람들은 접근하고 보는 것이 불가능해집니다. 만약, VPC 없이 인스턴스를 생성한다면 인스턴스끼리의 구분없는 연결로 인해 시스템 복잡도가 증가할 것이며, 인터넷을 통해 전달되는 트래픽의 전송이 굉장히 비효율적이게 될 것 입니다. VPC를 적용하면 인스턴스가 VPC에 속함으로써 네트워크를 구분할 수 있고, VPC 별로 필요한 설정을 통해 인스턴스에 네트워크 설정을 적용할 수 있습니다. AWS는 VPC의 중요성을 강조하여 2019년부터 거의 모든 서비스에 VPC를 적용하도록 강제하였습니다. **3-1. Amazon VPC에 따른 AWS Lambda의 상태에 대해 설명해주세요.&lt;/Font&gt;** VPC가 없는 상태 : 웹에 자유롭게 접속할 수 있지만, 로컬 네트워크로 AWS 서비스들과 연결할 수 없습니다. VPC가 있는 상태 : 기본적인 설정으로 로컬 네트워크에 연결이 가능하지만, 웹에는 접속할 수 없습니다. VPC와 NAT이 있는 상태 : AWS 서비스와 웹 둘 다 접속이 가능합니다. **3-2. NAT(Network Address Translation, 네트워크 주소 변환) Gateway란 무엇인가요?&lt;/Font&gt;** NAT(Network Address Translation, 네트워크 주소 변환) Gateway란, 외부 서비스에서 프라이빗 서브넷의 인스턴스로 접근할 수 없게 하되, 프라이빗 서브넷의 인스턴스에서는 외부 서비스로 접근할 수 있게 해주는 서비스 입니다. 이미지 5. NAT GW (Network Address Translation Gateway) **4. 만약 클라이언트의 수가 늘어나게 되면서 기존 서버만으로는 정상적인 서비스가 불가능하게 되었습니다. 이럴 때는 어떠한 방법이 있을까요?&lt;/Font&gt;** 증가한 트래픽에 대처할 수 있는 방법은 크게 서버 자체의 성능을 확장하는 Scale-up 방식과 서버를 여러대로 나눠서 트래픽을 처리하는 Scale-out의 방법이 있습니다. 또한, Scale-out의 방식은 여러 대의 서버로 트래픽을 균등하게 분산해주는 로드밸런싱이 반드시 필요합니다. **4-1. 로드 밸런서(Load Balancer)에 대해서 설명해 주세요.&lt;/Font&gt;** 로드 밸런서란, 서버에 가해지는 트래픽을 여러 대의 서버에게 균등하게 분산시켜주는 역할을 합니다. 또한, 여러 대의 서버 덕분에 무중단 서비스 제공할 수 있습니다. 로드 밸런싱의 종류와 알고리즘, 장애 대비 및 ELB(Elastic Load Balancer), ALB(Application Load Balancer), NLB(Network Load Balancer)에 대해서 미리 공부하고 가시는 것을 추천드립니다. 🌎[AWS] 로드 밸런서란?, Load Balancer 장애 대비 **5. 무중단 시스템으로 가기 위해 필요한 방법에 대한 본인의 생각을 말해주세요.&lt;/Font&gt;** 다운 타임이 발생하지 않도록 기본적으로 두 대 이상의 서버를 서비스해야 합니다. 비용 절감을 위해 배포할 때에만 새롭게 서비스를 띄우고, 배포가 완료된 후에는 기존 서버는 셧다운 시키면 될 것 같습니다. **6. Forward Proxy와 Reverse Proxy에 대해 설명해 주세요.&lt;/Font&gt;** Forward Proxy : 클라이언트에서 서버로 리소스를 요청할 때 직접 요청하지 않고 프록시 서버를 거쳐서 요청합니다. 특정 컨텐츠에 접근하는 것을 방지할 수 있으며, 유저의 정체를 숨겨줄 수도 있습니다. 이미지 6. Forward Proxy Reverse Proxy : 애플리케이션 서버의 앞에 위치하여 클라이언트가 서버를 요청할 때 리버스 프록시를 호출하고, 리버스 프록시가 서버로부터 응답을 전달받아 다시 클라이언트에게 전송하는 역할을 합니다. 로드 밸런싱(load balancing)에 사용되고 있으며, SSL 암호화와 보안에 좋다는 장점이 있습니다. NginX, Apache Web Server 등의 오픈 소스 소프트웨어에서 지원하고 CloudFlare, AWS CloudFront 같은 CDN 서비스도 마찬가지로 리버스 프록시 서버를 사용하고 있습니다. 이미지 7. Reverse Proxy **7. AWS 리전(Region)과 가용 영역(Availability Zone, AZ)에 대해 설명해 주세요.&lt;/Font&gt;** **8. Snapshot에 대해 설명해 주세요.&lt;/Font&gt;** **8-1. EC2 AMI(Amazon Machine Image)와 Snapshot의 차이점에 대해 설명해 주세요.&lt;/Font&gt;** 기본적으로 EBS(Elastic Block Store)를 백업한다는 점에서는 AMI(Amazon Machine Image)와 Snapshot은 동일하지만, AMI는 EC2 인스턴스에 연결되어 있는 모든 EBS Volume을 동시에 백업하는 것이라면 Snapshot 기능은 여러분들이 선택한 EBS Volume을 백업한다는 점에서 차이점이 있습니다. 또한 Snapshot은 AMI 주기적인 백업 기능을 제공해주지만, AMI는 제공하지 않습니다. 끝맺음 공부를 하면서 질문에 괜찮은 내용이 있으면 요약하면서 계속 추가하고 있습니다. 또한, 기본적인 이론에 대해 다시 공부를 하려고 정리한 내용이기 때문에 잘못된 부분들이 있을 수도 있습니다. 잘못된 정보가 보이거나, 부족한 내용, 추가되면 좋을 것 같은 내용이 있다면 댓글에 적어주시면 감사하겠습니다!😊 [참고자료] CI/CD가 뭔가요? 실전편, CI/CD가 뭔가요? 이론편 Domain Driven Design 이란 무엇인가? https://kubernetes.io/ko/docs/home/ [AWS] 로드 밸런서란? [Infra] 리버스 프록시(reverse proxy) 서버 개념 https://docs.aws.amazon.com/ko_kr/vpc/latest/userguide/what-is-amazon-vpc.html https://aws.amazon.com/ko/premiumsupport/knowledge-center/internet-access-lambda-function/ JIPA님 블로그 WS DevOps와 ECR을 통한 Elastic Beanstalk 배포 환경 구축 및 타 환경과의 비교","url":"http://localhost:4000/liampoet.github.io/interview3/","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    
+<link href="/liampoet.github.io/assets/css/screen.css" rel="stylesheet">
+
+<link href="/liampoet.github.io/assets/css/main.css" rel="stylesheet">
+
+<script src="/liampoet.github.io/assets/js/jquery.min.js"></script>
+
+</head>
+
+
+
+
+<body class="layout-post">
+	<!-- defer loading of font and font awesome -->
+	<noscript id="deferred-styles">
+		<link href="https://fonts.googleapis.com/css?family=Righteous%7CMerriweather:300,300i,400,400i,700,700i" rel="stylesheet">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+	</noscript>
+
+
+<!-- Begin Menu Navigation
+================================================== -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top mediumnavigation nav-down">
+
+    <div class="container pr-0">
+
+    <!-- Begin Logo -->
+    <a class="navbar-brand" href="/liampoet.github.io/">
+    <img src="/liampoet.github.io/assets/images/logo.png" alt="Liam">
+    </a>
+    <!-- End Logo -->
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMediumish" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarMediumish">
+
+        <!-- Begin Menu -->
+
+            <ul class="navbar-nav ml-auto">
+
+                
+                <li class="nav-item">
+                
+                <a class="nav-link" href="/liampoet.github.io/index.html">Blog</a>
+                </li>
+
+                <li class="nav-item">
+                <a class="nav-link" href="/liampoet.github.io/about">About</a>
+                </li>
+
+                <li class="nav-item">
+                <a target="_blank" class="nav-link" href="https://github.com/liampoet"><i class="fab fa-github"></i> Github</a>
+                </li>
+
+                <script src="/liampoet.github.io/assets/js/lunr.js"></script>
+
+
+<style>
+    .lunrsearchresult .title {color: #d9230f;}
+    .lunrsearchresult .url {color: silver;}
+    .lunrsearchresult a {display: block; color: #777;}
+    .lunrsearchresult a:hover, .lunrsearchresult a:focus {text-decoration: none;}
+    .lunrsearchresult a:hover .title {text-decoration: underline;}
+</style>
+
+
+<form class="bd-search" onSubmit="return lunr_search(document.getElementById('lunrsearch').value);">
+    <input type="text" class="form-control text-small launch-modal-search" id="lunrsearch" name="q" maxlength="255" value="" placeholder="Type and enter..."/>
+</form>
+
+<div id="lunrsearchresults">
+    <ul></ul>
+</div>
+
+<script src="/liampoet.github.io/assets/js/lunrsearchengine.js"></script>
+
+            </ul>
+
+        <!-- End Menu -->
+
+    </div>
+
+    </div>
+</nav>
+<!-- End Navigation
+================================================== -->
+
+<div class="site-content">
+
+<div class="container">
+
+<!-- Site Title
+================================================== -->
+<div class="mainheading">
+    <h1 class="sitetitle">Liam</h1>
+    <p class="lead">
+        Hello! I'm Liam 👋I'm a developer working at ./-
+    </p>
+</div>
+
+<!-- Content
+================================================== -->
+<div class="main-content">
+    <!-- Begin Article
+================================================== -->
+<div class="container">
+    <div class="row">
+
+        <!-- Post Share -->
+        <div class="col-md-2 pl-0">
+            <div class="share sticky-top sticky-top-offset">
+    <p>
+        Share
+    </p>
+    <ul>
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://twitter.com/intent/tweet?text=신입 백앤드 개발자를 위한 면접 질문 정리 - 기타(공통, 인프라/클라우드(AWS), 컨테이너)&url=http://localhost:4000/liampoet.github.io/interview3/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fab fa-twitter"></i>
+            </a>
+        </li>
+
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://facebook.com/sharer.php?u=http://localhost:4000/liampoet.github.io/interview3/" onclick="window.open(this.href, 'facebook-share', 'width=550,height=435');return false;">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+        </li>
+
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/liampoet.github.io/interview3/" onclick="window.open(this.href, 'width=550,height=435');return false;">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+        </li>
+
+    </ul>
+    
+    <div class="sep">
+    </div>
+    <ul>
+        <li>
+        <a class="small smoothscroll" href="#disqus_thread"></a>
+        </li>
+    </ul>
+    
+</div>
+
+        </div>
+
+        <!-- Post -->
+        
+
+        <div class="col-md-9 flex-first flex-md-unordered">
+            <div class="mainheading">
+
+                <!-- Author Box -->
+                
+                <div class="row post-top-meta">
+                    <div class="col-xs-12 col-md-3 col-lg-2 text-center text-md-left mb-4 mb-md-0">
+                        
+                        <img class="author-thumb" src="https://www.gravatar.com/avatar/341e587e52b4402086ddb8d2ffc9e48b?s=250&d=mm&r=x" alt="Liam">
+                        
+                    </div>
+                    <div class="col-xs-12 col-md-9 col-lg-10 text-center text-md-left">
+                        <a target="_blank" class="link-dark" href="https://www.linkedin.com/in/kwongmin-lim-32b828247/">Liam</a><a target="_blank" href="" class="btn follow">Follow</a>
+                        <span class="author-description">공부하는 중입니다.🥸</span>
+                    </div>
+                </div>
+                
+
+                <!-- Post Title -->
+                <h1 class="posttitle">신입 백앤드 개발자를 위한 면접 질문 정리 - 기타(공통, 인프라/클라우드(AWS), 컨테이너)</h1>
+
+            </div>
+
+            <!-- Adsense if enabled from _config.yml (change your pub id and slot) -->
+            
+            <!-- End Adsense -->
+
+            <!-- Post Featured Image -->
+            
+
+            
+            <img class="featured-image img-fluid lazyimg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAACCAQAAAA3fa6RAAAADklEQVR42mNkAANGCAUAACMAA2w/AMgAAAAASUVORK5CYII=" data-src="/liampoet.github.io/assets/images/interview/msa.png" alt="신입 백앤드 개발자를 위한 면접 질문 정리 - 기타(공통, 인프라/클라우드(AWS), 컨테이너)">
+            
+
+            
+            <!-- End Featured Image -->
+
+            <!-- Post Content -->
+            <div class="article-post">
+                <!-- Toc if any -->
+                
+                <!-- End Toc -->
+                <p><br />
+<br /></p>
+
+<h2 id="-intro">💡 Intro</h2>
+
+<p><strong>신입 백앤드 개발자를 위한 면접 질문 정리 - 기타(공통, 인프라/클라우드(AWS), 컨테이너)</strong> 에서는 프로그래밍 공통 질문과 트러블 슈팅, 인프라/클라우드, 컨테이너 등에 대한 면접 질문을 다루어 보려고 합니다.</p>
+
+<p><br />
+<br /></p>
+
+<h2 id="-개발-면접-질문---공통">🔎 개발 면접 질문 - 공통</h2>
+
+<p><br /></p>
+
+<p><strong><font size="4">1. DevOps란 무엇인가요?</font></strong></p>
+
+<p>데브옵스(Dev(개발) Ops(운영))란, 애플리케이션 개발-운영 간의 협업 프로세스를 자동화하는 것을 말하는 개발 방법론 이며, 결과적으로 애플리케이션의 개발과 개선 속도를 빠르게 합니다.</p>
+<blockquote>
+  <p>과거 새로운 서비스를 출시하기 위해서 오랜기간 작업 후 배포했던 것과 달리, 현재는 서비스 출시 속도가 다르고 업데이트 주기 또한 빈번해 졌습니다. 때문에 개발된 소프트웨어가 시스템의 안정성을 유지하면서 사용자에게 빠르게 제공될 수 있도록 업무 사이클을 자동화 시킬 수 있도록 하는 데브옵스와 같은 개발 방법론이 등장 했습니다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<p><strong><font size="4">2. CI/CD란 무엇인가요? 적용해 본 적이있다면 설명해 주세요.</font></strong></p>
+
+<p>CI(Continuous Integration)/CD(Continuous Deployment)란, 서비스 빌드부터 배포까지 애플리케이션 개발 단계를 자동화 하는 과정입니다. 예를 들어 Github으로 코드를 커밋하고 Jenkins가 자동으로 빌드하도록 설계해본 경험 등에 대해 설명하면 될 것 같습니다.</p>
+<blockquote>
+  <p>CI/CD에 대한 경험이 부족하거나 깊이 있게 공부하고 싶으면 🌎<a href="https://tecoble.techcourse.co.kr/post/2021-08-14-ci-cd/">CI/CD가 뭔가요? 이론편</a>과, 🌎<a href="https://tecoble.techcourse.co.kr/post/2021-10-10-jenkins/">CI/CD가 뭔가요? 실전편</a>에서 자세하게 다루어 볼 수 있습니다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<p><strong><font size="4">3. Test Code에 대해서 알고 계신가요? 그렇다면 왜 작성해야 할까요?</font></strong></p>
+
+<p>테스트 코드란 내가 작성한 메서드가 실제로 제대로 동작하는지에 대해 테스트를 하는 코드입니다. 테스트 코드는 잘 작동하고, 깔끔한 코드를 얻기 위해서 작성합니다.</p>
+<blockquote>
+  <p>필자의 예시 : 저는 테스트 코드에 대해 잘 알지 못할 때 코드를 배포하기 전, <strong><em>코드 수정 -&gt; 서버동작 -&gt; 테스트에 필요한 데이터를 DB에 입력 -&gt; 테스트 -&gt; DB 데이터 정리 -&gt; 과정 반복</em></strong>등의 단계를 겪었습니다. 그 후 테스트 코드를 알고 나서 <strong><em>코드 수정 -&gt; 테스트 코드 실행 -&gt; 결과 확인</em></strong> 정도로 많은 시간을 절약할 수 있었습니다. 이러한 테스트 코드의 장점은 시간절약, 문서로서의 역할 가능(보통 값이 주어짐(given), 무엇을 했을 때(when) 어떤 값을 원함(then)의 구조이기 때문에 가독성이 뛰어남), 깔끔한 인터페이스등이 있습니다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<p><strong><font size="4">4. TDD(Test-Driven Development)에 대해 설명해 주세요.</font></strong></p>
+
+<p>TDD란 작은 단위의 테스트 케이스를 작성하고 그에 맞는 코드를 작성하여 테스트를 통과한 후에 상황에 맞게 리팩토링하는 테스트 주도 개발 방식을 말합니다. 레드 그린 사이클이라는 3가지 과정을 거치는데,</p>
+<ol>
+  <li><span style="color:red">Red<span> - 항상 실패하는 테스트를 먼저 작성하고,</span></span></li>
+  <li><span style="color:green">Green<span> - 테스트가 통과하는 프로덕션 코드를 작성한 후,</span></span></li>
+  <li>Refactor - 작성한 프로덕션 코드를 깨끗하고 가독성 좋게 리펙토링합니다.</li>
+</ol>
+
+<p><br /></p>
+
+<p><strong><font size="4">5. DDD(Domain-Driven Design)에 대해 설명해 주세요.</font></strong></p>
+
+<p>DDD란, 각 비즈니스 도메인이 중심이 되어 진행하는 개발 방식으로 소프트웨어의 연관된 부분들을 연결하여 계속해서 진화하는 새로운 모델을 만들어나가 복잡한 애플리케이션을 만드는 것을 쉽게 해주는 것에 있습니다. 도메인 전문가와 IT 개발자 간의 커뮤니케이션과 협업을 통해서 모델을 발전시키는 것을 추구합니다. 쇼핑몰을 예로 들면 손님들이 주문하는 도메인, 점주들이 관리하는 도메인 등이 있을 수 있습니다. 이러한 도메인들이 서로 상호작용하며 설계하는 것이 도메인 주도 설계입니다.</p>
+
+<p><br /></p>
+
+<p><img src="/liampoet.github.io/assets/images/interview/ddd.png" alt="DDD(Domain-Driven Design)" /><em>이미지 1. DDD(Domain-Driven Design)</em></p>
+
+<p><br /></p>
+
+<p><strong><font size="4">6. <u>Monolithic Architecture</u>와 <u>MSA(Microservice Architecture)</u>의 차이점에 대해 설명해 주세요.</font></strong></p>
+
+<p>모놀리식 아키텍쳐는 모든 시스템의 구성요소가 한 프로젝트에 통합되어 있는 하나의 통합된 패키지로 개발하는 방식입니다. 반면에, 마이크로 서비스는 1개의 시스템을 독립적으로 배포가능한 각각의 서비스로 분할하는 개별 서비스 단위로 개발하는 방식입니다. 때문에 마이크로 서비스는 개별 서비스 단위로 나뉘어져 있어서 해당 부분만 수정 또는 배포하기 좋고, 필요한 부분만 확장하기에도 용이하다는 장점이 있습니다.</p>
+
+<p><br /></p>
+
+<p><img src="/liampoet.github.io/assets/images/interview/msa.png" alt="MSA(Microservice Architecture)" /><em>이미지 2. MSA(Microservice Architecture)</em></p>
+
+<p><br /></p>
+
+<p><strong><font size="4">7. 트러블슈팅(troubleshooting)을 경험해 보셨나요?</font></strong></p>
+
+<p>개발을 하면서 발생한 문제를 어떻게 해결했는지, 원인 규명 -&gt; 사실 정리 -&gt; 원인 추론 -&gt; 조치 및 방안 검토 -&gt; 해결 과정을 차근차근 설명하시면 될 것같습니다. 추가로 알게 된 개념 혹은 방법을 곁들여서 함께 설명할 수 있으면 더 좋을 것 같습니다.</p>
+
+<p><br />
+<br /></p>
+
+<h2 id="-개발-면접-질문---컨테이너">🔎 개발 면접 질문 - 컨테이너</h2>
+
+<p><br /></p>
+
+<p><strong><font size="4">1. Docker에 대해 설명해 주세요.</font></strong></p>
+
+<p>도커는 컨테이너 기술을 기반으로한 가상화 플랫폼입니다. 기존의 가상화는 하드웨어를 가상화하여 무거운데다, 반드시 하이퍼바이저를 거쳐야 하기 때문에 속도 저하가 발생했습니다. 이러한 이유로 베이스 환경의 OS를 공유하면서 필요한 프로세스만 격리시킨 컨테이너를 통해 가상화를 하는 Docker같은 기술이 등장했습니다.</p>
+
+<p><br /></p>
+
+<p><img src="/liampoet.github.io/assets/images/interview/docker.png" alt="Docker" /><em>이미지 3. VM과 Docker의 차이</em></p>
+
+<blockquote>
+  <p>가상 머신을 생성하기 위해서는 하이퍼바이저 또는 가상 머신 모니터라고 불리는 소프트웨어를 이용합니다. <strong>하이퍼바이저는 호스트 하드웨어에 설치되어 호스트와 게스트를 나누는 역할을 하고, 각각의 게스트는 하이퍼바이저에 의해 관리되며 시스템 자원을 할당받게 됩니다.</strong> 하이퍼바이저와 달리 컨테이너는 가상의 OS를 만드는 것이 아닙니다. <strong>컨테이너는 베이스 환경의 OS를 공유하면서 필요한 프로세스만 격리하는 방식으로, 커널을 공유하기 때문에 호스트 OS의 기능을 모두 사용할 수 있습니다.</strong> 그렇기 때문에 컨테이너 위에서는 호스트 OS와 다른 OS를 구동할 수 없습니다. 대신 격리시킬 애플리케이션과 거기에 필요한 파일이나 특정 라이브러리 등 종속 항목만 포함하기 때문에 배포를 위해 생성되는 이미지의 용량이 작아진다는 장점이 있습니다. 운영체제가 아닌 프로세스이며, 하이퍼바이저를 거칠 필요가 없어 실행 속도가 빠르기도 합니다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<p><strong><font size="4">2. Dockerfile, Docker-Compose, Docker Image와 Container의 차이, Docker Hub</font></strong></p>
+
+<ol>
+  <li>Dockerfile : Dockerfile은 이미지를 생성하기 위한 용도로 컨테이너에 설치해야하는 패키지, 소스코드, 명령어, 환경변수설정 등을 기록한 하나의 파일</li>
+  <li>Docker-Compose : 여러 컨테이너들을 한 번에 관리를 할 수있게 도와주는 파일</li>
+  <li>Docker Image와 Container의 차이 : 서비스 운영에 필요한 서버 프로그램, 소스코드 및 라이브러리, 컴파일된 실행 파일을 묶은 것을 Docker image라 하며, Image를 실행한 상태를 Container라고 함</li>
+  <li>Docker Hub : Docker에서 운영하는 Docker 이미지 저장소 서비스</li>
+</ol>
+
+<p><strong><font size="4">3. k8s(Kubernetes)에 대해서 설명해 주세요.</font></strong></p>
+
+<p>쿠버네티스(Kubernetes)란, 컨테이너화된 애플리케이션의 배포, 확장 및 관리를 자동화하는 오픈 소스 시스템입니다.</p>
+
+<p><br /></p>
+
+<p><strong><font size="4">3-1. 쿠버네티스 클러스터의 기본 아키텍처에 대해 설명해 주세요.</font></strong></p>
+
+<p><br /></p>
+
+<p><strong><font size="4">3-2. 쿠버네티스에서 Auto Scaling의 원리에 대해 설명해 주세요.</font></strong></p>
+
+<blockquote>
+  <p>아직 k8s에 대해 익숙하지 않아서 열심히 공부하는 중입니다;ㅅ;. 🌎<a href="https://kubernetes.io/ko/docs/home/">kubernetes 공식 문서</a>에서 깊이 있게 공부하실 수 있습니다.</p>
+</blockquote>
+
+<p><br />
+<br /></p>
+
+<h2 id="-개발-면접-질문---인프라클라우드">🔎 개발 면접 질문 - 인프라/클라우드</h2>
+
+<p><br /></p>
+
+<p>**<font size="4">1. AWS 인프라를 구축해본 경험에 대해 설명해 주세요.&lt;/Font&gt;**</font></p>
+
+<p>AWS를 사용해본 경험에 대하여 설명해 주시면 될 것 같습니다.</p>
+
+<p><br /></p>
+
+<p>**<font size="4">2. 서버리스(Serverless)란 무엇인가요?&lt;/Font&gt;**</font></p>
+
+<p>서버리스 컴퓨팅(Serverless Computing)이란 IT 인프라를 데이터센터 또는 클라우드에 준비 없이 필요한 기능을 함수로 구현해서 관리하는 것을 의미 합니다. 추가로 서버리스 컴퓨팅을 사용해본 경험에 대해 질문이 들어온다면, AWS Lambda와 같은 서버리스 컴퓨팅 플랫폼을 사용해본 경험에 대해 설명하시면 될 것 같습니다.</p>
+
+<blockquote>
+  <p>서버리스 컴퓨팅은 IT 인프라를 데이터센터 또는 클라우드에 준비 없이, 필요한 기능을 함수(Function) 형태로 구현하고, 자동 스케일링 방식으로 시시각각 변하는 자원 수요를 지원하며 전통적인 백엔드를 대신합니다. 따라서 서버리스 컴퓨팅을 <strong>FaaS(Function as a Service)</strong> 라고도 하고 백엔드 시스템을 보이지 않는 서비스로 추상화하였기 때문에 <strong>BaaS(Backend as a Service)</strong> 라고도 합니다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<p><img src="/liampoet.github.io/assets/images/interview/serverless.png" alt="서버리스 컴퓨팅" /><em>이미지 4. 기술의 발전</em></p>
+
+<p><br /></p>
+
+<p>**<font size="4">3. Amazon VPC(Amazon Virtual Private Cloud)란 무엇인가요?&lt;/Font&gt;**</font></p>
+
+<p>AWS 클라우드에서 다른 고객과 완벽하게 논리적으로 격리된 네트워크 공간을 제공하여 프로비저닝하여 가상 네트워크에서 AWS 리소스를 만드는데 사용하는 리소스입니다. 쉽게 풀어서 설명하자면, 자신이 사용할 AWS Resource들을 격리 되어진 하나의 네트워크로 묶는 서비스를 의미하며 격리되어 있기 때문에 다른 사람들은 접근하고 보는 것이 불가능해집니다.</p>
+
+<blockquote>
+  <p>만약, VPC 없이 인스턴스를 생성한다면 인스턴스끼리의 구분없는 연결로 인해 시스템 복잡도가 증가할 것이며, 인터넷을 통해 전달되는 트래픽의 전송이 굉장히 비효율적이게 될 것 입니다. VPC를 적용하면 인스턴스가 VPC에 속함으로써 네트워크를 구분할 수 있고, VPC 별로 필요한 설정을 통해 인스턴스에 네트워크 설정을 적용할 수 있습니다. AWS는 VPC의 중요성을 강조하여 2019년부터 거의 모든 서비스에 VPC를 적용하도록 강제하였습니다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<p>**<font size="4">3-1. Amazon VPC에 따른 AWS Lambda의 상태에 대해 설명해주세요.&lt;/Font&gt;**</font></p>
+
+<ul>
+  <li><strong>VPC</strong>가 없는 상태 : 웹에 자유롭게 접속할 수 있지만, 로컬 네트워크로 AWS 서비스들과 연결할 수 없습니다.</li>
+  <li><strong>VPC</strong>가 있는 상태 : 기본적인 설정으로 로컬 네트워크에 연결이 가능하지만, 웹에는 접속할 수 없습니다.</li>
+  <li><strong>VPC</strong>와 <strong>NAT</strong>이 있는 상태 : AWS 서비스와 웹 둘 다 접속이 가능합니다.</li>
+</ul>
+
+<p><br /></p>
+
+<p>**<font size="4">3-2. NAT(Network Address Translation, 네트워크 주소 변환) Gateway란 무엇인가요?&lt;/Font&gt;**</font></p>
+
+<p>NAT(Network Address Translation, 네트워크 주소 변환) Gateway란, 외부 서비스에서 프라이빗 서브넷의 인스턴스로 접근할 수 없게 하되, 프라이빗 서브넷의 인스턴스에서는 외부 서비스로 접근할 수 있게 해주는 서비스 입니다.</p>
+
+<p><br /></p>
+
+<p><img src="/liampoet.github.io/assets/images/interview/natgateway.png" alt="NAT GW" /><em>이미지 5. NAT GW (Network Address Translation Gateway)</em></p>
+
+<p><br /></p>
+
+<p>**<font size="4">4. 만약 클라이언트의 수가 늘어나게 되면서 기존 서버만으로는 정상적인 서비스가 불가능하게 되었습니다. 이럴 때는 어떠한 방법이 있을까요?&lt;/Font&gt;**</font></p>
+
+<p>증가한 트래픽에 대처할 수 있는 방법은 크게 서버 자체의 성능을 확장하는 Scale-up 방식과 서버를 여러대로 나눠서 트래픽을 처리하는 Scale-out의 방법이 있습니다. 또한, Scale-out의 방식은 여러 대의 서버로 트래픽을 균등하게 분산해주는 로드밸런싱이 반드시 필요합니다.</p>
+
+<p><br /></p>
+
+<p>**<font size="4">4-1. 로드 밸런서(Load Balancer)에 대해서 설명해 주세요.&lt;/Font&gt;**</font></p>
+
+<p>로드 밸런서란, 서버에 가해지는 트래픽을 여러 대의 서버에게 균등하게 분산시켜주는 역할을 합니다. 또한, 여러 대의 서버 덕분에 무중단 서비스 제공할 수 있습니다.</p>
+
+<blockquote>
+  <p>로드 밸런싱의 종류와 알고리즘, 장애 대비 및 ELB(Elastic Load Balancer), ALB(Application Load Balancer), NLB(Network Load Balancer)에 대해서 미리 공부하고 가시는 것을 추천드립니다. 🌎<a href="https://yoo11052.tistory.com/63">[AWS] 로드 밸런서란?</a>, <a href="https://nesoy.github.io/articles/2018-06/Load-Balancer">Load Balancer 장애 대비</a></p>
+</blockquote>
+
+<p><br /></p>
+
+<p>**<font size="4">5. 무중단 시스템으로 가기 위해 필요한 방법에 대한 본인의 생각을 말해주세요.&lt;/Font&gt;**</font></p>
+
+<p>다운 타임이 발생하지 않도록 기본적으로 두 대 이상의 서버를 서비스해야 합니다. 비용 절감을 위해 배포할 때에만 새롭게 서비스를 띄우고, 배포가 완료된 후에는 기존 서버는 셧다운 시키면 될 것 같습니다.</p>
+
+<p><br /></p>
+
+<p>**<font size="4">6. <u>Forward Proxy</u>와 <u>Reverse Proxy</u>에 대해 설명해 주세요.&lt;/Font&gt;**</font></p>
+
+<p><strong>Forward Proxy</strong> : 클라이언트에서 서버로 리소스를 요청할 때 직접 요청하지 않고 프록시 서버를 거쳐서 요청합니다. 특정 컨텐츠에 접근하는 것을 방지할 수 있으며, 유저의 정체를 숨겨줄 수도 있습니다.</p>
+
+<p><br /></p>
+
+<p><img src="/liampoet.github.io/assets/images/interview/forward.png" alt="Forward Proxy" /><em>이미지 6. Forward Proxy</em></p>
+
+<p><strong>Reverse Proxy</strong> : 애플리케이션 서버의 앞에 위치하여 클라이언트가 서버를 요청할 때 리버스 프록시를 호출하고, 리버스 프록시가 서버로부터 응답을 전달받아 다시 클라이언트에게 전송하는 역할을 합니다. 로드 밸런싱(load balancing)에 사용되고 있으며, SSL 암호화와 보안에 좋다는 장점이 있습니다.</p>
+
+<blockquote>
+  <p>NginX, Apache Web Server 등의 오픈 소스 소프트웨어에서 지원하고 CloudFlare, AWS CloudFront 같은 CDN 서비스도 마찬가지로 리버스 프록시 서버를 사용하고 있습니다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<p><img src="/liampoet.github.io/assets/images/interview/reverse.png" alt="Reverse Proxy" /><em>이미지 7. Reverse Proxy</em></p>
+
+<p><br /></p>
+
+<p>**<font size="4">7. AWS 리전(Region)과 가용 영역(Availability Zone, AZ)에 대해 설명해 주세요.&lt;/Font&gt;**</font></p>
+
+<p><br /></p>
+
+<p>**<font size="4">8. Snapshot에 대해 설명해 주세요.&lt;/Font&gt;**</font></p>
+
+<p><br /></p>
+
+<p>**<font size="4">8-1. <u>EC2 AMI(Amazon Machine Image)</u>와 <u>Snapshot</u>의 차이점에 대해 설명해 주세요.&lt;/Font&gt;**</font></p>
+
+<p>기본적으로 EBS(Elastic Block Store)를 백업한다는 점에서는 AMI(Amazon Machine Image)와 Snapshot은 동일하지만, AMI는 EC2 인스턴스에 연결되어 있는 모든 EBS Volume을 동시에 백업하는 것이라면 Snapshot 기능은 여러분들이 선택한 EBS Volume을 백업한다는 점에서 차이점이 있습니다. 또한 Snapshot은 AMI 주기적인 백업 기능을 제공해주지만, AMI는 제공하지 않습니다.</p>
+
+<p><br /></p>
+
+<p><br />
+<br /></p>
+
+<blockquote>
+  <p>끝맺음</p>
+</blockquote>
+
+<p>공부를 하면서 질문에 괜찮은 내용이 있으면 요약하면서 계속 추가하고 있습니다. 또한, 기본적인 이론에 대해 다시 공부를 하려고 정리한 내용이기 때문에 잘못된 부분들이 있을 수도 있습니다. 잘못된 정보가 보이거나, 부족한 내용, 추가되면 좋을 것 같은 내용이 있다면 댓글에 적어주시면 감사하겠습니다!😊</p>
+
+<p><br />
+<br /></p>
+
+<p><strong>[참고자료]</strong></p>
+<ul>
+  <li><a href="https://tecoble.techcourse.co.kr/post/2021-10-10-jenkins/">CI/CD가 뭔가요? 실전편</a>, <a href="https://tecoble.techcourse.co.kr/post/2021-08-14-ci-cd/">CI/CD가 뭔가요? 이론편</a></li>
+  <li><a href="https://steemit.com/kr/@frontalnh/domain-driven-design">Domain Driven Design 이란 무엇인가?</a></li>
+  <li><a href="https://kubernetes.io/ko/docs/home/">https://kubernetes.io/ko/docs/home/</a></li>
+  <li><a href="https://yoo11052.tistory.com/63">[AWS] 로드 밸런서란?</a></li>
+  <li><a href="https://losskatsu.github.io/it-infra/reverse-proxy/#">[Infra] 리버스 프록시(reverse proxy) 서버 개념</a></li>
+  <li><a href="https://docs.aws.amazon.com/ko_kr/vpc/latest/userguide/what-is-amazon-vpc.html">https://docs.aws.amazon.com/ko_kr/vpc/latest/userguide/what-is-amazon-vpc.html</a></li>
+  <li><a href="https://aws.amazon.com/ko/premiumsupport/knowledge-center/internet-access-lambda-function/">https://aws.amazon.com/ko/premiumsupport/knowledge-center/internet-access-lambda-function/</a></li>
+  <li><a href="https://cloudguardians.medium.com/ec2-ami-%EC%99%80-snapshot-%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90-db8dc5682eac">JIPA님 블로그</a></li>
+  <li><a href="https://www.slideshare.net/ssuserd4f9ff/aws-devops-ecr-elastic-beanstalk-240070104">WS DevOps와 ECR을 통한 Elastic Beanstalk 배포 환경 구축 및 타 환경과의 비교</a></li>
+</ul>
+
+
+            </div>
+
+            <!-- Rating -->
+            
+
+            <!-- Post Date -->
+            <p>
+            <small>
+                <span class="post-date"><time class="post-date" datetime="2022-08-13">13 Aug 2022</time></span>           
+                
+                </small>
+            </p>
+
+            <!-- Post Categories -->
+            <div class="after-post-cats">
+                <ul class="tags mb-4">
+                    
+                    
+                    <li>
+                        <a class="smoothscroll" href="/liampoet.github.io/categories#AWS">AWS</a>
+                    </li>
+                    
+                    <li>
+                        <a class="smoothscroll" href="/liampoet.github.io/categories#Docker">Docker</a>
+                    </li>
+                    
+                    <li>
+                        <a class="smoothscroll" href="/liampoet.github.io/categories#Interview">Interview</a>
+                    </li>
+                    
+                    <li>
+                        <a class="smoothscroll" href="/liampoet.github.io/categories#K8S">K8S</a>
+                    </li>
+                    
+                </ul>
+            </div>
+            <!-- End Categories -->
+
+            <!-- Post Tags -->
+            <div class="after-post-tags">
+                <ul class="tags">
+                    
+                    
+                </ul>
+            </div>
+            <!-- End Tags -->
+
+            <!-- Prev/Next -->
+            <div class="row PageNavigation d-flex justify-content-between font-weight-bold">
+            
+            <a class="prev d-block col-md-6" href="/liampoet.github.io//interview2/"> &laquo; 신입 백앤드 개발자를 위한 면접 질문 정리 - 데이터베이스</a>
+            
+            
+            <a class="next d-block col-md-6 text-lg-right" href="/liampoet.github.io//lambda-nat/">VPC내의 AWS Lambda의 인터넷 접속하기 &raquo; </a>
+            
+            <div class="clearfix"></div>
+            </div>
+            <!-- End Categories -->
+
+        </div>
+        <!-- End Post -->
+
+    </div>
+</div>
+<!-- End Article
+================================================== -->
+
+<!-- Begin Comments
+================================================== -->
+
+    <div class="container">
+        <div id="comments" class="row justify-content-center mb-5">
+            <div class="col-md-8">
+                <section class="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'demowebsite'; 
+        var disqus_developer = 0;
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = window.location.protocol + '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+            </div>
+        </div>
+    </div>
+
+<!--End Comments
+================================================== -->
+
+<!-- Review with LD-JSON, adapt it for your needs if you like, but make sure you test the generated HTML source code first: 
+https://search.google.com/structured-data/testing-tool/u/0/
+================================================== -->
+
+</div>
+
+
+<!-- Bottom Alert Bar
+================================================== -->
+<div class="alertbar">
+	<div class="container text-center">
+		<span><img src="/liampoet.github.io/assets/images/logo.png" alt="LiamCoding"> &nbsp; Never miss a <b>story</b> from us, subscribe to our newsletter</span>
+        <form action="https://wowthemes.us11.list-manage.com/subscribe/post?u=8aeb20a530e124561927d3bd8&amp;id=8c3d2d214b" method="post" name="mc-embedded-subscribe-form" class="wj-contact-form validate" target="_blank" novalidate>
+            <div class="mc-field-group">
+            <input type="email" placeholder="Email" name="EMAIL" class="required email" id="mce-EMAIL" autocomplete="on" required>
+            <input type="submit" value="Subscribe" name="subscribe" class="heart">
+            </div>
+        </form>
+	</div>
+</div>
+
+    
+</div>
+
+<!-- Categories Jumbotron
+================================================== -->
+<div class="jumbotron fortags">
+	<div class="d-md-flex h-100">
+		<div class="col-md-4 transpdark align-self-center text-center h-100">
+            <div class="d-md-flex align-items-center justify-content-center h-100">
+                <h2 class="d-md-block align-self-center py-1 font-weight-light">Explore <span class="d-none d-md-inline">→</span></h2>
+            </div>
+		</div>
+		<div class="col-md-8 p-5 align-self-center text-center">
+            
+            
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#AWS">AWS (7)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Python">Python (6)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Bootpay">Bootpay (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#FastAPI">FastAPI (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#AWS-Lambda">AWS Lambda (3)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#EventBridge">EventBridge (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Aamazon-Cloudwatch">Aamazon Cloudwatch (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Javascript">Javascript (3)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#jQuery">jQuery (3)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#MySQL">MySQL (4)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#HTML">HTML (2)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Json">Json (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Postman">Postman (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#AWS-RDS">AWS RDS (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Interview">Interview (3)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Docker">Docker (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#K8S">K8S (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#ALB">ALB (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#CDN">CDN (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Diary">Diary (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Kafka">Kafka (1)</a>
+                
+            
+            
+		</div>
+	</div>
+</div>
+
+<!-- Begin Footer
+================================================== -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 text-center text-lg-left">
+                Copyright © 2022 Liam 
+            </div>
+            <div class="col-md-6 col-sm-6 text-center text-lg-right">    
+                <a target="_blank" href="https://www.wowthemes.net/mediumish-free-jekyll-template/">Mediumish Jekyll Theme</a> by WowThemes.net
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- End Footer
+================================================== -->
+
+</div> <!-- /.site-content -->
+
+<!-- Scripts
+================================================== -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+<script src="/liampoet.github.io/assets/js/mediumish.js"></script>
+
+
+<script src="/liampoet.github.io/assets/js/lazyload.js"></script>
+
+
+<script src="/liampoet.github.io/assets/js/ie10-viewport-bug-workaround.js"></script> 
+
+
+<script id="dsq-count-scr" src="//demowebsite.disqus.com/count.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="icon" href="/liampoet.github.io/assets/images/logo.png">
+
+<title>알아두면 쓸모있는 MySQL 명령어 모음 | Liam</title>
+
+<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>알아두면 쓸모있는 MySQL 명령어 모음 | LiamCoding</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="알아두면 쓸모있는 MySQL 명령어 모음" />
+<meta name="author" content="Liam" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="💡 Intro 저는 아직 MySQL초보이기 때문에, 여러 명령어를 사용해 놓고도 시간이 조금 지나면 까먹을 때가 종종 있습니다(어….그 명령어가 뭐드라..?!?!). 그래서 제가 생각하기에 평소에 MySQL을 사용하다가, 알고있으면 쓸모있는 MySQL문법을 이곳에 간단하게 정리해 보려고 합니다.🙌 🔎 알아두면 쓸모있는 MySQL 명령어 모음 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 # 기존 컬럼에 AUTO_INCREMENT, PK 속성 추가 # 문법: ALTER TABLE [테이블명] MODIFY [컬럼명] [타입] [속성] ALTER TABLE table MODIFY id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY; # auto_increment 다시 1로 세팅 alter table &lt;table name&gt; auto_increment = 1; # 기존 테이블에 신규 컬럼 추가 # 문법: ALTER TABLE [테이블명] ADD [컬럼명] [타입] [속성] ALTER TABLE table ADD name VARCHAR(30) NOT NULL; # 문자열에 공백 제거 # TRIM - 문자열 좌우 공백 제거 SELECT TRIM(&#39; aabbccbbaa &#39;); # TRIM - 문자열 좌측 공백 제거 (LEADING) SELECT TRIM(LEADING FROM &#39; aabbccbbaa &#39;); # TRIM - 문자열 우측 공백 제거 (TRAILING) SELECT TRIM(TRAILING FROM &#39; aabbccbbaa &#39;); # 여러 문자열을 구분하여 하나의 문자열로 합치기 SELECT CONCAT_WS(&#39; &#39;, &#39;FirstName&#39;, &#39;LastName&#39;) full_name FROM table; # TRIM과 CONCAT_WS 응용 SELECT CONCAT_WS(&#39; &#39;, trim(FirstName), trim(LastName)) full_name FROM table; # 데이터 베이스에 속한 테이블들의 각종 정보 확인 show table status from `database`; # CASE문 : MySQL에서 CASE문은 프로그래밍 언어에서 스위치(switch)문과 비슷하지만, 다수의 조건에 하나의 반환 값은 동작하지 않는다. # 문법: SELECT CASE [컬럼명] WHEN [조건] TEHN [결과값] WHEN [조건] TEHN [결과값] ... ELSE [결과값] END FROM [테이블명] SELECT CASE column WHEN &#39;N&#39; THEN &quot;실패&quot; WHEN &#39;Y&#39; THEN &quot;성공&quot; END as success_column FROM table; # 특정 문자로 시작하는 데이터 검색 # 문법: SELECT [필드명] FROM [테이블명] WHERE [필드명] LIKE &#39;특정 문자열%; SELECT * FROM member WHERE name LIKE &#39;홍% # 특정 문자로 끝나는 데이터 검색 # 문법: SELECT [필드명] FROM [테이블명] WHERE [필드명] LIKE &#39;% 특정 문자열; SELECT * FROM member WHERE name LIKE &#39;% 길동; # 특정 문자 포함 데이터 검색 # 문법: SELECT [필드명] FROM [테이블명] WHERE [필드명] LIKE &#39;% 특정 문자열%; SELECT * FROM member WHERE name LIKE &#39;% 길동%; # 페이징 시 쿼리 - LIMIT: 행을 얼마나 가져올지, OFFSET: 어디서 부터 가져올지 # 숫자 만큼의 행을 출력 # 문법: SELECT * FROM 테이블명 ORDERS LIMIT 숫자; SELECT * FROM USER orders LIMIT 10; # (B+1) 행 부터 A 행 만큼 출력 # 문법: SELECT * FROM 테이블명 ORDERS LIMIT 숫자(A) OFFSET 숫자(B); SELECT * FROM USER ORDERS LIMIT 10 OFFSET 10; # (A+1)부터 B개의 행을 출력 # 문법: SELECT * FROM 테이블명 ORDER LIMIT 숫자(A), 숫자(B); SELECT * FROM USER ORDERS LIMIT 0, 10; # DB 테이블 구조 및 데이터 복사 # 테이블 구조 복사 CREATE TABLE IF NOT EXISTS `new_table` LIKE `old_table`; # 테이블 구조 및 데이터 복사 CREATE TABLE IF NOT EXISTS `new_table` SELECT * FROM `old_table`; # 테이블 데이터 복사 CREATE TABLE IF NOT EXISTS `new_table` SELECT * FROM `old_table`; # 테이블 데이터 부분 복사 INSERT INTO `new_table` (컬럼1 [, 컬럼2 ...]) SELECT 컬럼1 [, 컬럼2 ...] FROM `old_table`; 페이징을 처리할 수 있는 쿼리인 [OFFSET]에 대해서는 다음 포스팅에 조금 더 자세히 다루어 보도록 하겠습니다.😀 [참고자료] https://zzang9ha.tistory.com/295 https://extbrain.tistory.com/ https://pangtrue.tistory.com/170" />
+<meta property="og:description" content="💡 Intro 저는 아직 MySQL초보이기 때문에, 여러 명령어를 사용해 놓고도 시간이 조금 지나면 까먹을 때가 종종 있습니다(어….그 명령어가 뭐드라..?!?!). 그래서 제가 생각하기에 평소에 MySQL을 사용하다가, 알고있으면 쓸모있는 MySQL문법을 이곳에 간단하게 정리해 보려고 합니다.🙌 🔎 알아두면 쓸모있는 MySQL 명령어 모음 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 # 기존 컬럼에 AUTO_INCREMENT, PK 속성 추가 # 문법: ALTER TABLE [테이블명] MODIFY [컬럼명] [타입] [속성] ALTER TABLE table MODIFY id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY; # auto_increment 다시 1로 세팅 alter table &lt;table name&gt; auto_increment = 1; # 기존 테이블에 신규 컬럼 추가 # 문법: ALTER TABLE [테이블명] ADD [컬럼명] [타입] [속성] ALTER TABLE table ADD name VARCHAR(30) NOT NULL; # 문자열에 공백 제거 # TRIM - 문자열 좌우 공백 제거 SELECT TRIM(&#39; aabbccbbaa &#39;); # TRIM - 문자열 좌측 공백 제거 (LEADING) SELECT TRIM(LEADING FROM &#39; aabbccbbaa &#39;); # TRIM - 문자열 우측 공백 제거 (TRAILING) SELECT TRIM(TRAILING FROM &#39; aabbccbbaa &#39;); # 여러 문자열을 구분하여 하나의 문자열로 합치기 SELECT CONCAT_WS(&#39; &#39;, &#39;FirstName&#39;, &#39;LastName&#39;) full_name FROM table; # TRIM과 CONCAT_WS 응용 SELECT CONCAT_WS(&#39; &#39;, trim(FirstName), trim(LastName)) full_name FROM table; # 데이터 베이스에 속한 테이블들의 각종 정보 확인 show table status from `database`; # CASE문 : MySQL에서 CASE문은 프로그래밍 언어에서 스위치(switch)문과 비슷하지만, 다수의 조건에 하나의 반환 값은 동작하지 않는다. # 문법: SELECT CASE [컬럼명] WHEN [조건] TEHN [결과값] WHEN [조건] TEHN [결과값] ... ELSE [결과값] END FROM [테이블명] SELECT CASE column WHEN &#39;N&#39; THEN &quot;실패&quot; WHEN &#39;Y&#39; THEN &quot;성공&quot; END as success_column FROM table; # 특정 문자로 시작하는 데이터 검색 # 문법: SELECT [필드명] FROM [테이블명] WHERE [필드명] LIKE &#39;특정 문자열%; SELECT * FROM member WHERE name LIKE &#39;홍% # 특정 문자로 끝나는 데이터 검색 # 문법: SELECT [필드명] FROM [테이블명] WHERE [필드명] LIKE &#39;% 특정 문자열; SELECT * FROM member WHERE name LIKE &#39;% 길동; # 특정 문자 포함 데이터 검색 # 문법: SELECT [필드명] FROM [테이블명] WHERE [필드명] LIKE &#39;% 특정 문자열%; SELECT * FROM member WHERE name LIKE &#39;% 길동%; # 페이징 시 쿼리 - LIMIT: 행을 얼마나 가져올지, OFFSET: 어디서 부터 가져올지 # 숫자 만큼의 행을 출력 # 문법: SELECT * FROM 테이블명 ORDERS LIMIT 숫자; SELECT * FROM USER orders LIMIT 10; # (B+1) 행 부터 A 행 만큼 출력 # 문법: SELECT * FROM 테이블명 ORDERS LIMIT 숫자(A) OFFSET 숫자(B); SELECT * FROM USER ORDERS LIMIT 10 OFFSET 10; # (A+1)부터 B개의 행을 출력 # 문법: SELECT * FROM 테이블명 ORDER LIMIT 숫자(A), 숫자(B); SELECT * FROM USER ORDERS LIMIT 0, 10; # DB 테이블 구조 및 데이터 복사 # 테이블 구조 복사 CREATE TABLE IF NOT EXISTS `new_table` LIKE `old_table`; # 테이블 구조 및 데이터 복사 CREATE TABLE IF NOT EXISTS `new_table` SELECT * FROM `old_table`; # 테이블 데이터 복사 CREATE TABLE IF NOT EXISTS `new_table` SELECT * FROM `old_table`; # 테이블 데이터 부분 복사 INSERT INTO `new_table` (컬럼1 [, 컬럼2 ...]) SELECT 컬럼1 [, 컬럼2 ...] FROM `old_table`; 페이징을 처리할 수 있는 쿼리인 [OFFSET]에 대해서는 다음 포스팅에 조금 더 자세히 다루어 보도록 하겠습니다.😀 [참고자료] https://zzang9ha.tistory.com/295 https://extbrain.tistory.com/ https://pangtrue.tistory.com/170" />
+<link rel="canonical" href="http://localhost:4000/liampoet.github.io/mysql-command/" />
+<meta property="og:url" content="http://localhost:4000/liampoet.github.io/mysql-command/" />
+<meta property="og:site_name" content="LiamCoding" />
+<meta property="og:image" content="http://localhost:4000/liampoet.github.io/assets/images/default-logo.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-04-19T20:11:23+09:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","headline":"알아두면 쓸모있는 MySQL 명령어 모음","dateModified":"2022-04-19T20:11:23+09:00","datePublished":"2022-04-19T20:11:23+09:00","image":"http://localhost:4000/liampoet.github.io/assets/images/default-logo.png","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/liampoet.github.io/assets/images/logo.png"},"name":"Liam"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/liampoet.github.io/mysql-command/"},"author":{"@type":"Person","name":"Liam"},"description":"💡 Intro 저는 아직 MySQL초보이기 때문에, 여러 명령어를 사용해 놓고도 시간이 조금 지나면 까먹을 때가 종종 있습니다(어….그 명령어가 뭐드라..?!?!). 그래서 제가 생각하기에 평소에 MySQL을 사용하다가, 알고있으면 쓸모있는 MySQL문법을 이곳에 간단하게 정리해 보려고 합니다.🙌 🔎 알아두면 쓸모있는 MySQL 명령어 모음 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 # 기존 컬럼에 AUTO_INCREMENT, PK 속성 추가 # 문법: ALTER TABLE [테이블명] MODIFY [컬럼명] [타입] [속성] ALTER TABLE table MODIFY id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY; # auto_increment 다시 1로 세팅 alter table &lt;table name&gt; auto_increment = 1; # 기존 테이블에 신규 컬럼 추가 # 문법: ALTER TABLE [테이블명] ADD [컬럼명] [타입] [속성] ALTER TABLE table ADD name VARCHAR(30) NOT NULL; # 문자열에 공백 제거 # TRIM - 문자열 좌우 공백 제거 SELECT TRIM(&#39; aabbccbbaa &#39;); # TRIM - 문자열 좌측 공백 제거 (LEADING) SELECT TRIM(LEADING FROM &#39; aabbccbbaa &#39;); # TRIM - 문자열 우측 공백 제거 (TRAILING) SELECT TRIM(TRAILING FROM &#39; aabbccbbaa &#39;); # 여러 문자열을 구분하여 하나의 문자열로 합치기 SELECT CONCAT_WS(&#39; &#39;, &#39;FirstName&#39;, &#39;LastName&#39;) full_name FROM table; # TRIM과 CONCAT_WS 응용 SELECT CONCAT_WS(&#39; &#39;, trim(FirstName), trim(LastName)) full_name FROM table; # 데이터 베이스에 속한 테이블들의 각종 정보 확인 show table status from `database`; # CASE문 : MySQL에서 CASE문은 프로그래밍 언어에서 스위치(switch)문과 비슷하지만, 다수의 조건에 하나의 반환 값은 동작하지 않는다. # 문법: SELECT CASE [컬럼명] WHEN [조건] TEHN [결과값] WHEN [조건] TEHN [결과값] ... ELSE [결과값] END FROM [테이블명] SELECT CASE column WHEN &#39;N&#39; THEN &quot;실패&quot; WHEN &#39;Y&#39; THEN &quot;성공&quot; END as success_column FROM table; # 특정 문자로 시작하는 데이터 검색 # 문법: SELECT [필드명] FROM [테이블명] WHERE [필드명] LIKE &#39;특정 문자열%; SELECT * FROM member WHERE name LIKE &#39;홍% # 특정 문자로 끝나는 데이터 검색 # 문법: SELECT [필드명] FROM [테이블명] WHERE [필드명] LIKE &#39;% 특정 문자열; SELECT * FROM member WHERE name LIKE &#39;% 길동; # 특정 문자 포함 데이터 검색 # 문법: SELECT [필드명] FROM [테이블명] WHERE [필드명] LIKE &#39;% 특정 문자열%; SELECT * FROM member WHERE name LIKE &#39;% 길동%; # 페이징 시 쿼리 - LIMIT: 행을 얼마나 가져올지, OFFSET: 어디서 부터 가져올지 # 숫자 만큼의 행을 출력 # 문법: SELECT * FROM 테이블명 ORDERS LIMIT 숫자; SELECT * FROM USER orders LIMIT 10; # (B+1) 행 부터 A 행 만큼 출력 # 문법: SELECT * FROM 테이블명 ORDERS LIMIT 숫자(A) OFFSET 숫자(B); SELECT * FROM USER ORDERS LIMIT 10 OFFSET 10; # (A+1)부터 B개의 행을 출력 # 문법: SELECT * FROM 테이블명 ORDER LIMIT 숫자(A), 숫자(B); SELECT * FROM USER ORDERS LIMIT 0, 10; # DB 테이블 구조 및 데이터 복사 # 테이블 구조 복사 CREATE TABLE IF NOT EXISTS `new_table` LIKE `old_table`; # 테이블 구조 및 데이터 복사 CREATE TABLE IF NOT EXISTS `new_table` SELECT * FROM `old_table`; # 테이블 데이터 복사 CREATE TABLE IF NOT EXISTS `new_table` SELECT * FROM `old_table`; # 테이블 데이터 부분 복사 INSERT INTO `new_table` (컬럼1 [, 컬럼2 ...]) SELECT 컬럼1 [, 컬럼2 ...] FROM `old_table`; 페이징을 처리할 수 있는 쿼리인 [OFFSET]에 대해서는 다음 포스팅에 조금 더 자세히 다루어 보도록 하겠습니다.😀 [참고자료] https://zzang9ha.tistory.com/295 https://extbrain.tistory.com/ https://pangtrue.tistory.com/170","url":"http://localhost:4000/liampoet.github.io/mysql-command/","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    
+<link href="/liampoet.github.io/assets/css/screen.css" rel="stylesheet">
+
+<link href="/liampoet.github.io/assets/css/main.css" rel="stylesheet">
+
+<script src="/liampoet.github.io/assets/js/jquery.min.js"></script>
+
+</head>
+
+
+
+
+<body class="layout-post">
+	<!-- defer loading of font and font awesome -->
+	<noscript id="deferred-styles">
+		<link href="https://fonts.googleapis.com/css?family=Righteous%7CMerriweather:300,300i,400,400i,700,700i" rel="stylesheet">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+	</noscript>
+
+
+<!-- Begin Menu Navigation
+================================================== -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top mediumnavigation nav-down">
+
+    <div class="container pr-0">
+
+    <!-- Begin Logo -->
+    <a class="navbar-brand" href="/liampoet.github.io/">
+    <img src="/liampoet.github.io/assets/images/logo.png" alt="Liam">
+    </a>
+    <!-- End Logo -->
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMediumish" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarMediumish">
+
+        <!-- Begin Menu -->
+
+            <ul class="navbar-nav ml-auto">
+
+                
+                <li class="nav-item">
+                
+                <a class="nav-link" href="/liampoet.github.io/index.html">Blog</a>
+                </li>
+
+                <li class="nav-item">
+                <a class="nav-link" href="/liampoet.github.io/about">About</a>
+                </li>
+
+                <li class="nav-item">
+                <a target="_blank" class="nav-link" href="https://github.com/liampoet"><i class="fab fa-github"></i> Github</a>
+                </li>
+
+                <script src="/liampoet.github.io/assets/js/lunr.js"></script>
+
+
+<style>
+    .lunrsearchresult .title {color: #d9230f;}
+    .lunrsearchresult .url {color: silver;}
+    .lunrsearchresult a {display: block; color: #777;}
+    .lunrsearchresult a:hover, .lunrsearchresult a:focus {text-decoration: none;}
+    .lunrsearchresult a:hover .title {text-decoration: underline;}
+</style>
+
+
+<form class="bd-search" onSubmit="return lunr_search(document.getElementById('lunrsearch').value);">
+    <input type="text" class="form-control text-small launch-modal-search" id="lunrsearch" name="q" maxlength="255" value="" placeholder="Type and enter..."/>
+</form>
+
+<div id="lunrsearchresults">
+    <ul></ul>
+</div>
+
+<script src="/liampoet.github.io/assets/js/lunrsearchengine.js"></script>
+
+            </ul>
+
+        <!-- End Menu -->
+
+    </div>
+
+    </div>
+</nav>
+<!-- End Navigation
+================================================== -->
+
+<div class="site-content">
+
+<div class="container">
+
+<!-- Site Title
+================================================== -->
+<div class="mainheading">
+    <h1 class="sitetitle">Liam</h1>
+    <p class="lead">
+        Hello! I'm Liam 👋I'm a developer working at ./-
+    </p>
+</div>
+
+<!-- Content
+================================================== -->
+<div class="main-content">
+    <!-- Begin Article
+================================================== -->
+<div class="container">
+    <div class="row">
+
+        <!-- Post Share -->
+        <div class="col-md-2 pl-0">
+            <div class="share sticky-top sticky-top-offset">
+    <p>
+        Share
+    </p>
+    <ul>
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://twitter.com/intent/tweet?text=알아두면 쓸모있는 MySQL 명령어 모음&url=http://localhost:4000/liampoet.github.io/mysql-command/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fab fa-twitter"></i>
+            </a>
+        </li>
+
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://facebook.com/sharer.php?u=http://localhost:4000/liampoet.github.io/mysql-command/" onclick="window.open(this.href, 'facebook-share', 'width=550,height=435');return false;">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+        </li>
+
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/liampoet.github.io/mysql-command/" onclick="window.open(this.href, 'width=550,height=435');return false;">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+        </li>
+
+    </ul>
+    
+    <div class="sep">
+    </div>
+    <ul>
+        <li>
+        <a class="small smoothscroll" href="#disqus_thread"></a>
+        </li>
+    </ul>
+    
+</div>
+
+        </div>
+
+        <!-- Post -->
+        
+
+        <div class="col-md-9 flex-first flex-md-unordered">
+            <div class="mainheading">
+
+                <!-- Author Box -->
+                
+                <div class="row post-top-meta">
+                    <div class="col-xs-12 col-md-3 col-lg-2 text-center text-md-left mb-4 mb-md-0">
+                        
+                        <img class="author-thumb" src="https://www.gravatar.com/avatar/341e587e52b4402086ddb8d2ffc9e48b?s=250&d=mm&r=x" alt="Liam">
+                        
+                    </div>
+                    <div class="col-xs-12 col-md-9 col-lg-10 text-center text-md-left">
+                        <a target="_blank" class="link-dark" href="https://www.linkedin.com/in/kwongmin-lim-32b828247/">Liam</a><a target="_blank" href="" class="btn follow">Follow</a>
+                        <span class="author-description">공부하는 중입니다.🥸</span>
+                    </div>
+                </div>
+                
+
+                <!-- Post Title -->
+                <h1 class="posttitle">알아두면 쓸모있는 MySQL 명령어 모음</h1>
+
+            </div>
+
+            <!-- Adsense if enabled from _config.yml (change your pub id and slot) -->
+            
+            <!-- End Adsense -->
+
+            <!-- Post Featured Image -->
+            
+
+            
+            <img class="featured-image img-fluid lazyimg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAACCAQAAAA3fa6RAAAADklEQVR42mNkAANGCAUAACMAA2w/AMgAAAAASUVORK5CYII=" data-src="/liampoet.github.io/assets/images/default-logo.png" alt="알아두면 쓸모있는 MySQL 명령어 모음">
+            
+
+            
+            <!-- End Featured Image -->
+
+            <!-- Post Content -->
+            <div class="article-post">
+                <!-- Toc if any -->
+                
+                <!-- End Toc -->
+                <p><br />
+<br /></p>
+
+<h2 id="-intro">💡 Intro</h2>
+
+<p>저는 아직 MySQL초보이기 때문에, 여러 명령어를 사용해 놓고도 시간이 조금 지나면 까먹을 때가 종종 있습니다(어….그 명령어가 뭐드라..?!?!). 그래서 제가 생각하기에 평소에 MySQL을 사용하다가,  알고있으면 쓸모있는 MySQL문법을 이곳에 간단하게 정리해 보려고 합니다.🙌</p>
+
+<p><br />
+<br /></p>
+
+<h2 id="-알아두면-쓸모있는-mysql-명령어-모음">🔎 알아두면 쓸모있는 MySQL 명령어 모음</h2>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+</pre></td><td class="rouge-code"><pre><span class="c1"># 기존 컬럼에 AUTO_INCREMENT, PK 속성 추가
+# 문법: ALTER TABLE [테이블명] MODIFY [컬럼명] [타입] [속성]
+</span><span class="n">ALTER</span> <span class="n">TABLE</span> <span class="n">table</span> <span class="n">MODIFY</span> <span class="nb">id</span> <span class="n">BIGINT</span> <span class="n">NOT</span> <span class="n">NULL</span> <span class="n">AUTO_INCREMENT</span> <span class="n">PRIMARY</span> <span class="n">KEY</span><span class="p">;</span>
+
+<span class="c1"># auto_increment 다시 1로 세팅
+</span><span class="n">alter</span> <span class="n">table</span> <span class="o">&lt;</span><span class="n">table</span> <span class="n">name</span><span class="o">&gt;</span> <span class="n">auto_increment</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+
+
+  
+<span class="c1"># 기존 테이블에 신규 컬럼 추가
+# 문법: ALTER TABLE [테이블명] ADD [컬럼명] [타입] [속성]
+</span><span class="n">ALTER</span> <span class="n">TABLE</span> <span class="n">table</span> <span class="n">ADD</span> <span class="n">name</span> <span class="n">VARCHAR</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span> <span class="n">NOT</span> <span class="n">NULL</span><span class="p">;</span>
+
+
+
+
+<span class="c1"># 문자열에 공백 제거
+# TRIM - 문자열 좌우 공백 제거
+</span><span class="n">SELECT</span> <span class="n">TRIM</span><span class="p">(</span><span class="s">' aabbccbbaa '</span><span class="p">);</span>
+
+<span class="c1"># TRIM - 문자열 좌측 공백 제거 (LEADING)
+</span><span class="n">SELECT</span> <span class="n">TRIM</span><span class="p">(</span><span class="n">LEADING</span> <span class="n">FROM</span> <span class="s">' aabbccbbaa '</span><span class="p">);</span>
+
+<span class="c1"># TRIM - 문자열 우측 공백 제거 (TRAILING)
+</span><span class="n">SELECT</span> <span class="n">TRIM</span><span class="p">(</span><span class="n">TRAILING</span> <span class="n">FROM</span> <span class="s">' aabbccbbaa '</span><span class="p">);</span>
+
+
+
+
+<span class="c1"># 여러 문자열을 구분하여 하나의 문자열로 합치기
+</span><span class="n">SELECT</span> <span class="n">CONCAT_WS</span><span class="p">(</span><span class="s">' '</span><span class="p">,</span> <span class="s">'FirstName'</span><span class="p">,</span> <span class="s">'LastName'</span><span class="p">)</span> <span class="n">full_name</span> <span class="n">FROM</span> <span class="n">table</span><span class="p">;</span>
+
+<span class="c1"># TRIM과 CONCAT_WS 응용
+</span><span class="n">SELECT</span> <span class="n">CONCAT_WS</span><span class="p">(</span><span class="s">' '</span><span class="p">,</span> <span class="n">trim</span><span class="p">(</span><span class="n">FirstName</span><span class="p">),</span> <span class="n">trim</span><span class="p">(</span><span class="n">LastName</span><span class="p">))</span> <span class="n">full_name</span> <span class="n">FROM</span> <span class="n">table</span><span class="p">;</span>
+
+
+
+
+<span class="c1"># 데이터 베이스에 속한 테이블들의 각종 정보 확인
+</span><span class="n">show</span> <span class="n">table</span> <span class="n">status</span> <span class="k">from</span> <span class="sb">`database`</span><span class="p">;</span>
+
+
+
+
+<span class="c1"># CASE문 : MySQL에서 CASE문은 프로그래밍 언어에서 스위치(switch)문과 비슷하지만, 다수의 조건에 하나의 반환 값은 동작하지 않는다.
+# 문법: SELECT CASE [컬럼명] WHEN [조건] TEHN [결과값] WHEN [조건] TEHN [결과값] ... ELSE [결과값] END FROM [테이블명]
+</span><span class="n">SELECT</span> <span class="n">CASE</span> <span class="n">column</span> <span class="n">WHEN</span> <span class="s">'N'</span> <span class="n">THEN</span> <span class="s">"실패"</span> <span class="n">WHEN</span> <span class="s">'Y'</span> <span class="n">THEN</span> <span class="s">"성공"</span> <span class="n">END</span> <span class="k">as</span> <span class="n">success_column</span> <span class="n">FROM</span> <span class="n">table</span><span class="p">;</span>
+
+
+
+
+<span class="c1"># 특정 문자로 시작하는 데이터 검색
+# 문법: SELECT [필드명] FROM [테이블명] WHERE [필드명] LIKE '특정 문자열%;
+</span><span class="n">SELECT</span> <span class="o">*</span> <span class="n">FROM</span> <span class="n">member</span> <span class="n">WHERE</span> <span class="n">name</span> <span class="n">LIKE</span> <span class="s">'홍</span><span class="si">%</span><span class="err">
+
+</span><span class="s"># 특정 문자로 끝나는 데이터 검색</span><span class="err">
+</span><span class="s"># 문법: SELECT [필드명] FROM [테이블명] WHERE [필드명] LIKE '</span><span class="o">%</span> <span class="err">특정</span> <span class="err">문자열</span><span class="p">;</span>
+<span class="n">SELECT</span> <span class="o">*</span> <span class="n">FROM</span> <span class="n">member</span> <span class="n">WHERE</span> <span class="n">name</span> <span class="n">LIKE</span> <span class="s">'</span><span class="si">% </span><span class="s">길동;</span><span class="err">
+
+</span><span class="s"># 특정 문자 포함  데이터  검색</span><span class="err">
+</span><span class="s"># 문법: SELECT [필드명] FROM [테이블명] WHERE [필드명] LIKE '</span><span class="o">%</span> <span class="err">특정</span> <span class="err">문자열</span><span class="o">%</span><span class="p">;</span>
+<span class="n">SELECT</span> <span class="o">*</span> <span class="n">FROM</span> <span class="n">member</span> <span class="n">WHERE</span> <span class="n">name</span> <span class="n">LIKE</span> <span class="s">'</span><span class="si">% </span><span class="s">길동</span><span class="si">%</span><span class="s">;</span><span class="err">
+
+
+
+
+</span><span class="s"># 페이징 시 쿼리 - LIMIT: 행을 얼마나 가져올지, OFFSET: 어디서 부터 가져올지</span><span class="err">
+</span><span class="s"># 숫자 만큼의 행을 출력</span><span class="err">
+</span><span class="s"># 문법: SELECT * FROM 테이블명 ORDERS LIMIT 숫자;</span><span class="err">
+</span><span class="s">SELECT * FROM USER orders LIMIT 10;</span><span class="err">
+</span><span class="s">  </span><span class="err">
+</span><span class="s"># (B+1) 행 부터 A 행 만큼 출력</span><span class="err">
+</span><span class="s"># 문법: SELECT * FROM 테이블명 ORDERS LIMIT 숫자(A) OFFSET 숫자(B);</span><span class="err">
+</span><span class="s">SELECT * FROM USER ORDERS LIMIT 10 OFFSET 10;</span><span class="err">
+
+</span><span class="s"># (A+1)부터 B개의 행을 출력</span><span class="err">
+</span><span class="s"># 문법: SELECT * FROM 테이블명 ORDER LIMIT 숫자(A), 숫자(B);</span><span class="err">
+</span><span class="s">SELECT * FROM USER ORDERS LIMIT 0, 10;</span><span class="err">
+
+
+
+
+</span><span class="s"># DB 테이블 구조 및 데이터 복사</span><span class="err">
+</span><span class="s"># 테이블 구조 복사</span><span class="err">
+</span><span class="s">CREATE TABLE IF NOT EXISTS `new_table` LIKE `old_table`;</span><span class="err">
+
+</span><span class="s"># 테이블 구조 및 데이터 복사</span><span class="err">
+</span><span class="s">CREATE TABLE IF NOT EXISTS `new_table` SELECT * FROM `old_table`;</span><span class="err">
+
+</span><span class="s"># 테이블 데이터 복사</span><span class="err">
+</span><span class="s">CREATE TABLE IF NOT EXISTS `new_table` SELECT * FROM `old_table`;</span><span class="err">
+
+</span><span class="s"># 테이블 데이터 부분 복사</span><span class="err">
+</span><span class="s">INSERT INTO `new_table` (컬럼1 [, 컬럼2 ...]) SELECT 컬럼1 [, 컬럼2 ...] FROM `old_table`;</span><span class="err">
+
+
+
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><br /></p>
+
+<p>페이징을 처리할 수 있는 쿼리인 [OFFSET]에 대해서는 다음 포스팅에 조금 더 자세히 다루어 보도록 하겠습니다.😀</p>
+
+<p><br />
+<br /></p>
+
+<p><strong>[참고자료]</strong></p>
+<ul>
+  <li><a href="https://zzang9ha.tistory.com/295">https://zzang9ha.tistory.com/295</a></li>
+  <li><a href="https://extbrain.tistory.com/">https://extbrain.tistory.com/</a></li>
+  <li><a href="https://pangtrue.tistory.com/170">https://pangtrue.tistory.com/170</a></li>
+</ul>
+
+            </div>
+
+            <!-- Rating -->
+            
+
+            <!-- Post Date -->
+            <p>
+            <small>
+                <span class="post-date"><time class="post-date" datetime="2022-04-19">19 Apr 2022</time></span>           
+                
+                </small>
+            </p>
+
+            <!-- Post Categories -->
+            <div class="after-post-cats">
+                <ul class="tags mb-4">
+                    
+                    
+                    <li>
+                        <a class="smoothscroll" href="/liampoet.github.io/categories#MySQL">MySQL</a>
+                    </li>
+                    
+                </ul>
+            </div>
+            <!-- End Categories -->
+
+            <!-- Post Tags -->
+            <div class="after-post-tags">
+                <ul class="tags">
+                    
+                    
+                </ul>
+            </div>
+            <!-- End Tags -->
+
+            <!-- Prev/Next -->
+            <div class="row PageNavigation d-flex justify-content-between font-weight-bold">
+            
+            <a class="prev d-block col-md-6" href="/liampoet.github.io//jquery-regex/"> &laquo; jQuery 정규식 [id^=] 사용해보기</a>
+            
+            
+            <a class="next d-block col-md-6 text-lg-right" href="/liampoet.github.io//mysql-offset/">MySQL offset 활용 &raquo; </a>
+            
+            <div class="clearfix"></div>
+            </div>
+            <!-- End Categories -->
+
+        </div>
+        <!-- End Post -->
+
+    </div>
+</div>
+<!-- End Article
+================================================== -->
+
+<!-- Begin Comments
+================================================== -->
+
+    <div class="container">
+        <div id="comments" class="row justify-content-center mb-5">
+            <div class="col-md-8">
+                <section class="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'demowebsite'; 
+        var disqus_developer = 0;
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = window.location.protocol + '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+            </div>
+        </div>
+    </div>
+
+<!--End Comments
+================================================== -->
+
+<!-- Review with LD-JSON, adapt it for your needs if you like, but make sure you test the generated HTML source code first: 
+https://search.google.com/structured-data/testing-tool/u/0/
+================================================== -->
+
+</div>
+
+
+<!-- Bottom Alert Bar
+================================================== -->
+<div class="alertbar">
+	<div class="container text-center">
+		<span><img src="/liampoet.github.io/assets/images/logo.png" alt="LiamCoding"> &nbsp; Never miss a <b>story</b> from us, subscribe to our newsletter</span>
+        <form action="https://wowthemes.us11.list-manage.com/subscribe/post?u=8aeb20a530e124561927d3bd8&amp;id=8c3d2d214b" method="post" name="mc-embedded-subscribe-form" class="wj-contact-form validate" target="_blank" novalidate>
+            <div class="mc-field-group">
+            <input type="email" placeholder="Email" name="EMAIL" class="required email" id="mce-EMAIL" autocomplete="on" required>
+            <input type="submit" value="Subscribe" name="subscribe" class="heart">
+            </div>
+        </form>
+	</div>
+</div>
+
+    
+</div>
+
+<!-- Categories Jumbotron
+================================================== -->
+<div class="jumbotron fortags">
+	<div class="d-md-flex h-100">
+		<div class="col-md-4 transpdark align-self-center text-center h-100">
+            <div class="d-md-flex align-items-center justify-content-center h-100">
+                <h2 class="d-md-block align-self-center py-1 font-weight-light">Explore <span class="d-none d-md-inline">→</span></h2>
+            </div>
+		</div>
+		<div class="col-md-8 p-5 align-self-center text-center">
+            
+            
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#AWS">AWS (7)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Python">Python (6)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Bootpay">Bootpay (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#FastAPI">FastAPI (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#AWS-Lambda">AWS Lambda (3)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#EventBridge">EventBridge (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Aamazon-Cloudwatch">Aamazon Cloudwatch (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Javascript">Javascript (3)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#jQuery">jQuery (3)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#MySQL">MySQL (4)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#HTML">HTML (2)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Json">Json (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Postman">Postman (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#AWS-RDS">AWS RDS (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Interview">Interview (3)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Docker">Docker (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#K8S">K8S (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#ALB">ALB (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#CDN">CDN (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Diary">Diary (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Kafka">Kafka (1)</a>
+                
+            
+            
+		</div>
+	</div>
+</div>
+
+<!-- Begin Footer
+================================================== -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 text-center text-lg-left">
+                Copyright © 2022 Liam 
+            </div>
+            <div class="col-md-6 col-sm-6 text-center text-lg-right">    
+                <a target="_blank" href="https://www.wowthemes.net/mediumish-free-jekyll-template/">Mediumish Jekyll Theme</a> by WowThemes.net
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- End Footer
+================================================== -->
+
+</div> <!-- /.site-content -->
+
+<!-- Scripts
+================================================== -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+<script src="/liampoet.github.io/assets/js/mediumish.js"></script>
+
+
+<script src="/liampoet.github.io/assets/js/lazyload.js"></script>
+
+
+<script src="/liampoet.github.io/assets/js/ie10-viewport-bug-workaround.js"></script> 
+
+
+<script id="dsq-count-scr" src="//demowebsite.disqus.com/count.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="icon" href="/liampoet.github.io/assets/images/logo.png">
+
+<title>What is Apache Kafka? | Liam</title>
+
+<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>What is Apache Kafka? | LiamCoding</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="What is Apache Kafka?" />
+<meta name="author" content="Liam" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Hello! I’m Liam 👋I’m a developer working at ./-" />
+<meta property="og:description" content="Hello! I’m Liam 👋I’m a developer working at ./-" />
+<link rel="canonical" href="http://localhost:4000/liampoet.github.io/kafka/" />
+<meta property="og:url" content="http://localhost:4000/liampoet.github.io/kafka/" />
+<meta property="og:site_name" content="LiamCoding" />
+<meta property="og:image" content="http://localhost:4000/liampoet.github.io/assets/images/kafka/kafka_streams.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-12-10T17:05:22+09:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","headline":"What is Apache Kafka?","dateModified":"2022-12-10T17:05:22+09:00","datePublished":"2022-12-10T17:05:22+09:00","image":"http://localhost:4000/liampoet.github.io/assets/images/kafka/kafka_streams.png","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/liampoet.github.io/assets/images/logo.png"},"name":"Liam"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/liampoet.github.io/kafka/"},"author":{"@type":"Person","name":"Liam"},"description":"Hello! I’m Liam 👋I’m a developer working at ./-","url":"http://localhost:4000/liampoet.github.io/kafka/","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    
+<link href="/liampoet.github.io/assets/css/screen.css" rel="stylesheet">
+
+<link href="/liampoet.github.io/assets/css/main.css" rel="stylesheet">
+
+<script src="/liampoet.github.io/assets/js/jquery.min.js"></script>
+
+</head>
+
+
+
+
+<body class="layout-post">
+	<!-- defer loading of font and font awesome -->
+	<noscript id="deferred-styles">
+		<link href="https://fonts.googleapis.com/css?family=Righteous%7CMerriweather:300,300i,400,400i,700,700i" rel="stylesheet">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+	</noscript>
+
+
+<!-- Begin Menu Navigation
+================================================== -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top mediumnavigation nav-down">
+
+    <div class="container pr-0">
+
+    <!-- Begin Logo -->
+    <a class="navbar-brand" href="/liampoet.github.io/">
+    <img src="/liampoet.github.io/assets/images/logo.png" alt="Liam">
+    </a>
+    <!-- End Logo -->
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMediumish" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarMediumish">
+
+        <!-- Begin Menu -->
+
+            <ul class="navbar-nav ml-auto">
+
+                
+                <li class="nav-item">
+                
+                <a class="nav-link" href="/liampoet.github.io/index.html">Blog</a>
+                </li>
+
+                <li class="nav-item">
+                <a class="nav-link" href="/liampoet.github.io/about">About</a>
+                </li>
+
+                <li class="nav-item">
+                <a target="_blank" class="nav-link" href="https://github.com/liampoet"><i class="fab fa-github"></i> Github</a>
+                </li>
+
+                <script src="/liampoet.github.io/assets/js/lunr.js"></script>
+
+
+<style>
+    .lunrsearchresult .title {color: #d9230f;}
+    .lunrsearchresult .url {color: silver;}
+    .lunrsearchresult a {display: block; color: #777;}
+    .lunrsearchresult a:hover, .lunrsearchresult a:focus {text-decoration: none;}
+    .lunrsearchresult a:hover .title {text-decoration: underline;}
+</style>
+
+
+<form class="bd-search" onSubmit="return lunr_search(document.getElementById('lunrsearch').value);">
+    <input type="text" class="form-control text-small launch-modal-search" id="lunrsearch" name="q" maxlength="255" value="" placeholder="Type and enter..."/>
+</form>
+
+<div id="lunrsearchresults">
+    <ul></ul>
+</div>
+
+<script src="/liampoet.github.io/assets/js/lunrsearchengine.js"></script>
+
+            </ul>
+
+        <!-- End Menu -->
+
+    </div>
+
+    </div>
+</nav>
+<!-- End Navigation
+================================================== -->
+
+<div class="site-content">
+
+<div class="container">
+
+<!-- Site Title
+================================================== -->
+<div class="mainheading">
+    <h1 class="sitetitle">Liam</h1>
+    <p class="lead">
+        Hello! I'm Liam 👋I'm a developer working at ./-
+    </p>
+</div>
+
+<!-- Content
+================================================== -->
+<div class="main-content">
+    <!-- Begin Article
+================================================== -->
+<div class="container">
+    <div class="row">
+
+        <!-- Post Share -->
+        <div class="col-md-2 pl-0">
+            <div class="share sticky-top sticky-top-offset">
+    <p>
+        Share
+    </p>
+    <ul>
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://twitter.com/intent/tweet?text=What is Apache Kafka?&url=http://localhost:4000/liampoet.github.io/kafka/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fab fa-twitter"></i>
+            </a>
+        </li>
+
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://facebook.com/sharer.php?u=http://localhost:4000/liampoet.github.io/kafka/" onclick="window.open(this.href, 'facebook-share', 'width=550,height=435');return false;">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+        </li>
+
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/liampoet.github.io/kafka/" onclick="window.open(this.href, 'width=550,height=435');return false;">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+        </li>
+
+    </ul>
+    
+    <div class="sep">
+    </div>
+    <ul>
+        <li>
+        <a class="small smoothscroll" href="#disqus_thread"></a>
+        </li>
+    </ul>
+    
+</div>
+
+        </div>
+
+        <!-- Post -->
+        
+
+        <div class="col-md-9 flex-first flex-md-unordered">
+            <div class="mainheading">
+
+                <!-- Author Box -->
+                
+                <div class="row post-top-meta">
+                    <div class="col-xs-12 col-md-3 col-lg-2 text-center text-md-left mb-4 mb-md-0">
+                        
+                        <img class="author-thumb" src="https://www.gravatar.com/avatar/341e587e52b4402086ddb8d2ffc9e48b?s=250&d=mm&r=x" alt="Liam">
+                        
+                    </div>
+                    <div class="col-xs-12 col-md-9 col-lg-10 text-center text-md-left">
+                        <a target="_blank" class="link-dark" href="https://www.linkedin.com/in/kwongmin-lim-32b828247/">Liam</a><a target="_blank" href="" class="btn follow">Follow</a>
+                        <span class="author-description">공부하는 중입니다.🥸</span>
+                    </div>
+                </div>
+                
+
+                <!-- Post Title -->
+                <h1 class="posttitle">What is Apache Kafka?</h1>
+
+            </div>
+
+            <!-- Adsense if enabled from _config.yml (change your pub id and slot) -->
+            
+            <!-- End Adsense -->
+
+            <!-- Post Featured Image -->
+            
+
+            
+            <img class="featured-image img-fluid lazyimg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAACCAQAAAA3fa6RAAAADklEQVR42mNkAANGCAUAACMAA2w/AMgAAAAASUVORK5CYII=" data-src="/liampoet.github.io/assets/images/kafka/kafka_streams.png" alt="What is Apache Kafka?">
+            
+
+            
+            <!-- End Featured Image -->
+
+            <!-- Post Content -->
+            <div class="article-post">
+                <!-- Toc if any -->
+                
+                <!-- End Toc -->
+                <p><br />
+<br /></p>
+
+<h2 id="-intro">💡 Intro</h2>
+
+<p>Kafka는 많은 서비스에서 백엔드로 사용하고 있습니다. 저는 Kafka의 ‘K’ 정도만 알고 있기 때문에, 오늘은 Kafka의 개념과 기본 구조에 대해서 알아보려고 합니다.</p>
+
+<p><br />
+<br /></p>
+
+<h2 id="-kafka의-탄생">🔎 Kafka의 탄생</h2>
+
+<p>링크드인은 사이트가 급속도로 성장하면서 기존의 End to End 연결 방식이었던 아키텍처로는 복잡도, 데이터 파이프라인 관리 등의 어려움 때문에 새로운 아키텍처가 필요로 해졌습니다. 
+이를 해결하기 위해 링크드인은 Kafka라는 메시징 분산 스트리밍 플랫폼을 개발하게 되었습니다.</p>
+
+<blockquote>
+  <p>당시 링크드인의 요구사항은 1.높은 처리량으로 데이터를 실시간으로 처리 가능 해야 하며, 2.메시지의 영속성을 보장해 주고, 3.Scale out이 용이 해야 한다 등이 있었습니다.
+하지만 당시의 제품들은 높은 처리량이 우선 순위였던 링크드인의 요구사항보다 트랜젝션의 관리가 너무 오버스펙이거나, 메시지 큐로 데이터를 쌓긴 하지만 장시간 쌓이는 것은 고려하지 않는 등의 문제로 충족시키지 못했습니다.
+당시 링크드인의 자세한 요구사항은 🌎<a href="https://www.hanbit.co.kr/media/channel/view.html?cms_code=CMS9400468504">한빛미디어-링크드인은 왜 카프카를 만들었나</a>을 통해 확인 하실 수 있습니다.</p>
+</blockquote>
+
+<p><br />
+<br /></p>
+
+<h2 id="what-is-apache-kafka">What is Apache Kafka?</h2>
+
+<p><code class="highlighter-rouge">Apache Kafka is an open-source distributed event streaming platform used by thousands of companies for high-performance data pipelines, 
+streaming analytics, data integration, and mission-critical applications.</code> <span style="color:gray; font-size:2px;">- 출처: Apache Kafka<span></span></span></p>
+
+<p>Apache Kafka의 공식사이트에서는 Apache Kafka란 수천 개의 기업이 고성능 데이터 파이프라인, 스트리밍 분석, 데이터 통합, 미션 크리티컬 애플리케이션을 위해 사용하는 오픈 소스 분산 이벤트 스트리밍 플랫폼이라고 설명합니다.
+즉, Kafka는 데이터를 생성하는 어플리케이션과 데이터를 소비하는 어플리케이션 간의 중재자 역할을 함으로써 데이터의 전송 제어, 처리, 관리 역할을 하며 Publish-Subscribe 모델을 구현한 분산 메시징 시스템입니다.</p>
+
+<blockquote>
+  <p>Message Queue란? 프로그램 간 데이터를 교환할 때 사용하는 통신 방법 중 하나이며 🌎<a href="https://tecoble.techcourse.co.kr/post/2021-07-03-message-oriented-middleware/">Message-Oriented Middleware</a>의 구현을 의미합니다.</p>
+</blockquote>
+
+<h3 id="apache-kafka의-아키텍처">Apache Kafka의 아키텍처</h3>
+
+<p><img src="/liampoet.github.io/assets/images/kafka/kafka_architecture.png" alt="Kafka Architecture" /><em>이미지 1. Kafka 아키텍처(출처: Developer.holee Blog)</em></p>
+
+<p>Kafka는 Publish-Subscribe 모델을 기반으로 동작하며, 위 이미와 같이 크게 <strong>producer, consumer, broker, Zookeeper</strong>로 구성됩니다. Producer는 특정 topic의 메시지를 생성한 뒤 해당 메시지를 broker에 전달합니다.
+Broker가 전달받은 메시지를 topic별로(Foo, bar) 분류하여 쌓아놓으면, 해당 topic을 구독하는 consumer들이 메시지를 가져가서 처리합니다. 클러스터 내의 broker에 대한 분산 처리는 <strong>이미지 1. Kafka 아키텍처</strong>와 같이 🌎<a href="https://zookeeper.apache.org/">Apache ZooKeeper</a>가 담당합니다.</p>
+<blockquote>
+  <p>여담으로, Apache Kafka에 대한 자료를 찾다가 Apache Kafka에서 Zookeeper을 제거한다는 소식이 있다는 것을 알게되었습니다. 🌎<a href="https://www.itworld.co.kr/news/235784">아파치 카프카에서 ‘주키퍼’ 빠진다…”내부 메타데이터 프로토콜로 대체”</a></p>
+</blockquote>
+
+<p><br /></p>
+
+<p>조금 더 깊이 들어 가기 전, Apache Kafka의 기본 개념은 아래와 같습니다.</p>
+
+<ul>
+  <li><span style="background-color:#f7ddbe">프로듀서(Producer)</span> : 데이터를 발생시키고 Kafka 클러스터에 적재하는 프로세스입니다.</li>
+  <li><span style="background-color:#f7ddbe">카프카 클러스터(Kafka Cluster)</span> : 카프카 클러스터는 카프카 서버로 이루어진 클러스터를 말하며, 카프카 클러스터를 이루는 각 요소는 다음과 같습니다.</li>
+  <li><span style="background-color:#f7ddbe">토픽(Topic)</span> : Kafka 클러스터에 데이터를 관리할 시 그 기준이 되는 개념입니다. 토픽은 Kafka 클러스터에서 여러개 만들 수 있으며 하나의 토픽은 1개 이상의 파티션으로 구성되어 있습니다.</li>
+  <li><span style="background-color:#f7ddbe">브로커(Broker)</span> : Broker는 실행 된 Kafka serve 중 1대를 뜻합니다.</li>
+  <li><span style="background-color:#f7ddbe">파티션(Partition)</span> : 각 토픽 당 데이터를 분산 처리하는 단위입니다. Kafka에서는 토픽 안에 파티션을 나누어 그 수 대로 데이터를 분산처리합니다.</li>
+  <li><span style="background-color:#f7ddbe">Offset</span> : 파티션 내의 각 레코드를 고유하게 식별하는 순차적인 ID를 뜻합니다.</li>
+  <li><span style="background-color:#f7ddbe">주키퍼(Zookeeper)</span> : 주키퍼는 분산 코디네이션 시스템입니다. Kafka 브로커를 하나의 클러스터로 코디네이팅하는 역할을 합니다.</li>
+  <li><span style="background-color:#f7ddbe">컨슈머 그룹(Consumer Group)</span> : 컨슈머의 집합을 구성하는 단위입니다. 카프카에서는 컨슈머 그룹으로서 데이터를 처리하며 컨슈머 그룹 안의 컨슈머 수만큼 파티션의 데이터를 분산처리하게 됩니다.</li>
+  <li><span style="background-color:#f7ddbe">Broker Partition Replication</span> : Replication은 각 Topic의 Partition들을 Kafka Cluster내의 다른 Broker들로 복제하는 것을 말하며 Topic생성 시 Replication의 수를 지정할 수 있습니다. 생성된 Replication은 Leader와 Follower로 나뉘어 ISR(In Sync Replica)이라는 일종의 Replication Group을 형성하여 관리됩니다.</li>
+  <li><span style="background-color:#f7ddbe">ISR(In Sync Replica)</span> : Reader, Follower 파티션이 모두 동기화된 상태를 말합니다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="kafka-아키텍처의-구성요소">Kafka 아키텍처의 구성요소</h3>
+
+<h4 id="1-topic과-partition">1. <span style="background-color:#fff5b1">Topic</span>과 <span style="background-color:#fff5b1">Partition</span></h4>
+
+<p><img src="/liampoet.github.io/assets/images/kafka/topic.png" alt="Topic" /><em>이미지 2. Kafka Topic(출처: Apache Kafka)</em></p>
+
+<p>하나의 topic이 3개의 partition에 분산되어 순차적으로 저장되어지는데, 이 때 각 partition은 0부터 1씩 증가하는 offset 값(고유 ID)을 메시지에 부여합니다.
+offset 값은 partition마다 별도로 관리되기 때문에 topic내에서 메시지를 식별할 때는 partition 번호와 offset 값을 함께 사용합니다.</p>
+
+<h4 id="2-broker">2. <span style="background-color:#fff5b1">Broker</span></h4>
+
+<p>Kafka Cluster는 여러대의 broker(server)로 구성되어져 있습니다. 보통 3개 이상의 broker로 클러스터를 운영하며, 각각의 broker는 고유한 id 값으로 구분되어집니다.</p>
+
+<p><img src="/liampoet.github.io/assets/images/kafka/Replication.png" alt="Replication" /><em>이미지 3. Replication(파란색이 리더)</em></p>
+
+<p><span style="background-color:#f7ddbe">Replication</span>은 클러스터로 묶인 브로커 중 일부에 장애가 발생하더라도 데이터를 유실하지 않고 안전 하게 하기 위해 사용됩니다.
+Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같이 3개의 broker가 있을 때, 복제된 파티션은 <strong>1개의 리더(leader)</strong>와 <strong>N-1개의 팔로워(follower)</strong>로 구성됩니다.
+각각의 팔로워는 리더의 오프셋을 확인하고, 현재 자신이 가지고 있는 오프셋과 차이가 나는 경우 리더로부터 데이터를 가져와서 자신의 파티션에 저장합니다. 파티션의 데이터가 복제되므로 복제 개수만큼의
+비용이 발생하게 되지만 데이터의 안전이 보장되기 때문에 이러한 비용을 감수하고 복제를 수행한다고 합니다.</p>
+
+<p><img src="/liampoet.github.io/assets/images/kafka/Replication-error.png" alt="Replication-error" /><em>이미지 4. Replication-error</em></p>
+
+<p>여기서 갑자기 리더의 broker에 error가 발생하게 된다면, 팔로워 파티션 중 하나가 리더 파티션의 지위를 넘겨받게 됩니다. 
+이를 통해 데이터가 유실되지 않고 데이터의 안전성을 보장할 수 있게 됩니다.</p>
+
+<h4 id="3-consumers와-consumer-groups">3. <span style="background-color:#fff5b1">Consumers</span>와 <span style="background-color:#fff5b1">Consumer Groups</span></h4>
+
+<p><br /></p>
+
+<h3 id="kafka의-특징">Kafka의 특징</h3>
+
+<ol>
+  <li>Kafka의 topic에 여러 프로듀서가 동시에 메시지를 전송할 수 있으며, Kafka topic의 메시지를 여러 컨슈머들이 동시에 읽어 갈 수 있습니다. 
+때문에, 다중 프로듀서/컨슈머의 지원으로 하나의 Kafka 시스템을 통해 다양한 애플리케이션이 데이터를 주고 받을 수 있습니다.</li>
+  <li>Kafka는 프로듀서가 생성한 메시지를 브로커가 위치한 서버의 파일 시스템에 저장할 수 있기 때문에, 데이터의 영속성을 보장해 줍니다.</li>
+  <li>Scale out 즉, 확장성이 용이합니다. 프로듀서, 컨슈머, 브로커등을 운영중에 추가할 수 있으며 예를 들어 초창기에 적은 수의 브로커들로 클러스터를 운영하다가 
+시스템 트래픽이 높아지면 브로커를 추가해서 클러스터를 확장할 수 있습니다.</li>
+  <li>Kafka는 Push가 아닌 컨슈머가 브로커에게서 메시지를 가져오는 Pull방식이기 때문에 컨슈머의 처리량을 브로커가 고민할 필요가 없습니다. 
+즉, 컨슈머는 자신이 처리할 수 있는 만큼의 메시지만 브로커에게서 가져가면 되기 때문에 최적의 메시지처리 성능을 가질 수 있습니다.</li>
+</ol>
+
+<p><br />
+<br /></p>
+
+<p><br /></p>
+
+
+            </div>
+
+            <!-- Rating -->
+            
+
+            <!-- Post Date -->
+            <p>
+            <small>
+                <span class="post-date"><time class="post-date" datetime="2022-12-10">10 Dec 2022</time></span>           
+                
+                </small>
+            </p>
+
+            <!-- Post Categories -->
+            <div class="after-post-cats">
+                <ul class="tags mb-4">
+                    
+                    
+                    <li>
+                        <a class="smoothscroll" href="/liampoet.github.io/categories#Kafka">Kafka</a>
+                    </li>
+                    
+                </ul>
+            </div>
+            <!-- End Categories -->
+
+            <!-- Post Tags -->
+            <div class="after-post-tags">
+                <ul class="tags">
+                    
+                    
+                    <li>
+                        <a class="smoothscroll" href="/liampoet.github.io/tags#Kafka">#Kafka</a>
+                    </li>
+                    
+                </ul>
+            </div>
+            <!-- End Tags -->
+
+            <!-- Prev/Next -->
+            <div class="row PageNavigation d-flex justify-content-between font-weight-bold">
+            
+            <a class="prev d-block col-md-6" href="/liampoet.github.io//diary/"> &laquo; My Diary</a>
+            
+            
+            <div class="clearfix"></div>
+            </div>
+            <!-- End Categories -->
+
+        </div>
+        <!-- End Post -->
+
+    </div>
+</div>
+<!-- End Article
+================================================== -->
+
+<!-- Begin Comments
+================================================== -->
+
+    <div class="container">
+        <div id="comments" class="row justify-content-center mb-5">
+            <div class="col-md-8">
+                <section class="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'demowebsite'; 
+        var disqus_developer = 0;
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = window.location.protocol + '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+            </div>
+        </div>
+    </div>
+
+<!--End Comments
+================================================== -->
+
+<!-- Review with LD-JSON, adapt it for your needs if you like, but make sure you test the generated HTML source code first: 
+https://search.google.com/structured-data/testing-tool/u/0/
+================================================== -->
+
+</div>
+
+
+<!-- Bottom Alert Bar
+================================================== -->
+<div class="alertbar">
+	<div class="container text-center">
+		<span><img src="/liampoet.github.io/assets/images/logo.png" alt="LiamCoding"> &nbsp; Never miss a <b>story</b> from us, subscribe to our newsletter</span>
+        <form action="https://wowthemes.us11.list-manage.com/subscribe/post?u=8aeb20a530e124561927d3bd8&amp;id=8c3d2d214b" method="post" name="mc-embedded-subscribe-form" class="wj-contact-form validate" target="_blank" novalidate>
+            <div class="mc-field-group">
+            <input type="email" placeholder="Email" name="EMAIL" class="required email" id="mce-EMAIL" autocomplete="on" required>
+            <input type="submit" value="Subscribe" name="subscribe" class="heart">
+            </div>
+        </form>
+	</div>
+</div>
+
+    
+</div>
+
+<!-- Categories Jumbotron
+================================================== -->
+<div class="jumbotron fortags">
+	<div class="d-md-flex h-100">
+		<div class="col-md-4 transpdark align-self-center text-center h-100">
+            <div class="d-md-flex align-items-center justify-content-center h-100">
+                <h2 class="d-md-block align-self-center py-1 font-weight-light">Explore <span class="d-none d-md-inline">→</span></h2>
+            </div>
+		</div>
+		<div class="col-md-8 p-5 align-self-center text-center">
+            
+            
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#AWS">AWS (7)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Python">Python (6)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Bootpay">Bootpay (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#FastAPI">FastAPI (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#AWS-Lambda">AWS Lambda (3)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#EventBridge">EventBridge (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Aamazon-Cloudwatch">Aamazon Cloudwatch (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Javascript">Javascript (3)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#jQuery">jQuery (3)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#MySQL">MySQL (4)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#HTML">HTML (2)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Json">Json (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Postman">Postman (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#AWS-RDS">AWS RDS (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Interview">Interview (3)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Docker">Docker (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#K8S">K8S (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#ALB">ALB (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#CDN">CDN (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Diary">Diary (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Kafka">Kafka (1)</a>
+                
+            
+            
+		</div>
+	</div>
+</div>
+
+<!-- Begin Footer
+================================================== -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 text-center text-lg-left">
+                Copyright © 2022 Liam 
+            </div>
+            <div class="col-md-6 col-sm-6 text-center text-lg-right">    
+                <a target="_blank" href="https://www.wowthemes.net/mediumish-free-jekyll-template/">Mediumish Jekyll Theme</a> by WowThemes.net
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- End Footer
+================================================== -->
+
+</div> <!-- /.site-content -->
+
+<!-- Scripts
+================================================== -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+<script src="/liampoet.github.io/assets/js/mediumish.js"></script>
+
+
+<script src="/liampoet.github.io/assets/js/lazyload.js"></script>
+
+
+<script src="/liampoet.github.io/assets/js/ie10-viewport-bug-workaround.js"></script> 
+
+
+<script id="dsq-count-scr" src="//demowebsite.disqus.com/count.js"></script>
+
+
+</body>
+</html>
