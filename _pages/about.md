@@ -14,8 +14,6 @@ comments: true
 <br>
 
 <p class="mb-5"><img class="shadow-lg" src="{{site.baseurl}}/assets/images/liam_notion_portfolio-1.png"/></p>
-<p class="mb-5"><img class="shadow-lg" src="{{site.baseurl}}/assets/images/liam_notion_portfolio-2.png"/></p>
-<p class="mb-5"><img class="shadow-lg" src="{{site.baseurl}}/assets/images/liam_notion_portfolio-3.png"/></p>
 
 <h4>Learn More</h4>
 
