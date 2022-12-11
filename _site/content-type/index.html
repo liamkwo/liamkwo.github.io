@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<link rel="icon" href="/liampoet.github.io/assets/images/logo.png">
+<link rel="icon" href="/assets/images/logo.png">
 
-<title>form-data? x-www-form-urlencoded? raw? | Liam</title>
+<title>form-data? x-www-form-urlencoded? raw? | LiamCoding</title>
 
 <!-- Begin Jekyll SEO tag v2.5.0 -->
 <title>form-data? x-www-form-urlencoded? raw? | LiamCoding</title>
@@ -16,24 +16,24 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="💡 Intro Postman을 사용하다 보면 여러 가지의 Content-Type이 있습니다. form-data, x-www-form-urlencoded, Raw, Binary, GraphQL이 있는데, 오늘은 이 요청 유형에 대해 알아보려 합니다. 🔎 들어가기전 Content-Type이란? 📝 Content-Type : API 연동시에, 보내는 자원의 형식을 명시하기 위해서 HTTP Header에 실리는 정보를 content-type이라고 합니다. 즉, api 요청 시 request에 실어 보내는 data의 type정보를 표현합니다. content-type에 대한 자세한 정보는 NAMP 님의 HTTP Content-Type 정리에 잘 정리되어져 있으니 정보가 필요하신분은 방문해주세요! 📚 POST 요청 유형 📕 1. form-data(양식 데이터) 이름에서 알 수 있듯이 양식 데이터는 양식을 채울때 입력 한 세부 정보와 같이 양식 내부에 래핑하는 데이터를 보내는데 사용됩니다. 이러한 세부 정보는 Key가 보내는 항목의 “이름” 이고 Value는 실제 값을 입력하면 됩니다. 즉, Key-Value 쌍으로 작성하여 전송됩니다. 또한, 텍스트 뿐만아니라 파일과 함께 일부 데이터를 서버에 전송하기를 원한다면 아래 GIF와 같이 form-data에서 수행할 수도 있습니다. 📘 2. x-www-form-urlencoded 요즘은 많이 사용하지는 않지만 종종 사용하는 방식입니다. form-data와 거의 동일한 목적으로 사용되며 form-data와 상당히 유사합니다. form-data와의 차이점은 x-www-form-urlencoded는 보내는 데이터를 URL인코딩 이라고 부르는 방식으로 인코딩 후에 웹서버로 보냅니다. 또한, Raw는 본문 메시지가 요청 본문을 나타내는 비트스트림(bitstream)으로 표시됨을 의미합니다. 이러한 비트는 문자열 서버로 해석됩니다. 📒 3. raw 이름 그대로 날것이라고 해석할 수 있습니다. raw를 제외한 다른 타입들의 경우 각각 용도에 맞게 Postman에서 알아서 처리를 해줍니다. 하지만 raw타입은 문자 그대로를 보내기 때문에 개발자가 요청 형식에 맞게끔 값을 써주어야 합니다. raw를 선택하면 위 사진과 같이 세부 항목을 선택할 수 있습니다. Text, JavaScript, JSON, HTML, XML의 형식을 지원합니다. 물론 형식에 틀리게 작성한다면 틀렸다고 알려줍니다. 📗 4. binary Binary는 수동으로 입력할 수 없는 형식으로 데이터를 전송하도록 설계되었습니다. 컴퓨터의 모든 것이 바이너리로 변환되기 때문에 이미지, 파일 등과 같이 수동으로 작성할 수 없는 상황일 때 이러한 옵션을 사용합니다. 즉, 텍스트 없이 이미지나 영상, 오디오 파일 등을 보낼 때 사용합니다. 📙 5. GraphQL GraphQL이란 Facebook에서 만든 어플리케이션 레이어 쿼리 언어라고 합니다. 웹 클라이언트가 서버로부터 데이터를 효율적으로 가져오기 위한 언어입니다. GraphQL은 GraphQL 개념잡기에서 더 자세하게 보실 수 있습니다. 끝맺음 이렇게 오늘은 여러 가지의 요청 유형에 대해 알아보았습니다. 저는 실제로 사용할 때 JSON의 요청이 많다 보니, raw와 form-data를 가장 많이 사용하게 되더군요. 평소에는 생각지도 못한 부분들이었는데, 갑자기 이것들에 대한 차이가 뭐지..? 라는 생각을 가지게 되었고, 그렇게 이번에 공부를 하며 자료를 정리하다보니 생각보다 흥미로운 부분들이 많았던 것 같습니다.😊 [참고자료] HTTP Content-Type 정리 https://jw910911.tistory.com/117 Postman을 사용한 POST 요청 (GraphQL) GraphQL 개념잡기" />
 <meta property="og:description" content="💡 Intro Postman을 사용하다 보면 여러 가지의 Content-Type이 있습니다. form-data, x-www-form-urlencoded, Raw, Binary, GraphQL이 있는데, 오늘은 이 요청 유형에 대해 알아보려 합니다. 🔎 들어가기전 Content-Type이란? 📝 Content-Type : API 연동시에, 보내는 자원의 형식을 명시하기 위해서 HTTP Header에 실리는 정보를 content-type이라고 합니다. 즉, api 요청 시 request에 실어 보내는 data의 type정보를 표현합니다. content-type에 대한 자세한 정보는 NAMP 님의 HTTP Content-Type 정리에 잘 정리되어져 있으니 정보가 필요하신분은 방문해주세요! 📚 POST 요청 유형 📕 1. form-data(양식 데이터) 이름에서 알 수 있듯이 양식 데이터는 양식을 채울때 입력 한 세부 정보와 같이 양식 내부에 래핑하는 데이터를 보내는데 사용됩니다. 이러한 세부 정보는 Key가 보내는 항목의 “이름” 이고 Value는 실제 값을 입력하면 됩니다. 즉, Key-Value 쌍으로 작성하여 전송됩니다. 또한, 텍스트 뿐만아니라 파일과 함께 일부 데이터를 서버에 전송하기를 원한다면 아래 GIF와 같이 form-data에서 수행할 수도 있습니다. 📘 2. x-www-form-urlencoded 요즘은 많이 사용하지는 않지만 종종 사용하는 방식입니다. form-data와 거의 동일한 목적으로 사용되며 form-data와 상당히 유사합니다. form-data와의 차이점은 x-www-form-urlencoded는 보내는 데이터를 URL인코딩 이라고 부르는 방식으로 인코딩 후에 웹서버로 보냅니다. 또한, Raw는 본문 메시지가 요청 본문을 나타내는 비트스트림(bitstream)으로 표시됨을 의미합니다. 이러한 비트는 문자열 서버로 해석됩니다. 📒 3. raw 이름 그대로 날것이라고 해석할 수 있습니다. raw를 제외한 다른 타입들의 경우 각각 용도에 맞게 Postman에서 알아서 처리를 해줍니다. 하지만 raw타입은 문자 그대로를 보내기 때문에 개발자가 요청 형식에 맞게끔 값을 써주어야 합니다. raw를 선택하면 위 사진과 같이 세부 항목을 선택할 수 있습니다. Text, JavaScript, JSON, HTML, XML의 형식을 지원합니다. 물론 형식에 틀리게 작성한다면 틀렸다고 알려줍니다. 📗 4. binary Binary는 수동으로 입력할 수 없는 형식으로 데이터를 전송하도록 설계되었습니다. 컴퓨터의 모든 것이 바이너리로 변환되기 때문에 이미지, 파일 등과 같이 수동으로 작성할 수 없는 상황일 때 이러한 옵션을 사용합니다. 즉, 텍스트 없이 이미지나 영상, 오디오 파일 등을 보낼 때 사용합니다. 📙 5. GraphQL GraphQL이란 Facebook에서 만든 어플리케이션 레이어 쿼리 언어라고 합니다. 웹 클라이언트가 서버로부터 데이터를 효율적으로 가져오기 위한 언어입니다. GraphQL은 GraphQL 개념잡기에서 더 자세하게 보실 수 있습니다. 끝맺음 이렇게 오늘은 여러 가지의 요청 유형에 대해 알아보았습니다. 저는 실제로 사용할 때 JSON의 요청이 많다 보니, raw와 form-data를 가장 많이 사용하게 되더군요. 평소에는 생각지도 못한 부분들이었는데, 갑자기 이것들에 대한 차이가 뭐지..? 라는 생각을 가지게 되었고, 그렇게 이번에 공부를 하며 자료를 정리하다보니 생각보다 흥미로운 부분들이 많았던 것 같습니다.😊 [참고자료] HTTP Content-Type 정리 https://jw910911.tistory.com/117 Postman을 사용한 POST 요청 (GraphQL) GraphQL 개념잡기" />
-<link rel="canonical" href="http://localhost:4000/liampoet.github.io/content-type/" />
-<meta property="og:url" content="http://localhost:4000/liampoet.github.io/content-type/" />
+<link rel="canonical" href="http://localhost:4000/content-type/" />
+<meta property="og:url" content="http://localhost:4000/content-type/" />
 <meta property="og:site_name" content="LiamCoding" />
-<meta property="og:image" content="http://localhost:4000/liampoet.github.io/assets/images/content-type/form_2.gif" />
+<meta property="og:image" content="http://localhost:4000/assets/images/content-type/form_2.gif" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-05-17T18:48:57+09:00" />
 <script type="application/ld+json">
-{"@type":"BlogPosting","headline":"form-data? x-www-form-urlencoded? raw?","dateModified":"2022-05-17T18:48:57+09:00","datePublished":"2022-05-17T18:48:57+09:00","image":"http://localhost:4000/liampoet.github.io/assets/images/content-type/form_2.gif","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/liampoet.github.io/assets/images/logo.png"},"name":"Liam"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/liampoet.github.io/content-type/"},"author":{"@type":"Person","name":"Liam"},"description":"💡 Intro Postman을 사용하다 보면 여러 가지의 Content-Type이 있습니다. form-data, x-www-form-urlencoded, Raw, Binary, GraphQL이 있는데, 오늘은 이 요청 유형에 대해 알아보려 합니다. 🔎 들어가기전 Content-Type이란? 📝 Content-Type : API 연동시에, 보내는 자원의 형식을 명시하기 위해서 HTTP Header에 실리는 정보를 content-type이라고 합니다. 즉, api 요청 시 request에 실어 보내는 data의 type정보를 표현합니다. content-type에 대한 자세한 정보는 NAMP 님의 HTTP Content-Type 정리에 잘 정리되어져 있으니 정보가 필요하신분은 방문해주세요! 📚 POST 요청 유형 📕 1. form-data(양식 데이터) 이름에서 알 수 있듯이 양식 데이터는 양식을 채울때 입력 한 세부 정보와 같이 양식 내부에 래핑하는 데이터를 보내는데 사용됩니다. 이러한 세부 정보는 Key가 보내는 항목의 “이름” 이고 Value는 실제 값을 입력하면 됩니다. 즉, Key-Value 쌍으로 작성하여 전송됩니다. 또한, 텍스트 뿐만아니라 파일과 함께 일부 데이터를 서버에 전송하기를 원한다면 아래 GIF와 같이 form-data에서 수행할 수도 있습니다. 📘 2. x-www-form-urlencoded 요즘은 많이 사용하지는 않지만 종종 사용하는 방식입니다. form-data와 거의 동일한 목적으로 사용되며 form-data와 상당히 유사합니다. form-data와의 차이점은 x-www-form-urlencoded는 보내는 데이터를 URL인코딩 이라고 부르는 방식으로 인코딩 후에 웹서버로 보냅니다. 또한, Raw는 본문 메시지가 요청 본문을 나타내는 비트스트림(bitstream)으로 표시됨을 의미합니다. 이러한 비트는 문자열 서버로 해석됩니다. 📒 3. raw 이름 그대로 날것이라고 해석할 수 있습니다. raw를 제외한 다른 타입들의 경우 각각 용도에 맞게 Postman에서 알아서 처리를 해줍니다. 하지만 raw타입은 문자 그대로를 보내기 때문에 개발자가 요청 형식에 맞게끔 값을 써주어야 합니다. raw를 선택하면 위 사진과 같이 세부 항목을 선택할 수 있습니다. Text, JavaScript, JSON, HTML, XML의 형식을 지원합니다. 물론 형식에 틀리게 작성한다면 틀렸다고 알려줍니다. 📗 4. binary Binary는 수동으로 입력할 수 없는 형식으로 데이터를 전송하도록 설계되었습니다. 컴퓨터의 모든 것이 바이너리로 변환되기 때문에 이미지, 파일 등과 같이 수동으로 작성할 수 없는 상황일 때 이러한 옵션을 사용합니다. 즉, 텍스트 없이 이미지나 영상, 오디오 파일 등을 보낼 때 사용합니다. 📙 5. GraphQL GraphQL이란 Facebook에서 만든 어플리케이션 레이어 쿼리 언어라고 합니다. 웹 클라이언트가 서버로부터 데이터를 효율적으로 가져오기 위한 언어입니다. GraphQL은 GraphQL 개념잡기에서 더 자세하게 보실 수 있습니다. 끝맺음 이렇게 오늘은 여러 가지의 요청 유형에 대해 알아보았습니다. 저는 실제로 사용할 때 JSON의 요청이 많다 보니, raw와 form-data를 가장 많이 사용하게 되더군요. 평소에는 생각지도 못한 부분들이었는데, 갑자기 이것들에 대한 차이가 뭐지..? 라는 생각을 가지게 되었고, 그렇게 이번에 공부를 하며 자료를 정리하다보니 생각보다 흥미로운 부분들이 많았던 것 같습니다.😊 [참고자료] HTTP Content-Type 정리 https://jw910911.tistory.com/117 Postman을 사용한 POST 요청 (GraphQL) GraphQL 개념잡기","url":"http://localhost:4000/liampoet.github.io/content-type/","@context":"http://schema.org"}</script>
+{"@type":"BlogPosting","headline":"form-data? x-www-form-urlencoded? raw?","dateModified":"2022-05-17T18:48:57+09:00","datePublished":"2022-05-17T18:48:57+09:00","image":"http://localhost:4000/assets/images/content-type/form_2.gif","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/images/logo.png"},"name":"Liam"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/content-type/"},"author":{"@type":"Person","name":"Liam"},"description":"💡 Intro Postman을 사용하다 보면 여러 가지의 Content-Type이 있습니다. form-data, x-www-form-urlencoded, Raw, Binary, GraphQL이 있는데, 오늘은 이 요청 유형에 대해 알아보려 합니다. 🔎 들어가기전 Content-Type이란? 📝 Content-Type : API 연동시에, 보내는 자원의 형식을 명시하기 위해서 HTTP Header에 실리는 정보를 content-type이라고 합니다. 즉, api 요청 시 request에 실어 보내는 data의 type정보를 표현합니다. content-type에 대한 자세한 정보는 NAMP 님의 HTTP Content-Type 정리에 잘 정리되어져 있으니 정보가 필요하신분은 방문해주세요! 📚 POST 요청 유형 📕 1. form-data(양식 데이터) 이름에서 알 수 있듯이 양식 데이터는 양식을 채울때 입력 한 세부 정보와 같이 양식 내부에 래핑하는 데이터를 보내는데 사용됩니다. 이러한 세부 정보는 Key가 보내는 항목의 “이름” 이고 Value는 실제 값을 입력하면 됩니다. 즉, Key-Value 쌍으로 작성하여 전송됩니다. 또한, 텍스트 뿐만아니라 파일과 함께 일부 데이터를 서버에 전송하기를 원한다면 아래 GIF와 같이 form-data에서 수행할 수도 있습니다. 📘 2. x-www-form-urlencoded 요즘은 많이 사용하지는 않지만 종종 사용하는 방식입니다. form-data와 거의 동일한 목적으로 사용되며 form-data와 상당히 유사합니다. form-data와의 차이점은 x-www-form-urlencoded는 보내는 데이터를 URL인코딩 이라고 부르는 방식으로 인코딩 후에 웹서버로 보냅니다. 또한, Raw는 본문 메시지가 요청 본문을 나타내는 비트스트림(bitstream)으로 표시됨을 의미합니다. 이러한 비트는 문자열 서버로 해석됩니다. 📒 3. raw 이름 그대로 날것이라고 해석할 수 있습니다. raw를 제외한 다른 타입들의 경우 각각 용도에 맞게 Postman에서 알아서 처리를 해줍니다. 하지만 raw타입은 문자 그대로를 보내기 때문에 개발자가 요청 형식에 맞게끔 값을 써주어야 합니다. raw를 선택하면 위 사진과 같이 세부 항목을 선택할 수 있습니다. Text, JavaScript, JSON, HTML, XML의 형식을 지원합니다. 물론 형식에 틀리게 작성한다면 틀렸다고 알려줍니다. 📗 4. binary Binary는 수동으로 입력할 수 없는 형식으로 데이터를 전송하도록 설계되었습니다. 컴퓨터의 모든 것이 바이너리로 변환되기 때문에 이미지, 파일 등과 같이 수동으로 작성할 수 없는 상황일 때 이러한 옵션을 사용합니다. 즉, 텍스트 없이 이미지나 영상, 오디오 파일 등을 보낼 때 사용합니다. 📙 5. GraphQL GraphQL이란 Facebook에서 만든 어플리케이션 레이어 쿼리 언어라고 합니다. 웹 클라이언트가 서버로부터 데이터를 효율적으로 가져오기 위한 언어입니다. GraphQL은 GraphQL 개념잡기에서 더 자세하게 보실 수 있습니다. 끝맺음 이렇게 오늘은 여러 가지의 요청 유형에 대해 알아보았습니다. 저는 실제로 사용할 때 JSON의 요청이 많다 보니, raw와 form-data를 가장 많이 사용하게 되더군요. 평소에는 생각지도 못한 부분들이었는데, 갑자기 이것들에 대한 차이가 뭐지..? 라는 생각을 가지게 되었고, 그렇게 이번에 공부를 하며 자료를 정리하다보니 생각보다 흥미로운 부분들이 많았던 것 같습니다.😊 [참고자료] HTTP Content-Type 정리 https://jw910911.tistory.com/117 Postman을 사용한 POST 요청 (GraphQL) GraphQL 개념잡기","url":"http://localhost:4000/content-type/","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     
-<link href="/liampoet.github.io/assets/css/screen.css" rel="stylesheet">
+<link href="/assets/css/screen.css" rel="stylesheet">
 
-<link href="/liampoet.github.io/assets/css/main.css" rel="stylesheet">
+<link href="/assets/css/main.css" rel="stylesheet">
 
-<script src="/liampoet.github.io/assets/js/jquery.min.js"></script>
+<script src="/assets/js/jquery.min.js"></script>
 
 </head>
 
@@ -55,8 +55,8 @@
     <div class="container pr-0">
 
     <!-- Begin Logo -->
-    <a class="navbar-brand" href="/liampoet.github.io/">
-    <img src="/liampoet.github.io/assets/images/logo.png" alt="Liam">
+    <a class="navbar-brand" href="/">
+    <img src="/assets/images/logo.png" alt="LiamCoding">
     </a>
     <!-- End Logo -->
 
@@ -73,18 +73,18 @@
                 
                 <li class="nav-item">
                 
-                <a class="nav-link" href="/liampoet.github.io/index.html">Blog</a>
+                <a class="nav-link" href="/index.html">Blog</a>
                 </li>
 
                 <li class="nav-item">
-                <a class="nav-link" href="/liampoet.github.io/about">About</a>
+                <a class="nav-link" href="/about">About</a>
                 </li>
 
                 <li class="nav-item">
                 <a target="_blank" class="nav-link" href="https://github.com/liampoet"><i class="fab fa-github"></i> Github</a>
                 </li>
 
-                <script src="/liampoet.github.io/assets/js/lunr.js"></script>
+                <script src="/assets/js/lunr.js"></script>
 
 
 <style>
@@ -104,7 +104,7 @@
     <ul></ul>
 </div>
 
-<script src="/liampoet.github.io/assets/js/lunrsearchengine.js"></script>
+<script src="/assets/js/lunrsearchengine.js"></script>
 
             </ul>
 
@@ -124,7 +124,7 @@
 <!-- Site Title
 ================================================== -->
 <div class="mainheading">
-    <h1 class="sitetitle">Liam</h1>
+    <h1 class="sitetitle">LiamCoding</h1>
     <p class="lead">
         Hello! I'm Liam 👋I'm a developer working at ./-
     </p>
@@ -146,19 +146,19 @@
     </p>
     <ul>
         <li class="ml-1 mr-1">
-            <a target="_blank" href="https://twitter.com/intent/tweet?text=form-data? x-www-form-urlencoded? raw?&url=http://localhost:4000/liampoet.github.io/content-type/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+            <a target="_blank" href="https://twitter.com/intent/tweet?text=form-data? x-www-form-urlencoded? raw?&url=http://localhost:4000/content-type/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                 <i class="fab fa-twitter"></i>
             </a>
         </li>
 
         <li class="ml-1 mr-1">
-            <a target="_blank" href="https://facebook.com/sharer.php?u=http://localhost:4000/liampoet.github.io/content-type/" onclick="window.open(this.href, 'facebook-share', 'width=550,height=435');return false;">
+            <a target="_blank" href="https://facebook.com/sharer.php?u=http://localhost:4000/content-type/" onclick="window.open(this.href, 'facebook-share', 'width=550,height=435');return false;">
                 <i class="fab fa-facebook-f"></i>
             </a>
         </li>
 
         <li class="ml-1 mr-1">
-            <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/liampoet.github.io/content-type/" onclick="window.open(this.href, 'width=550,height=435');return false;">
+            <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/content-type/" onclick="window.open(this.href, 'width=550,height=435');return false;">
                 <i class="fab fa-linkedin-in"></i>
             </a>
         </li>
@@ -192,7 +192,7 @@
                         
                     </div>
                     <div class="col-xs-12 col-md-9 col-lg-10 text-center text-md-left">
-                        <a target="_blank" class="link-dark" href="https://www.linkedin.com/in/kwongmin-lim-32b828247/">Liam</a><a target="_blank" href="" class="btn follow">Follow</a>
+                        <a target="_blank" class="link-dark" href="https://www.linkedin.com/in/kwongmin-lim-32b828247/">Liam</a><a target="_blank" href="https://www.linkedin.com/in/kwongmin-lim-32b828247/" class="btn follow">Follow</a><br>
                         <span class="author-description">공부하는 중입니다.🥸</span>
                     </div>
                 </div>
@@ -211,7 +211,7 @@
             
 
             
-            <img class="featured-image img-fluid lazyimg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAACCAQAAAA3fa6RAAAADklEQVR42mNkAANGCAUAACMAA2w/AMgAAAAASUVORK5CYII=" data-src="/liampoet.github.io/assets/images/content-type/form_2.gif" alt="form-data? x-www-form-urlencoded? raw?">
+            <img class="featured-image img-fluid lazyimg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAACCAQAAAA3fa6RAAAADklEQVR42mNkAANGCAUAACMAA2w/AMgAAAAASUVORK5CYII=" data-src="/assets/images/content-type/form_2.gif" alt="form-data? x-www-form-urlencoded? raw?">
             
 
             
@@ -250,7 +250,7 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/content-type/form_1.png" alt="form_1.png" /></p>
+<p><img src="/assets/images/content-type/form_1.png" alt="form_1.png" /></p>
 
 <p><br /></p>
 
@@ -258,7 +258,7 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/content-type/form_2.gif" alt="form_2.gif" /></p>
+<p><img src="/assets/images/content-type/form_2.gif" alt="form_2.gif" /></p>
 
 <p><br />
 <br /></p>
@@ -268,7 +268,7 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/content-type/x-form_1.png" alt="x-form_1.png" /></p>
+<p><img src="/assets/images/content-type/x-form_1.png" alt="x-form_1.png" /></p>
 
 <p><br />
 <br /></p>
@@ -278,7 +278,7 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/content-type/raw_1.png" alt="raw_1.png" /></p>
+<p><img src="/assets/images/content-type/raw_1.png" alt="raw_1.png" /></p>
 
 <p><br /></p>
 
@@ -292,7 +292,7 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/content-type/binary_1.gif" alt="binary_1.gif" /></p>
+<p><img src="/assets/images/content-type/binary_1.gif" alt="binary_1.gif" /></p>
 
 <p><br />
 <br /></p>
@@ -338,11 +338,11 @@
                     
                     
                     <li>
-                        <a class="smoothscroll" href="/liampoet.github.io/categories#Json">Json</a>
+                        <a class="smoothscroll" href="/categories#Json">Json</a>
                     </li>
                     
                     <li>
-                        <a class="smoothscroll" href="/liampoet.github.io/categories#Postman">Postman</a>
+                        <a class="smoothscroll" href="/categories#Postman">Postman</a>
                     </li>
                     
                 </ul>
@@ -361,10 +361,10 @@
             <!-- Prev/Next -->
             <div class="row PageNavigation d-flex justify-content-between font-weight-bold">
             
-            <a class="prev d-block col-md-6" href="/liampoet.github.io//jquery-btn-event/"> &laquo; jQuery로 버튼 클릭 이벤트 만들기</a>
+            <a class="prev d-block col-md-6" href="//jquery-btn-event/"> &laquo; jQuery로 버튼 클릭 이벤트 만들기</a>
             
             
-            <a class="next d-block col-md-6 text-lg-right" href="/liampoet.github.io//mysql-error1/">(문제해결)ERROR 1227 (42000) at line 18 - Access denied; you need (at least one of) the SUPER privilege(s) for this operation &raquo; </a>
+            <a class="next d-block col-md-6 text-lg-right" href="//mysql-error1/">(문제해결)ERROR 1227 (42000) at line 18 - Access denied; you need (at least one of) the SUPER privilege(s) for this operation &raquo; </a>
             
             <div class="clearfix"></div>
             </div>
@@ -417,7 +417,7 @@ https://search.google.com/structured-data/testing-tool/u/0/
 ================================================== -->
 <div class="alertbar">
 	<div class="container text-center">
-		<span><img src="/liampoet.github.io/assets/images/logo.png" alt="LiamCoding"> &nbsp; Never miss a <b>story</b> from us, subscribe to our newsletter</span>
+		<span><img src="/assets/images/logo.png" alt="LiamCoding"> &nbsp; Never miss a <b>story</b> from us, subscribe to our newsletter</span>
         <form action="https://wowthemes.us11.list-manage.com/subscribe/post?u=8aeb20a530e124561927d3bd8&amp;id=8c3d2d214b" method="post" name="mc-embedded-subscribe-form" class="wj-contact-form validate" target="_blank" novalidate>
             <div class="mc-field-group">
             <input type="email" placeholder="Email" name="EMAIL" class="required email" id="mce-EMAIL" autocomplete="on" required>
@@ -443,47 +443,47 @@ https://search.google.com/structured-data/testing-tool/u/0/
             
             
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#AWS">AWS (7)</a>
+                    <a class="mt-1 mb-1" href="/categories#AWS">AWS (7)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Python">Python (6)</a>
+                    <a class="mt-1 mb-1" href="/categories#Python">Python (6)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Bootpay">Bootpay (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#Bootpay">Bootpay (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#FastAPI">FastAPI (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#FastAPI">FastAPI (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#AWS-Lambda">AWS Lambda (3)</a>
+                    <a class="mt-1 mb-1" href="/categories#AWS-Lambda">AWS Lambda (3)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#EventBridge">EventBridge (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#EventBridge">EventBridge (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Aamazon-Cloudwatch">Aamazon Cloudwatch (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#Aamazon-Cloudwatch">Aamazon Cloudwatch (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Javascript">Javascript (3)</a>
+                    <a class="mt-1 mb-1" href="/categories#Javascript">Javascript (3)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#jQuery">jQuery (3)</a>
+                    <a class="mt-1 mb-1" href="/categories#jQuery">jQuery (3)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#MySQL">MySQL (4)</a>
+                    <a class="mt-1 mb-1" href="/categories#MySQL">MySQL (4)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#HTML">HTML (2)</a>
+                    <a class="mt-1 mb-1" href="/categories#HTML">HTML (2)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Json">Json (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#Json">Json (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Postman">Postman (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#Postman">Postman (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#AWS-RDS">AWS RDS (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#AWS-RDS">AWS RDS (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Interview">Interview (3)</a>
+                    <a class="mt-1 mb-1" href="/categories#Interview">Interview (3)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Docker">Docker (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#Docker">Docker (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#K8S">K8S (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#K8S">K8S (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#ALB">ALB (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#ALB">ALB (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#CDN">CDN (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#CDN">CDN (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Diary">Diary (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#Diary">Diary (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Kafka">Kafka (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#Kafka">Kafka (1)</a>
                 
             
             
@@ -497,7 +497,7 @@ https://search.google.com/structured-data/testing-tool/u/0/
     <div class="container">
         <div class="row">
             <div class="col-md-6 col-sm-6 text-center text-lg-left">
-                Copyright © 2022 Liam 
+                Copyright © 2022 LiamCoding 
             </div>
             <div class="col-md-6 col-sm-6 text-center text-lg-right">    
                 <a target="_blank" href="https://www.wowthemes.net/mediumish-free-jekyll-template/">Mediumish Jekyll Theme</a> by WowThemes.net
@@ -517,13 +517,13 @@ https://search.google.com/structured-data/testing-tool/u/0/
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 
-<script src="/liampoet.github.io/assets/js/mediumish.js"></script>
+<script src="/assets/js/mediumish.js"></script>
 
 
-<script src="/liampoet.github.io/assets/js/lazyload.js"></script>
+<script src="/assets/js/lazyload.js"></script>
 
 
-<script src="/liampoet.github.io/assets/js/ie10-viewport-bug-workaround.js"></script> 
+<script src="/assets/js/ie10-viewport-bug-workaround.js"></script> 
 
 
 <script id="dsq-count-scr" src="//demowebsite.disqus.com/count.js"></script>

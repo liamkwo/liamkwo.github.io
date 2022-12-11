@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<link rel="icon" href="/liampoet.github.io/assets/images/logo.png">
+<link rel="icon" href="/assets/images/logo.png">
 
-<title>ALB(Application Load Balancer)에서 URL 기반 라우팅 | Liam</title>
+<title>ALB(Application Load Balancer)에서 URL 기반 라우팅 | LiamCoding</title>
 
 <!-- Begin Jekyll SEO tag v2.5.0 -->
 <title>ALB(Application Load Balancer)에서 URL 기반 라우팅 | LiamCoding</title>
@@ -16,24 +16,24 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="💡 Intro 하나의 도메인에 두 개의 서비스를 할 수 있는지에 대해 묻는 분이 있었습니다. AWS에서 어떻게 구성해야 하는지 🌎AWS Docs를 찾아보다가 ALB(Application Load Balancer)로 가능하다는 것을알게 되었습니다. 이를 URL 기반 라우팅이라고 하는데, 이에 대해서 실습해 보려 합니다. ⚠️ Classic Load Balancer, Network Load Balancer 및 Gateway Load Balancer 등 다른 로드 밸런서 유형에는 이 기능을 사용할 수 없습니다. ELB는 AWS를 사용하는 분에게는 기본적으로 숙지해야하는 내용이라고 들었기 때문에 초보 개발자인 저도 열심히 공부하고 있습니다.😭 🔎 ALB(Application Load Balancer)란? ELB(Elastic Load Balancing) 설명서에는 ALB(Application Load Balancer)에 대해 이렇게 설명 하고 있습니다. Application Load Balancer는 개방형 시스템 간 상호 연결(OSI) 모델의 일곱 번째 계층인 애플리케이션 계층에서 작동합니다. 로드 밸런서는 요청을 받으면 우선 순위에 따라 리스너 규칙을 평가하여 적용할 규칙을 결정한 다음, 규칙 작업의 대상 그룹에서 대상을 선택합니다. 애플리케이션 트래픽의 콘텐츠를 기반으로 다른 대상 그룹에 요청을 라우팅하도록 리스너 규칙을 구성할 수 있습니다. 대상이 여러 개의 대상 그룹에 등록이 된 경우에도 각 대상 그룹에 대해 독립적으로 라우팅이 수행됩니다. 대상 그룹 레벨에서 사용되는 라우팅 알고리즘을 구성할 수 있습니다. 기본 라우팅 알고리즘은 라운드 로빈입니다. 그 대신 최소 미해결 요청 라우팅 알고리즘을 지정할 수 있습니다. - 출처: AWS Docs Application layer는 OSI 7 Layer의 제일 꼭대기에 있는 계층입니다. 애플리케이션과 데이터를 주고 받기 위한 역할을 하는데, 서버가 이해할 수 있는 메시지(데이터)로 변환하고, 전송 계층에 전달하는 역할을 수행합니다. 애플리케이션 계층에는 웹 사이트를 이용할 때의 HTTP 프로토콜, 파일을 전송할 때 쓰는 FTP 프로포콜, 메일을 보낼 때 쓰는 SMTP 프로토콜 등 다양한 프로토콜이 존재합니다. 아래 이미지와 같이 Load Balancer 아래에는 Listener, Rule, Target Group이 있습니다. Listener : 구성한 프로토콜 및 포트를 사용하여 클라이언트의 연결 요청을 확인하여 요청을 처리할 적절한 Target Group으로 전달합니다. Rule : 어떤 대상그룹에 전달해야 할지를 판단하는 기준이 됩니다. Target Group : 클라이언트의 요청을 처리할 EC2 인스턴스의 집합이며, 지정한 프로토콜과 포트 번호를 사용하여 요청을 라우팅합니다. 이미지 1. ALB 구성 요소(출처: AWS Docs) ALB는 하나 이상의 Listener를 추가할 수 있으며, Listener에는 다수의 Rule을 가질 수 있고, Listener 또한 다수의 Target Group을 가질 수 있습니다. 📚 ALB에서 URL 기반 라우팅을 수행해 보기 AWS Docs를 따라서 진행해 보겠습니다. 서비스 A와 서비스 B라는 두 가지 서비스가 있고 애플리케이션이 포트 80의 이러한 서비스에서 실행되고 있다고 가정합니다. 예를 들어 서비스 A는 /svcA 경로에서 애플리케이션을 실행하고, 서비스 B는 /svcB 경로에서 애플리케이션을 실행합니다. - 출처: AWS Docs 📕 ELB(Application Load Balancer) 생성 [EC2 대시보드]에서 [로드 벨런서]를 들어간 뒤 [로드 밸런서 생성]을 들어갑니다. 이미지 2. 로드 밸런서 생성 [Select load balancer type]에서 [Application Load Balancer]를 Create합니다. 이미지 3. Application Load Balancer 생성 - 1 Load balancer name, VPC, 가용영역을 설정한 후 Summary를 확인하고 생성합니다. 이미지 4. Application Load Balancer 생성 - 2 Internet-facing(인터넷경계) 란, 이름에서 느껴지는 것처럼 인터넷에 연결되는 밸런서를 뜻합니다. 인터넷으로부터 요청을 받아서 각기 다른 EC2로 분배해 주는 역할을 합니다. Internal(내부) 는, private subnet에 연결되어 있는 여러 서버에 연결될 때 사용합니다. 이미지 5. Application Load Balancer 생성 - 3 로드 밸런서 [my-alb]가 생성된 것을 볼 수 있습니다. 이미지 6. Application Load Balancer 생성 - 4 📘 Listeners 규칙 구성 리스너 규칙 1: 요청 URL 경로에 /svcA 문자열이 포함되어 있으면 요청을 my-tg1로 전달합니다. my-tg1에는 지정된 경로에서 애플리케이션을 실행하는 서비스 A가 포함되어 있기 때문입니다. 리스너 규칙 2: 요청 URL 경로에 /svcB 문자열이 포함되어 있으면 해당 요청을 my-tg2로 전달합니다. my-tg2에는 지정된 경로에서 애플리케이션을 실행하는 서비스 B가 포함되어 있기 때문입니다. - 출처: AWS Docs [로드 밸런서]를 선택한 다음 [리스너(Listeners)]를 선택합니다. 그리고 리스너를 업데이트하기 위해 [규칙 보기/편집(View/edit rules)]을 선택합니다. 이미지 7. 리스너 규칙 보기/편집 상단의 메뉴에서 규칙 추가(Add rules) 아이콘인 [더하기 기호(+)]를 선택합니다. 이미지 8. 리스너 규칙 추가 - 1 우선 순위에 따라 규칙을 삽입할 수 있는 [규칙 삽입(Insert Rule) 아이콘]을 클릭합니다. /svcA와 /svcB에 경로 기반 규칙 추가를 위해 IF(모두 일치) 부분에서 [조건 추가(Add condition)]를 클릭 후, [경로(Path)]를 선택한 다음 경로 패턴 /svcA를 입력합니다. THEN 부분에서 [작업 추가(Add action)]를 클릭한 후, [전달(Forward to)]을 선택한 다음 대상 그룹 my-tg1를 선택합니다. /svcB 또한 똑같이 설정해 줍니다. 이미지 9. 리스너 규칙 추가 - 2 Application Load Balancer의 DNS 이름을 복사하여 URL 경로 끝에 /svcA or /svcA 를 붙여 넣었을 때, 올바른 서비스를 반환하면 테스트가 성공적으로 이루어집니다. [참고자료] Application Load Balancer에서 경로 기반 라우팅을 수행하려면 어떻게 해야 하나요? AWS docs - Application Load Balancer Listener rules for your Application Load Balancer https://aws-hyoh.tistory.com/133" />
 <meta property="og:description" content="💡 Intro 하나의 도메인에 두 개의 서비스를 할 수 있는지에 대해 묻는 분이 있었습니다. AWS에서 어떻게 구성해야 하는지 🌎AWS Docs를 찾아보다가 ALB(Application Load Balancer)로 가능하다는 것을알게 되었습니다. 이를 URL 기반 라우팅이라고 하는데, 이에 대해서 실습해 보려 합니다. ⚠️ Classic Load Balancer, Network Load Balancer 및 Gateway Load Balancer 등 다른 로드 밸런서 유형에는 이 기능을 사용할 수 없습니다. ELB는 AWS를 사용하는 분에게는 기본적으로 숙지해야하는 내용이라고 들었기 때문에 초보 개발자인 저도 열심히 공부하고 있습니다.😭 🔎 ALB(Application Load Balancer)란? ELB(Elastic Load Balancing) 설명서에는 ALB(Application Load Balancer)에 대해 이렇게 설명 하고 있습니다. Application Load Balancer는 개방형 시스템 간 상호 연결(OSI) 모델의 일곱 번째 계층인 애플리케이션 계층에서 작동합니다. 로드 밸런서는 요청을 받으면 우선 순위에 따라 리스너 규칙을 평가하여 적용할 규칙을 결정한 다음, 규칙 작업의 대상 그룹에서 대상을 선택합니다. 애플리케이션 트래픽의 콘텐츠를 기반으로 다른 대상 그룹에 요청을 라우팅하도록 리스너 규칙을 구성할 수 있습니다. 대상이 여러 개의 대상 그룹에 등록이 된 경우에도 각 대상 그룹에 대해 독립적으로 라우팅이 수행됩니다. 대상 그룹 레벨에서 사용되는 라우팅 알고리즘을 구성할 수 있습니다. 기본 라우팅 알고리즘은 라운드 로빈입니다. 그 대신 최소 미해결 요청 라우팅 알고리즘을 지정할 수 있습니다. - 출처: AWS Docs Application layer는 OSI 7 Layer의 제일 꼭대기에 있는 계층입니다. 애플리케이션과 데이터를 주고 받기 위한 역할을 하는데, 서버가 이해할 수 있는 메시지(데이터)로 변환하고, 전송 계층에 전달하는 역할을 수행합니다. 애플리케이션 계층에는 웹 사이트를 이용할 때의 HTTP 프로토콜, 파일을 전송할 때 쓰는 FTP 프로포콜, 메일을 보낼 때 쓰는 SMTP 프로토콜 등 다양한 프로토콜이 존재합니다. 아래 이미지와 같이 Load Balancer 아래에는 Listener, Rule, Target Group이 있습니다. Listener : 구성한 프로토콜 및 포트를 사용하여 클라이언트의 연결 요청을 확인하여 요청을 처리할 적절한 Target Group으로 전달합니다. Rule : 어떤 대상그룹에 전달해야 할지를 판단하는 기준이 됩니다. Target Group : 클라이언트의 요청을 처리할 EC2 인스턴스의 집합이며, 지정한 프로토콜과 포트 번호를 사용하여 요청을 라우팅합니다. 이미지 1. ALB 구성 요소(출처: AWS Docs) ALB는 하나 이상의 Listener를 추가할 수 있으며, Listener에는 다수의 Rule을 가질 수 있고, Listener 또한 다수의 Target Group을 가질 수 있습니다. 📚 ALB에서 URL 기반 라우팅을 수행해 보기 AWS Docs를 따라서 진행해 보겠습니다. 서비스 A와 서비스 B라는 두 가지 서비스가 있고 애플리케이션이 포트 80의 이러한 서비스에서 실행되고 있다고 가정합니다. 예를 들어 서비스 A는 /svcA 경로에서 애플리케이션을 실행하고, 서비스 B는 /svcB 경로에서 애플리케이션을 실행합니다. - 출처: AWS Docs 📕 ELB(Application Load Balancer) 생성 [EC2 대시보드]에서 [로드 벨런서]를 들어간 뒤 [로드 밸런서 생성]을 들어갑니다. 이미지 2. 로드 밸런서 생성 [Select load balancer type]에서 [Application Load Balancer]를 Create합니다. 이미지 3. Application Load Balancer 생성 - 1 Load balancer name, VPC, 가용영역을 설정한 후 Summary를 확인하고 생성합니다. 이미지 4. Application Load Balancer 생성 - 2 Internet-facing(인터넷경계) 란, 이름에서 느껴지는 것처럼 인터넷에 연결되는 밸런서를 뜻합니다. 인터넷으로부터 요청을 받아서 각기 다른 EC2로 분배해 주는 역할을 합니다. Internal(내부) 는, private subnet에 연결되어 있는 여러 서버에 연결될 때 사용합니다. 이미지 5. Application Load Balancer 생성 - 3 로드 밸런서 [my-alb]가 생성된 것을 볼 수 있습니다. 이미지 6. Application Load Balancer 생성 - 4 📘 Listeners 규칙 구성 리스너 규칙 1: 요청 URL 경로에 /svcA 문자열이 포함되어 있으면 요청을 my-tg1로 전달합니다. my-tg1에는 지정된 경로에서 애플리케이션을 실행하는 서비스 A가 포함되어 있기 때문입니다. 리스너 규칙 2: 요청 URL 경로에 /svcB 문자열이 포함되어 있으면 해당 요청을 my-tg2로 전달합니다. my-tg2에는 지정된 경로에서 애플리케이션을 실행하는 서비스 B가 포함되어 있기 때문입니다. - 출처: AWS Docs [로드 밸런서]를 선택한 다음 [리스너(Listeners)]를 선택합니다. 그리고 리스너를 업데이트하기 위해 [규칙 보기/편집(View/edit rules)]을 선택합니다. 이미지 7. 리스너 규칙 보기/편집 상단의 메뉴에서 규칙 추가(Add rules) 아이콘인 [더하기 기호(+)]를 선택합니다. 이미지 8. 리스너 규칙 추가 - 1 우선 순위에 따라 규칙을 삽입할 수 있는 [규칙 삽입(Insert Rule) 아이콘]을 클릭합니다. /svcA와 /svcB에 경로 기반 규칙 추가를 위해 IF(모두 일치) 부분에서 [조건 추가(Add condition)]를 클릭 후, [경로(Path)]를 선택한 다음 경로 패턴 /svcA를 입력합니다. THEN 부분에서 [작업 추가(Add action)]를 클릭한 후, [전달(Forward to)]을 선택한 다음 대상 그룹 my-tg1를 선택합니다. /svcB 또한 똑같이 설정해 줍니다. 이미지 9. 리스너 규칙 추가 - 2 Application Load Balancer의 DNS 이름을 복사하여 URL 경로 끝에 /svcA or /svcA 를 붙여 넣었을 때, 올바른 서비스를 반환하면 테스트가 성공적으로 이루어집니다. [참고자료] Application Load Balancer에서 경로 기반 라우팅을 수행하려면 어떻게 해야 하나요? AWS docs - Application Load Balancer Listener rules for your Application Load Balancer https://aws-hyoh.tistory.com/133" />
-<link rel="canonical" href="http://localhost:4000/liampoet.github.io/alb/" />
-<meta property="og:url" content="http://localhost:4000/liampoet.github.io/alb/" />
+<link rel="canonical" href="http://localhost:4000/alb/" />
+<meta property="og:url" content="http://localhost:4000/alb/" />
 <meta property="og:site_name" content="LiamCoding" />
-<meta property="og:image" content="http://localhost:4000/liampoet.github.io/assets/images/alb/create-alb2.png" />
+<meta property="og:image" content="http://localhost:4000/assets/images/alb/create-alb2.png" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-08-31T14:40:22+09:00" />
 <script type="application/ld+json">
-{"@type":"BlogPosting","headline":"ALB(Application Load Balancer)에서 URL 기반 라우팅","dateModified":"2022-08-31T14:40:22+09:00","datePublished":"2022-08-31T14:40:22+09:00","image":"http://localhost:4000/liampoet.github.io/assets/images/alb/create-alb2.png","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/liampoet.github.io/assets/images/logo.png"},"name":"Liam"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/liampoet.github.io/alb/"},"author":{"@type":"Person","name":"Liam"},"description":"💡 Intro 하나의 도메인에 두 개의 서비스를 할 수 있는지에 대해 묻는 분이 있었습니다. AWS에서 어떻게 구성해야 하는지 🌎AWS Docs를 찾아보다가 ALB(Application Load Balancer)로 가능하다는 것을알게 되었습니다. 이를 URL 기반 라우팅이라고 하는데, 이에 대해서 실습해 보려 합니다. ⚠️ Classic Load Balancer, Network Load Balancer 및 Gateway Load Balancer 등 다른 로드 밸런서 유형에는 이 기능을 사용할 수 없습니다. ELB는 AWS를 사용하는 분에게는 기본적으로 숙지해야하는 내용이라고 들었기 때문에 초보 개발자인 저도 열심히 공부하고 있습니다.😭 🔎 ALB(Application Load Balancer)란? ELB(Elastic Load Balancing) 설명서에는 ALB(Application Load Balancer)에 대해 이렇게 설명 하고 있습니다. Application Load Balancer는 개방형 시스템 간 상호 연결(OSI) 모델의 일곱 번째 계층인 애플리케이션 계층에서 작동합니다. 로드 밸런서는 요청을 받으면 우선 순위에 따라 리스너 규칙을 평가하여 적용할 규칙을 결정한 다음, 규칙 작업의 대상 그룹에서 대상을 선택합니다. 애플리케이션 트래픽의 콘텐츠를 기반으로 다른 대상 그룹에 요청을 라우팅하도록 리스너 규칙을 구성할 수 있습니다. 대상이 여러 개의 대상 그룹에 등록이 된 경우에도 각 대상 그룹에 대해 독립적으로 라우팅이 수행됩니다. 대상 그룹 레벨에서 사용되는 라우팅 알고리즘을 구성할 수 있습니다. 기본 라우팅 알고리즘은 라운드 로빈입니다. 그 대신 최소 미해결 요청 라우팅 알고리즘을 지정할 수 있습니다. - 출처: AWS Docs Application layer는 OSI 7 Layer의 제일 꼭대기에 있는 계층입니다. 애플리케이션과 데이터를 주고 받기 위한 역할을 하는데, 서버가 이해할 수 있는 메시지(데이터)로 변환하고, 전송 계층에 전달하는 역할을 수행합니다. 애플리케이션 계층에는 웹 사이트를 이용할 때의 HTTP 프로토콜, 파일을 전송할 때 쓰는 FTP 프로포콜, 메일을 보낼 때 쓰는 SMTP 프로토콜 등 다양한 프로토콜이 존재합니다. 아래 이미지와 같이 Load Balancer 아래에는 Listener, Rule, Target Group이 있습니다. Listener : 구성한 프로토콜 및 포트를 사용하여 클라이언트의 연결 요청을 확인하여 요청을 처리할 적절한 Target Group으로 전달합니다. Rule : 어떤 대상그룹에 전달해야 할지를 판단하는 기준이 됩니다. Target Group : 클라이언트의 요청을 처리할 EC2 인스턴스의 집합이며, 지정한 프로토콜과 포트 번호를 사용하여 요청을 라우팅합니다. 이미지 1. ALB 구성 요소(출처: AWS Docs) ALB는 하나 이상의 Listener를 추가할 수 있으며, Listener에는 다수의 Rule을 가질 수 있고, Listener 또한 다수의 Target Group을 가질 수 있습니다. 📚 ALB에서 URL 기반 라우팅을 수행해 보기 AWS Docs를 따라서 진행해 보겠습니다. 서비스 A와 서비스 B라는 두 가지 서비스가 있고 애플리케이션이 포트 80의 이러한 서비스에서 실행되고 있다고 가정합니다. 예를 들어 서비스 A는 /svcA 경로에서 애플리케이션을 실행하고, 서비스 B는 /svcB 경로에서 애플리케이션을 실행합니다. - 출처: AWS Docs 📕 ELB(Application Load Balancer) 생성 [EC2 대시보드]에서 [로드 벨런서]를 들어간 뒤 [로드 밸런서 생성]을 들어갑니다.\u001c 이미지 2. 로드 밸런서 생성 [Select load balancer type]에서 [Application Load Balancer]를 Create합니다. 이미지 3. Application Load Balancer 생성 - 1 Load balancer name, VPC, 가용영역을 설정한 후 Summary를 확인하고 생성합니다. 이미지 4. Application Load Balancer 생성 - 2 Internet-facing(인터넷\u001c경계) 란, 이름에서 느껴지는 것처럼 인터넷에 연결되는 밸런서를 뜻합니다. 인터넷으로부터 요청을 받아서 각기 다른 EC2로 분배해 주는 역할을 합니다. Internal(내부) 는, private subnet에 연결되어 있는 여러 서버에 연결될 때 사용합니다. 이미지 5. Application Load Balancer 생성 - 3 로드 밸런서 [my-alb]가 생성된 것을 볼 수 있습니다. 이미지 6. Application Load Balancer 생성 - 4 📘 Listeners 규칙 구성 리스너 규칙 1: 요청 URL 경로에 /svcA 문자열이 포함되어 있으면 요청을 my-tg1로 전달합니다. my-tg1에는 지정된 경로에서 애플리케이션을 실행하는 서비스 A가 포함되어 있기 때문입니다. 리스너 규칙 2: 요청 URL 경로에 /svcB 문자열이 포함되어 있으면 해당 요청을 my-tg2로 전달합니다. my-tg2에는 지정된 경로에서 애플리케이션을 실행하는 서비스 B가 포함되어 있기 때문입니다. - 출처: AWS Docs [로드 밸런서]를 선택한 다음 [리스너(Listeners)]를 선택합니다. 그리고 리스너를 업데이트하기 위해 [규칙 보기/편집(View/edit rules)]을 선택합니다. 이미지 7. 리스너 규칙 보기/편집 상단의 메뉴에서 규칙 추가(Add rules) 아이콘인 [더하기 기호(+)]를 선택합니다. 이미지 8. 리스너 규칙 추가 - 1 우선 순위에 따라 규칙을 삽입할 수 있는 [규칙 삽입(Insert Rule) 아이콘]을 클릭합니다. /svcA와 /svcB에 경로 기반 규칙 추가를 위해 IF(모두 일치) 부분에서 [조건 추가(Add condition)]를 클릭 후, [경로(Path)]를 선택한 다음 경로 패턴 /svcA를 입력합니다. THEN 부분에서 [작업 추가(Add action)]를 클릭한 후, [전달(Forward to)]을 선택한 다음 대상 그룹 my-tg1를 선택합니다. /svcB 또한 똑같이 설정해 줍니다. 이미지 9. 리스너 규칙 추가 - 2 Application Load Balancer의 DNS 이름을 복사하여 URL 경로 끝에 /svcA or /svcA 를 붙여 넣었을 때, 올바른 서비스를 반환하면 테스트가 성공적으로 이루어집니다. [참고자료] Application Load Balancer에서 경로 기반 라우팅을 수행하려면 어떻게 해야 하나요? AWS docs - Application Load Balancer Listener rules for your Application Load Balancer https://aws-hyoh.tistory.com/133","url":"http://localhost:4000/liampoet.github.io/alb/","@context":"http://schema.org"}</script>
+{"@type":"BlogPosting","headline":"ALB(Application Load Balancer)에서 URL 기반 라우팅","dateModified":"2022-08-31T14:40:22+09:00","datePublished":"2022-08-31T14:40:22+09:00","image":"http://localhost:4000/assets/images/alb/create-alb2.png","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/images/logo.png"},"name":"Liam"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/alb/"},"author":{"@type":"Person","name":"Liam"},"description":"💡 Intro 하나의 도메인에 두 개의 서비스를 할 수 있는지에 대해 묻는 분이 있었습니다. AWS에서 어떻게 구성해야 하는지 🌎AWS Docs를 찾아보다가 ALB(Application Load Balancer)로 가능하다는 것을알게 되었습니다. 이를 URL 기반 라우팅이라고 하는데, 이에 대해서 실습해 보려 합니다. ⚠️ Classic Load Balancer, Network Load Balancer 및 Gateway Load Balancer 등 다른 로드 밸런서 유형에는 이 기능을 사용할 수 없습니다. ELB는 AWS를 사용하는 분에게는 기본적으로 숙지해야하는 내용이라고 들었기 때문에 초보 개발자인 저도 열심히 공부하고 있습니다.😭 🔎 ALB(Application Load Balancer)란? ELB(Elastic Load Balancing) 설명서에는 ALB(Application Load Balancer)에 대해 이렇게 설명 하고 있습니다. Application Load Balancer는 개방형 시스템 간 상호 연결(OSI) 모델의 일곱 번째 계층인 애플리케이션 계층에서 작동합니다. 로드 밸런서는 요청을 받으면 우선 순위에 따라 리스너 규칙을 평가하여 적용할 규칙을 결정한 다음, 규칙 작업의 대상 그룹에서 대상을 선택합니다. 애플리케이션 트래픽의 콘텐츠를 기반으로 다른 대상 그룹에 요청을 라우팅하도록 리스너 규칙을 구성할 수 있습니다. 대상이 여러 개의 대상 그룹에 등록이 된 경우에도 각 대상 그룹에 대해 독립적으로 라우팅이 수행됩니다. 대상 그룹 레벨에서 사용되는 라우팅 알고리즘을 구성할 수 있습니다. 기본 라우팅 알고리즘은 라운드 로빈입니다. 그 대신 최소 미해결 요청 라우팅 알고리즘을 지정할 수 있습니다. - 출처: AWS Docs Application layer는 OSI 7 Layer의 제일 꼭대기에 있는 계층입니다. 애플리케이션과 데이터를 주고 받기 위한 역할을 하는데, 서버가 이해할 수 있는 메시지(데이터)로 변환하고, 전송 계층에 전달하는 역할을 수행합니다. 애플리케이션 계층에는 웹 사이트를 이용할 때의 HTTP 프로토콜, 파일을 전송할 때 쓰는 FTP 프로포콜, 메일을 보낼 때 쓰는 SMTP 프로토콜 등 다양한 프로토콜이 존재합니다. 아래 이미지와 같이 Load Balancer 아래에는 Listener, Rule, Target Group이 있습니다. Listener : 구성한 프로토콜 및 포트를 사용하여 클라이언트의 연결 요청을 확인하여 요청을 처리할 적절한 Target Group으로 전달합니다. Rule : 어떤 대상그룹에 전달해야 할지를 판단하는 기준이 됩니다. Target Group : 클라이언트의 요청을 처리할 EC2 인스턴스의 집합이며, 지정한 프로토콜과 포트 번호를 사용하여 요청을 라우팅합니다. 이미지 1. ALB 구성 요소(출처: AWS Docs) ALB는 하나 이상의 Listener를 추가할 수 있으며, Listener에는 다수의 Rule을 가질 수 있고, Listener 또한 다수의 Target Group을 가질 수 있습니다. 📚 ALB에서 URL 기반 라우팅을 수행해 보기 AWS Docs를 따라서 진행해 보겠습니다. 서비스 A와 서비스 B라는 두 가지 서비스가 있고 애플리케이션이 포트 80의 이러한 서비스에서 실행되고 있다고 가정합니다. 예를 들어 서비스 A는 /svcA 경로에서 애플리케이션을 실행하고, 서비스 B는 /svcB 경로에서 애플리케이션을 실행합니다. - 출처: AWS Docs 📕 ELB(Application Load Balancer) 생성 [EC2 대시보드]에서 [로드 벨런서]를 들어간 뒤 [로드 밸런서 생성]을 들어갑니다.\u001c 이미지 2. 로드 밸런서 생성 [Select load balancer type]에서 [Application Load Balancer]를 Create합니다. 이미지 3. Application Load Balancer 생성 - 1 Load balancer name, VPC, 가용영역을 설정한 후 Summary를 확인하고 생성합니다. 이미지 4. Application Load Balancer 생성 - 2 Internet-facing(인터넷\u001c경계) 란, 이름에서 느껴지는 것처럼 인터넷에 연결되는 밸런서를 뜻합니다. 인터넷으로부터 요청을 받아서 각기 다른 EC2로 분배해 주는 역할을 합니다. Internal(내부) 는, private subnet에 연결되어 있는 여러 서버에 연결될 때 사용합니다. 이미지 5. Application Load Balancer 생성 - 3 로드 밸런서 [my-alb]가 생성된 것을 볼 수 있습니다. 이미지 6. Application Load Balancer 생성 - 4 📘 Listeners 규칙 구성 리스너 규칙 1: 요청 URL 경로에 /svcA 문자열이 포함되어 있으면 요청을 my-tg1로 전달합니다. my-tg1에는 지정된 경로에서 애플리케이션을 실행하는 서비스 A가 포함되어 있기 때문입니다. 리스너 규칙 2: 요청 URL 경로에 /svcB 문자열이 포함되어 있으면 해당 요청을 my-tg2로 전달합니다. my-tg2에는 지정된 경로에서 애플리케이션을 실행하는 서비스 B가 포함되어 있기 때문입니다. - 출처: AWS Docs [로드 밸런서]를 선택한 다음 [리스너(Listeners)]를 선택합니다. 그리고 리스너를 업데이트하기 위해 [규칙 보기/편집(View/edit rules)]을 선택합니다. 이미지 7. 리스너 규칙 보기/편집 상단의 메뉴에서 규칙 추가(Add rules) 아이콘인 [더하기 기호(+)]를 선택합니다. 이미지 8. 리스너 규칙 추가 - 1 우선 순위에 따라 규칙을 삽입할 수 있는 [규칙 삽입(Insert Rule) 아이콘]을 클릭합니다. /svcA와 /svcB에 경로 기반 규칙 추가를 위해 IF(모두 일치) 부분에서 [조건 추가(Add condition)]를 클릭 후, [경로(Path)]를 선택한 다음 경로 패턴 /svcA를 입력합니다. THEN 부분에서 [작업 추가(Add action)]를 클릭한 후, [전달(Forward to)]을 선택한 다음 대상 그룹 my-tg1를 선택합니다. /svcB 또한 똑같이 설정해 줍니다. 이미지 9. 리스너 규칙 추가 - 2 Application Load Balancer의 DNS 이름을 복사하여 URL 경로 끝에 /svcA or /svcA 를 붙여 넣었을 때, 올바른 서비스를 반환하면 테스트가 성공적으로 이루어집니다. [참고자료] Application Load Balancer에서 경로 기반 라우팅을 수행하려면 어떻게 해야 하나요? AWS docs - Application Load Balancer Listener rules for your Application Load Balancer https://aws-hyoh.tistory.com/133","url":"http://localhost:4000/alb/","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     
-<link href="/liampoet.github.io/assets/css/screen.css" rel="stylesheet">
+<link href="/assets/css/screen.css" rel="stylesheet">
 
-<link href="/liampoet.github.io/assets/css/main.css" rel="stylesheet">
+<link href="/assets/css/main.css" rel="stylesheet">
 
-<script src="/liampoet.github.io/assets/js/jquery.min.js"></script>
+<script src="/assets/js/jquery.min.js"></script>
 
 </head>
 
@@ -55,8 +55,8 @@
     <div class="container pr-0">
 
     <!-- Begin Logo -->
-    <a class="navbar-brand" href="/liampoet.github.io/">
-    <img src="/liampoet.github.io/assets/images/logo.png" alt="Liam">
+    <a class="navbar-brand" href="/">
+    <img src="/assets/images/logo.png" alt="LiamCoding">
     </a>
     <!-- End Logo -->
 
@@ -73,18 +73,18 @@
                 
                 <li class="nav-item">
                 
-                <a class="nav-link" href="/liampoet.github.io/index.html">Blog</a>
+                <a class="nav-link" href="/index.html">Blog</a>
                 </li>
 
                 <li class="nav-item">
-                <a class="nav-link" href="/liampoet.github.io/about">About</a>
+                <a class="nav-link" href="/about">About</a>
                 </li>
 
                 <li class="nav-item">
                 <a target="_blank" class="nav-link" href="https://github.com/liampoet"><i class="fab fa-github"></i> Github</a>
                 </li>
 
-                <script src="/liampoet.github.io/assets/js/lunr.js"></script>
+                <script src="/assets/js/lunr.js"></script>
 
 
 <style>
@@ -104,7 +104,7 @@
     <ul></ul>
 </div>
 
-<script src="/liampoet.github.io/assets/js/lunrsearchengine.js"></script>
+<script src="/assets/js/lunrsearchengine.js"></script>
 
             </ul>
 
@@ -124,7 +124,7 @@
 <!-- Site Title
 ================================================== -->
 <div class="mainheading">
-    <h1 class="sitetitle">Liam</h1>
+    <h1 class="sitetitle">LiamCoding</h1>
     <p class="lead">
         Hello! I'm Liam 👋I'm a developer working at ./-
     </p>
@@ -146,19 +146,19 @@
     </p>
     <ul>
         <li class="ml-1 mr-1">
-            <a target="_blank" href="https://twitter.com/intent/tweet?text=ALB(Application Load Balancer)에서 URL 기반 라우팅&url=http://localhost:4000/liampoet.github.io/alb/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+            <a target="_blank" href="https://twitter.com/intent/tweet?text=ALB(Application Load Balancer)에서 URL 기반 라우팅&url=http://localhost:4000/alb/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                 <i class="fab fa-twitter"></i>
             </a>
         </li>
 
         <li class="ml-1 mr-1">
-            <a target="_blank" href="https://facebook.com/sharer.php?u=http://localhost:4000/liampoet.github.io/alb/" onclick="window.open(this.href, 'facebook-share', 'width=550,height=435');return false;">
+            <a target="_blank" href="https://facebook.com/sharer.php?u=http://localhost:4000/alb/" onclick="window.open(this.href, 'facebook-share', 'width=550,height=435');return false;">
                 <i class="fab fa-facebook-f"></i>
             </a>
         </li>
 
         <li class="ml-1 mr-1">
-            <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/liampoet.github.io/alb/" onclick="window.open(this.href, 'width=550,height=435');return false;">
+            <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/alb/" onclick="window.open(this.href, 'width=550,height=435');return false;">
                 <i class="fab fa-linkedin-in"></i>
             </a>
         </li>
@@ -192,7 +192,7 @@
                         
                     </div>
                     <div class="col-xs-12 col-md-9 col-lg-10 text-center text-md-left">
-                        <a target="_blank" class="link-dark" href="https://www.linkedin.com/in/kwongmin-lim-32b828247/">Liam</a><a target="_blank" href="" class="btn follow">Follow</a>
+                        <a target="_blank" class="link-dark" href="https://www.linkedin.com/in/kwongmin-lim-32b828247/">Liam</a><a target="_blank" href="https://www.linkedin.com/in/kwongmin-lim-32b828247/" class="btn follow">Follow</a><br>
                         <span class="author-description">공부하는 중입니다.🥸</span>
                     </div>
                 </div>
@@ -211,7 +211,7 @@
             
 
             
-            <img class="featured-image img-fluid lazyimg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAACCAQAAAA3fa6RAAAADklEQVR42mNkAANGCAUAACMAA2w/AMgAAAAASUVORK5CYII=" data-src="/liampoet.github.io/assets/images/alb/create-alb2.png" alt="ALB(Application Load Balancer)에서 URL 기반 라우팅">
+            <img class="featured-image img-fluid lazyimg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAACCAQAAAA3fa6RAAAADklEQVR42mNkAANGCAUAACMAA2w/AMgAAAAASUVORK5CYII=" data-src="/assets/images/alb/create-alb2.png" alt="ALB(Application Load Balancer)에서 URL 기반 라우팅">
             
 
             
@@ -258,7 +258,7 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/alb/alb-element.png" alt="ALB 구성 요소" /><em>이미지 1. ALB 구성 요소(출처: AWS Docs)</em></p>
+<p><img src="/assets/images/alb/alb-element.png" alt="ALB 구성 요소" /><em>이미지 1. ALB 구성 요소(출처: AWS Docs)</em></p>
 
 <p><br /></p>
 
@@ -279,7 +279,7 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/alb/create-alb1.png" alt="AWS Console &gt; EC2 &gt; 로드 밸런서 생성" /><em>이미지 2. 로드 밸런서 생성</em></p>
+<p><img src="/assets/images/alb/create-alb1.png" alt="AWS Console &gt; EC2 &gt; 로드 밸런서 생성" /><em>이미지 2. 로드 밸런서 생성</em></p>
 
 <p><br /></p>
 
@@ -287,7 +287,7 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/alb/create-alb2.png" alt="Application Load Balancer 생성" /><em>이미지 3. Application Load Balancer 생성 - 1</em></p>
+<p><img src="/assets/images/alb/create-alb2.png" alt="Application Load Balancer 생성" /><em>이미지 3. Application Load Balancer 생성 - 1</em></p>
 
 <p><br /></p>
 
@@ -295,7 +295,7 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/alb/create-alb3.png" alt="Application Load Balancer 생성" /><em>이미지 4. Application Load Balancer 생성 - 2</em></p>
+<p><img src="/assets/images/alb/create-alb3.png" alt="Application Load Balancer 생성" /><em>이미지 4. Application Load Balancer 생성 - 2</em></p>
 
 <blockquote>
   <p><strong>Internet-facing(인터넷경계)</strong> 란, 이름에서 느껴지는 것처럼 인터넷에 연결되는 밸런서를 뜻합니다. 인터넷으로부터 요청을 받아서 각기 다른 EC2로 분배해 주는 역할을 합니다. <strong>Internal(내부)</strong> 는, private subnet에 연결되어 있는 여러 서버에 연결될 때 사용합니다.</p>
@@ -303,7 +303,7 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/alb/create-alb4.png" alt="Application Load Balancer 생성" /><em>이미지 5. Application Load Balancer 생성 - 3</em></p>
+<p><img src="/assets/images/alb/create-alb4.png" alt="Application Load Balancer 생성" /><em>이미지 5. Application Load Balancer 생성 - 3</em></p>
 
 <p><br /></p>
 
@@ -311,7 +311,7 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/alb/create-alb5.png" alt="Application Load Balancer 생성" /><em>이미지 6. Application Load Balancer 생성 - 4</em></p>
+<p><img src="/assets/images/alb/create-alb5.png" alt="Application Load Balancer 생성" /><em>이미지 6. Application Load Balancer 생성 - 4</em></p>
 
 <p><br /></p>
 
@@ -325,7 +325,7 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/alb/listeners1.png" alt="Listeners 업데이트" /><em>이미지 7. 리스너 규칙 보기/편집</em></p>
+<p><img src="/assets/images/alb/listeners1.png" alt="Listeners 업데이트" /><em>이미지 7. 리스너 규칙 보기/편집</em></p>
 
 <p><br /></p>
 
@@ -333,7 +333,7 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/alb/listeners2.png" alt="규칙 추가" /><em>이미지 8. 리스너 규칙 추가 - 1</em></p>
+<p><img src="/assets/images/alb/listeners2.png" alt="규칙 추가" /><em>이미지 8. 리스너 규칙 추가 - 1</em></p>
 
 <p><br /></p>
 
@@ -346,7 +346,7 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/alb/listeners3.png" alt="규칙 추가" /><em>이미지 9. 리스너 규칙 추가 - 2</em></p>
+<p><img src="/assets/images/alb/listeners3.png" alt="규칙 추가" /><em>이미지 9. 리스너 규칙 추가 - 2</em></p>
 
 <p><br /></p>
 
@@ -384,11 +384,11 @@
                     
                     
                     <li>
-                        <a class="smoothscroll" href="/liampoet.github.io/categories#ALB">ALB</a>
+                        <a class="smoothscroll" href="/categories#ALB">ALB</a>
                     </li>
                     
                     <li>
-                        <a class="smoothscroll" href="/liampoet.github.io/categories#AWS">AWS</a>
+                        <a class="smoothscroll" href="/categories#AWS">AWS</a>
                     </li>
                     
                 </ul>
@@ -407,10 +407,10 @@
             <!-- Prev/Next -->
             <div class="row PageNavigation d-flex justify-content-between font-weight-bold">
             
-            <a class="prev d-block col-md-6" href="/liampoet.github.io//lambda-nat/"> &laquo; VPC내의 AWS Lambda의 인터넷 접속하기</a>
+            <a class="prev d-block col-md-6" href="//lambda-nat/"> &laquo; VPC내의 AWS Lambda의 인터넷 접속하기</a>
             
             
-            <a class="next d-block col-md-6 text-lg-right" href="/liampoet.github.io//streaming/">스트리밍 서비스와 AWS Media Services &raquo; </a>
+            <a class="next d-block col-md-6 text-lg-right" href="//streaming/">스트리밍 서비스와 AWS Media Services &raquo; </a>
             
             <div class="clearfix"></div>
             </div>
@@ -463,7 +463,7 @@ https://search.google.com/structured-data/testing-tool/u/0/
 ================================================== -->
 <div class="alertbar">
 	<div class="container text-center">
-		<span><img src="/liampoet.github.io/assets/images/logo.png" alt="LiamCoding"> &nbsp; Never miss a <b>story</b> from us, subscribe to our newsletter</span>
+		<span><img src="/assets/images/logo.png" alt="LiamCoding"> &nbsp; Never miss a <b>story</b> from us, subscribe to our newsletter</span>
         <form action="https://wowthemes.us11.list-manage.com/subscribe/post?u=8aeb20a530e124561927d3bd8&amp;id=8c3d2d214b" method="post" name="mc-embedded-subscribe-form" class="wj-contact-form validate" target="_blank" novalidate>
             <div class="mc-field-group">
             <input type="email" placeholder="Email" name="EMAIL" class="required email" id="mce-EMAIL" autocomplete="on" required>
@@ -489,47 +489,47 @@ https://search.google.com/structured-data/testing-tool/u/0/
             
             
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#AWS">AWS (7)</a>
+                    <a class="mt-1 mb-1" href="/categories#AWS">AWS (7)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Python">Python (6)</a>
+                    <a class="mt-1 mb-1" href="/categories#Python">Python (6)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Bootpay">Bootpay (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#Bootpay">Bootpay (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#FastAPI">FastAPI (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#FastAPI">FastAPI (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#AWS-Lambda">AWS Lambda (3)</a>
+                    <a class="mt-1 mb-1" href="/categories#AWS-Lambda">AWS Lambda (3)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#EventBridge">EventBridge (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#EventBridge">EventBridge (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Aamazon-Cloudwatch">Aamazon Cloudwatch (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#Aamazon-Cloudwatch">Aamazon Cloudwatch (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Javascript">Javascript (3)</a>
+                    <a class="mt-1 mb-1" href="/categories#Javascript">Javascript (3)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#jQuery">jQuery (3)</a>
+                    <a class="mt-1 mb-1" href="/categories#jQuery">jQuery (3)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#MySQL">MySQL (4)</a>
+                    <a class="mt-1 mb-1" href="/categories#MySQL">MySQL (4)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#HTML">HTML (2)</a>
+                    <a class="mt-1 mb-1" href="/categories#HTML">HTML (2)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Json">Json (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#Json">Json (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Postman">Postman (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#Postman">Postman (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#AWS-RDS">AWS RDS (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#AWS-RDS">AWS RDS (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Interview">Interview (3)</a>
+                    <a class="mt-1 mb-1" href="/categories#Interview">Interview (3)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Docker">Docker (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#Docker">Docker (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#K8S">K8S (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#K8S">K8S (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#ALB">ALB (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#ALB">ALB (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#CDN">CDN (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#CDN">CDN (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Diary">Diary (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#Diary">Diary (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Kafka">Kafka (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#Kafka">Kafka (1)</a>
                 
             
             
@@ -543,7 +543,7 @@ https://search.google.com/structured-data/testing-tool/u/0/
     <div class="container">
         <div class="row">
             <div class="col-md-6 col-sm-6 text-center text-lg-left">
-                Copyright © 2022 Liam 
+                Copyright © 2022 LiamCoding 
             </div>
             <div class="col-md-6 col-sm-6 text-center text-lg-right">    
                 <a target="_blank" href="https://www.wowthemes.net/mediumish-free-jekyll-template/">Mediumish Jekyll Theme</a> by WowThemes.net
@@ -563,13 +563,13 @@ https://search.google.com/structured-data/testing-tool/u/0/
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 
-<script src="/liampoet.github.io/assets/js/mediumish.js"></script>
+<script src="/assets/js/mediumish.js"></script>
 
 
-<script src="/liampoet.github.io/assets/js/lazyload.js"></script>
+<script src="/assets/js/lazyload.js"></script>
 
 
-<script src="/liampoet.github.io/assets/js/ie10-viewport-bug-workaround.js"></script> 
+<script src="/assets/js/ie10-viewport-bug-workaround.js"></script> 
 
 
 <script id="dsq-count-scr" src="//demowebsite.disqus.com/count.js"></script>

@@ -1,5 +1,5 @@
 # Site
-name: "Liam"
+name: "LiamCoding"
 title: "LiamCoding"
 description: "Hello! I'm Liam 👋I'm a developer working at ./-"
 logo: 'assets/images/logo.png'
@@ -19,8 +19,8 @@ authors:
     gravatar: 341e587e52b4402086ddb8d2ffc9e48b
     email: dnwjd6452@gmail.com
     web: https://www.linkedin.com/in/kwongmin-lim-32b828247/
-    twitter: ""
-    description: "공부하는 중입니다.🥸"
+    twitter: https://www.linkedin.com/in/kwongmin-lim-32b828247/
+    description: "공부하는 중입니다🥸"
 
 # Plugins
 plugins:

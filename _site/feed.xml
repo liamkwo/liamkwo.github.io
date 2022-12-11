@@ -3,10 +3,10 @@
   <channel>
     <title>LiamCoding</title>
     <description>Hello! I'm Liam 👋I'm a developer working at ./-</description>
-    <link>http://localhost:4000/liampoet.github.io/</link>
-    <atom:link href="http://localhost:4000/liampoet.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 10 Dec 2022 20:00:16 +0900</pubDate>
-    <lastBuildDate>Sat, 10 Dec 2022 20:00:16 +0900</lastBuildDate>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sun, 11 Dec 2022 18:11:22 +0900</pubDate>
+    <lastBuildDate>Sun, 11 Dec 2022 18:11:22 +0900</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -47,12 +47,31 @@ streaming analytics, data integration, and mission-critical applications.&lt;/co
   &lt;p&gt;Message Queue란? 프로그램 간 데이터를 교환할 때 사용하는 통신 방법 중 하나이며 🌎&lt;a href=&quot;https://tecoble.techcourse.co.kr/post/2021-07-03-message-oriented-middleware/&quot;&gt;Message-Oriented Middleware&lt;/a&gt;의 구현을 의미합니다.&lt;/p&gt;
 &lt;/blockquote&gt;
 
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;apache-kafka의-특징&quot;&gt;Apache Kafka의 특징&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Kafka의 topic에 여러 프로듀서가 동시에 메시지를 전송할 수 있으며, Kafka topic의 메시지를 여러 컨슈머들이 동시에 읽어 갈 수 있습니다. 
+때문에, 다중 프로듀서/컨슈머의 지원으로 하나의 Kafka 시스템을 통해 다양한 애플리케이션이 데이터를 주고 받을 수 있습니다.&lt;/li&gt;
+  &lt;li&gt;Kafka는 프로듀서가 생성한 메시지를 브로커가 위치한 서버의 파일 시스템에 저장할 수 있기 때문에, 데이터의 영속성을 보장해 줍니다.&lt;/li&gt;
+  &lt;li&gt;Scale out 즉, 확장성이 용이합니다. 프로듀서, 컨슈머, 브로커등을 운영중에 추가할 수 있으며 예를 들어 초창기에 적은 수의 브로커들로 클러스터를 운영하다가 
+시스템 트래픽이 높아지면 브로커를 추가해서 클러스터를 확장할 수 있습니다.&lt;/li&gt;
+  &lt;li&gt;Kafka는 Push가 아닌 컨슈머가 브로커에게서 메시지를 가져오는 Pull방식이기 때문에 컨슈머의 처리량을 브로커가 고민할 필요가 없습니다. 
+즉, 컨슈머는 자신이 처리할 수 있는 만큼의 메시지만 브로커에게서 가져가면 되기 때문에 최적의 메시지처리 성능을 가질 수 있습니다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
 &lt;h3 id=&quot;apache-kafka의-아키텍처&quot;&gt;Apache Kafka의 아키텍처&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/kafka/kafka_architecture.png&quot; alt=&quot;Kafka Architecture&quot; /&gt;&lt;em&gt;이미지 1. Kafka 아키텍처(출처: Developer.holee Blog)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/kafka/kafka_architecture.png&quot; alt=&quot;Kafka Architecture&quot; /&gt;&lt;em&gt;이미지 1. Kafka 아키텍처(출처: Developer.holee Blog)&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;Kafka는 Publish-Subscribe 모델을 기반으로 동작하며, 위 이미와 같이 크게 &lt;strong&gt;producer, consumer, broker, Zookeeper&lt;/strong&gt;로 구성됩니다. Producer는 특정 topic의 메시지를 생성한 뒤 해당 메시지를 broker에 전달합니다.
 Broker가 전달받은 메시지를 topic별로(Foo, bar) 분류하여 쌓아놓으면, 해당 topic을 구독하는 consumer들이 메시지를 가져가서 처리합니다. 클러스터 내의 broker에 대한 분산 처리는 &lt;strong&gt;이미지 1. Kafka 아키텍처&lt;/strong&gt;와 같이 🌎&lt;a href=&quot;https://zookeeper.apache.org/&quot;&gt;Apache ZooKeeper&lt;/a&gt;가 담당합니다.&lt;/p&gt;
+
 &lt;blockquote&gt;
   &lt;p&gt;여담으로, Apache Kafka에 대한 자료를 찾다가 Apache Kafka에서 Zookeeper을 제거한다는 소식이 있다는 것을 알게되었습니다. 🌎&lt;a href=&quot;https://www.itworld.co.kr/news/235784&quot;&gt;아파치 카프카에서 ‘주키퍼’ 빠진다…”내부 메타데이터 프로토콜로 대체”&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -80,54 +99,77 @@ Broker가 전달받은 메시지를 topic별로(Foo, bar) 분류하여 쌓아놓
 
 &lt;h4 id=&quot;1-topic과-partition&quot;&gt;1. &lt;span style=&quot;background-color:#fff5b1&quot;&gt;Topic&lt;/span&gt;과 &lt;span style=&quot;background-color:#fff5b1&quot;&gt;Partition&lt;/span&gt;&lt;/h4&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/kafka/topic.png&quot; alt=&quot;Topic&quot; /&gt;&lt;em&gt;이미지 2. Kafka Topic(출처: Apache Kafka)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/kafka/topic.png&quot; alt=&quot;Topic&quot; /&gt;&lt;em&gt;이미지 2. Kafka Topic(출처: Apache Kafka)&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;하나의 topic이 3개의 partition에 분산되어 순차적으로 저장되어지는데, 이 때 각 partition은 0부터 1씩 증가하는 offset 값(고유 ID)을 메시지에 부여합니다.
 offset 값은 partition마다 별도로 관리되기 때문에 topic내에서 메시지를 식별할 때는 partition 번호와 offset 값을 함께 사용합니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
 &lt;h4 id=&quot;2-broker&quot;&gt;2. &lt;span style=&quot;background-color:#fff5b1&quot;&gt;Broker&lt;/span&gt;&lt;/h4&gt;
 
 &lt;p&gt;Kafka Cluster는 여러대의 broker(server)로 구성되어져 있습니다. 보통 3개 이상의 broker로 클러스터를 운영하며, 각각의 broker는 고유한 id 값으로 구분되어집니다.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/kafka/Replication.png&quot; alt=&quot;Replication&quot; /&gt;&lt;em&gt;이미지 3. Replication(파란색이 리더)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/kafka/Replication.png&quot; alt=&quot;Replication&quot; /&gt;&lt;em&gt;이미지 3. Replication(파란색이 리더)&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;span style=&quot;background-color:#f7ddbe&quot;&gt;Replication&lt;/span&gt;은 클러스터로 묶인 브로커 중 일부에 장애가 발생하더라도 데이터를 유실하지 않고 안전 하게 하기 위해 사용됩니다.
 Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같이 3개의 broker가 있을 때, 복제된 파티션은 &lt;strong&gt;1개의 리더(leader)&lt;/strong&gt;와 &lt;strong&gt;N-1개의 팔로워(follower)&lt;/strong&gt;로 구성됩니다.
 각각의 팔로워는 리더의 오프셋을 확인하고, 현재 자신이 가지고 있는 오프셋과 차이가 나는 경우 리더로부터 데이터를 가져와서 자신의 파티션에 저장합니다. 파티션의 데이터가 복제되므로 복제 개수만큼의
 비용이 발생하게 되지만 데이터의 안전이 보장되기 때문에 이러한 비용을 감수하고 복제를 수행한다고 합니다.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/kafka/Replication-error.png&quot; alt=&quot;Replication-error&quot; /&gt;&lt;em&gt;이미지 4. Replication-error&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/kafka/Replication-error.png&quot; alt=&quot;Replication-error&quot; /&gt;&lt;em&gt;이미지 4. Replication-error&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;여기서 갑자기 리더의 broker에 error가 발생하게 된다면, 팔로워 파티션 중 하나가 리더 파티션의 지위를 넘겨받게 됩니다. 
 이를 통해 데이터가 유실되지 않고 데이터의 안전성을 보장할 수 있게 됩니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
 &lt;h4 id=&quot;3-consumers와-consumer-groups&quot;&gt;3. &lt;span style=&quot;background-color:#fff5b1&quot;&gt;Consumers&lt;/span&gt;와 &lt;span style=&quot;background-color:#fff5b1&quot;&gt;Consumer Groups&lt;/span&gt;&lt;/h4&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;h3 id=&quot;kafka의-특징&quot;&gt;Kafka의 특징&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/kafka/consumer-groups.png&quot; alt=&quot;Consumer Groups&quot; /&gt;&lt;em&gt;이미지 5. Consumer Groups&lt;/em&gt;&lt;/p&gt;
 
-&lt;ol&gt;
-  &lt;li&gt;Kafka의 topic에 여러 프로듀서가 동시에 메시지를 전송할 수 있으며, Kafka topic의 메시지를 여러 컨슈머들이 동시에 읽어 갈 수 있습니다. 
-때문에, 다중 프로듀서/컨슈머의 지원으로 하나의 Kafka 시스템을 통해 다양한 애플리케이션이 데이터를 주고 받을 수 있습니다.&lt;/li&gt;
-  &lt;li&gt;Kafka는 프로듀서가 생성한 메시지를 브로커가 위치한 서버의 파일 시스템에 저장할 수 있기 때문에, 데이터의 영속성을 보장해 줍니다.&lt;/li&gt;
-  &lt;li&gt;Scale out 즉, 확장성이 용이합니다. 프로듀서, 컨슈머, 브로커등을 운영중에 추가할 수 있으며 예를 들어 초창기에 적은 수의 브로커들로 클러스터를 운영하다가 
-시스템 트래픽이 높아지면 브로커를 추가해서 클러스터를 확장할 수 있습니다.&lt;/li&gt;
-  &lt;li&gt;Kafka는 Push가 아닌 컨슈머가 브로커에게서 메시지를 가져오는 Pull방식이기 때문에 컨슈머의 처리량을 브로커가 고민할 필요가 없습니다. 
-즉, 컨슈머는 자신이 처리할 수 있는 만큼의 메시지만 브로커에게서 가져가면 되기 때문에 최적의 메시지처리 성능을 가질 수 있습니다.&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;Kafka의 파티션은 consumer group당 오로지 하나의 컨슈머의 접근만을 허용합니다. 따라서 동일한 consumer group에 속하는 컨슈머끼리는 동일한 파티션에 접근할 수 없습니다.
+만일, 컨슈머가 추가/제거되면 추가/제거된 컨슈머가 속한 consumer group 내의 컨슈머들의 파티션 재분배가 발생하고, broker가 추가/제거되면 전체 consumer group에서 파티션 재분배가 발생합니다.&lt;/p&gt;
+
+&lt;p&gt;위의 그림과 같이 consumer group을 구성하는 컨슈머의 수가 파티션의 수보다 작으면 하나의 컨슈머가 여러 개의 파티션을 소유할 수 있습니다. 
+하지만, 반대로 컨슈머의 수가 파티션의 수보다 많다면 몇몇 컨슈머는 수행 하는 것이 없이 놀고 있을 수 있습니다. 때문에 파티션 개수와 컨슈머 수의 적절한 설정이 필요합니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;
 &lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;끝맺음&lt;/p&gt;
+&lt;/blockquote&gt;
 
+&lt;p&gt;Apache Kafka는 근래에 가졌던 가장 최고의 관심사 였는데, 오늘 공부를 해보면서 이론만으로는 부족하다는 느낌을 절실히 경험했습니다. 
+다음 포스팅에는 이론이 아닌 실전편의 Kafka를 포스팅 해보려고 합니다! 공부하면서 포스팅을 하다보니 많은 부족한 점이 있을 수 있습니다. 
+혹여나 내용에 이상이 있다면 댓글로 알려주시면 감사드립니다! 😀👍&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;[참고자료]&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://kafka.apache.org/081/documentation.html&quot;&gt;Apache Kafka Docs&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://devfunny.tistory.com/823&quot;&gt;서해바다 - Apache Kafka 기본 개념 총정리&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://tecoble.techcourse.co.kr/post/2021-07-03-message-oriented-middleware/&quot;&gt;Message Oriented Middleware&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.hanbit.co.kr/media/channel/view.html?cms_code=CMS9400468504&quot;&gt;링크드인은 왜 Kafka를 만들었나&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://velog.io/@king3456/Apache-Kafka-%EA%B8%B0%EB%B3%B8%EA%B0%9C%EB%85%90&quot;&gt;Developer.holee - Apache Kafka&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://zookeeper.apache.org/&quot;&gt;https://zookeeper.apache.org/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 </description>
         <pubDate>Sat, 10 Dec 2022 17:05:22 +0900</pubDate>
-        <link>http://localhost:4000/liampoet.github.io/kafka/</link>
-        <guid isPermaLink="true">http://localhost:4000/liampoet.github.io/kafka/</guid>
-        
-        <category>Kafka</category>
+        <link>http://localhost:4000/kafka/</link>
+        <guid isPermaLink="true">http://localhost:4000/kafka/</guid>
         
         
         <category>Kafka</category>
@@ -145,7 +187,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;커뮤니티에서 &lt;strong&gt;&lt;a href=&quot;http://www.yes24.com/Product/Goods/93997435?pid=123487&amp;amp;cosemkid=go16033550339966347&amp;amp;gclid=Cj0KCQjw1bqZBhDXARIsANTjCPJp7r0vo4GmU6npFF04iJT11yK1sOUduYI0opq8lfSdFa49gdKnO-waAkxXEALw_wcB&quot;&gt;IT 엔지니어를 위한 네트워크 입문&lt;/a&gt;&lt;/strong&gt; 이라는 네트워크에 대한 책을 추천을 받았습니다. 사알짝 늦은 감이 있나 싶었지만, 제가 보기에 저는 아직 네트워크에 네ㅌ… 정도(?)만을 아는 것 같기도 하고 다시 기초를 탄탄히 다져보면 좋을 것 같은 생각에 곧바로 구매했습니다. 이틀 전에 구매를 하고 오늘 오전에 받아서  오늘부터 정독해 보려고 합니다.(지금 하고 있는 것들이 너무 많아서 조금씩이라도 꾸준히 정독하려고 합니다.🥲)&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/diary/2022-09-25-book.jpeg&quot; alt=&quot;IT 엔지니어를 위한 네트워크 입문&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/diary/2022-09-25-book.jpeg&quot; alt=&quot;IT 엔지니어를 위한 네트워크 입문&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -157,7 +199,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
   &lt;p&gt;&lt;strong&gt;추가&lt;/strong&gt; - 리뷰를 보니 번역상의 오류가 조금씩 있다고 하네요.(예를 들어, ElasticCache -&amp;gt; ElastiCache) 또한 문제의 지문 번역이 애매한 것들도 있다고 하군요. 전 그래도 이런 느낌의 AWS의 책은 처음 보아서 그런지 좀 더 다양한 자격증과 풍부한 내용이 더해진다면 더 좋을 것 같습니다! 계속 천천히 읽어보겠습니다.😊&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/diary/2022-09-28-book.png&quot; alt=&quot;클라우드 AWS 자격증으로 시작하기&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/diary/2022-09-28-book.png&quot; alt=&quot;클라우드 AWS 자격증으로 시작하기&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -167,12 +209,12 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;두 번째로 🌏&lt;a href=&quot;https://www.dotslashdash.com/&quot;&gt;닷슬래시대시&lt;/a&gt;라는 회사의 조은우 개발자님 이셨는데, 같은 오픈 채팅방에 계신 분이셨습니다. 제 첫 회사가 스타트업이었고 서버 개발자가 저 혼자였던 만큼, 많은 부분에서 공감해주시고 이해해 주셨습니다.😭 또한 서비스 아키텍처 구성, 시스템 설명까지 너무 친절하게 설명해 주셔서 정말 감사했었습니다. 또한 조은우 개발자님께서  함께 있었던 다른 주니어 개발자분들과도 대화를 잘 이끌어서 주셔서 짧지만 알차게 여러 이야기에 대해 들을 수 있었습니다. 오늘 파이콘 참가하신 많은 분들 너무 수고하셨고, 좋은 기회를 주신 파이콘 기획자님들 정말 감사합니다!(추가로, 파이콘 행사 구성품이 꽤나 알찼습니다. 옷, 피규어, 기타 물품들…)&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/diary/pycon.png&quot; alt=&quot;pycon 후기 - 왼쪽부터 채용설명회, 경품 추천(친구는 요기요 상품권 당첨됬지만 전 암것도 없습니다..), 파이콘 참여 업체 스티커, 같이간 친구와 스티커 사진&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/diary/pycon.png&quot; alt=&quot;pycon 후기 - 왼쪽부터 채용설명회, 경품 추천(친구는 요기요 상품권 당첨됬지만 전 암것도 없습니다..), 파이콘 참여 업체 스티커, 같이간 친구와 스티커 사진&quot; /&gt;
 &lt;br /&gt;&lt;/p&gt;
 </description>
         <pubDate>Sun, 25 Sep 2022 15:55:20 +0900</pubDate>
-        <link>http://localhost:4000/liampoet.github.io/diary/</link>
-        <guid isPermaLink="true">http://localhost:4000/liampoet.github.io/diary/</guid>
+        <link>http://localhost:4000/diary/</link>
+        <guid isPermaLink="true">http://localhost:4000/diary/</guid>
         
         
         <category>Diary</category>
@@ -232,7 +274,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/streaming/hls.png&quot; alt=&quot;HLS의 구성&quot; /&gt;&lt;em&gt;이미지 1. HLS의 구성(출처: Apple Documentation Archive)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/streaming/hls.png&quot; alt=&quot;HLS의 구성&quot; /&gt;&lt;em&gt;이미지 1. HLS의 구성(출처: Apple Documentation Archive)&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -249,7 +291,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://youtu.be/fdoaUq49dSA?list=PLORxAVAC5fUWPziIFAho12lvGl1hR7ZZ5&quot;&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/streaming/youtube.png&quot; alt=&quot;AWS 미디어서비스를 통한 라이브 및 온디맨드 동영상 워크플로 구성 및 배포하기 - 김영진:: AWS Builders Online Series&quot; /&gt;&lt;em&gt;클릭시 Youtube로 이동됨&lt;/em&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://youtu.be/fdoaUq49dSA?list=PLORxAVAC5fUWPziIFAho12lvGl1hR7ZZ5&quot;&gt;&lt;img src=&quot;/assets/images/streaming/youtube.png&quot; alt=&quot;AWS 미디어서비스를 통한 라이브 및 온디맨드 동영상 워크플로 구성 및 배포하기 - 김영진:: AWS Builders Online Series&quot; /&gt;&lt;em&gt;클릭시 Youtube로 이동됨&lt;/em&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -257,7 +299,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/streaming/workflow.png&quot; alt=&quot;AWS 미디어 서비스를 이용한 워크플로우&quot; /&gt;&lt;em&gt;이미지 2. AWS 미디어 서비스를 이용한 워크플로우(출처: AWS Youtube)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/streaming/workflow.png&quot; alt=&quot;AWS 미디어 서비스를 이용한 워크플로우&quot; /&gt;&lt;em&gt;이미지 2. AWS 미디어 서비스를 이용한 워크플로우(출처: AWS Youtube)&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;
 &lt;br /&gt;&lt;/p&gt;
@@ -314,7 +356,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/streaming/MediaConvert.png&quot; alt=&quot;AWS Elemental MediaTailor 작동 방식&quot; /&gt;&lt;em&gt;이미지 3. AWS Elemental MediaTailor 작동 방식(출처: AWS - MediaTailor)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/streaming/MediaConvert.png&quot; alt=&quot;AWS Elemental MediaTailor 작동 방식&quot; /&gt;&lt;em&gt;이미지 3. AWS Elemental MediaTailor 작동 방식(출처: AWS - MediaTailor)&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -328,7 +370,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/streaming/MediaConvert.png&quot; alt=&quot;AWS Elemental MediaConvert 작동 방식&quot; /&gt;&lt;em&gt;이미지 4. AWS Elemental MediaConvert 작동 방식(출처: AWS - MediaConvert)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/streaming/MediaConvert.png&quot; alt=&quot;AWS Elemental MediaConvert 작동 방식&quot; /&gt;&lt;em&gt;이미지 4. AWS Elemental MediaConvert 작동 방식(출처: AWS - MediaConvert)&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -372,7 +414,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/streaming/CloudFront.png&quot; alt=&quot;CloudFront에서 사용자에게 콘텐츠를 제공하는 방법&quot; /&gt;&lt;em&gt;이미지 5. CloudFront에서 사용자에게 콘텐츠를 제공하는 방법(출처: AWS Docs)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/streaming/CloudFront.png&quot; alt=&quot;CloudFront에서 사용자에게 콘텐츠를 제공하는 방법&quot; /&gt;&lt;em&gt;이미지 5. CloudFront에서 사용자에게 콘텐츠를 제공하는 방법(출처: AWS Docs)&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -403,8 +445,8 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 &lt;/ul&gt;
 </description>
         <pubDate>Thu, 15 Sep 2022 20:08:49 +0900</pubDate>
-        <link>http://localhost:4000/liampoet.github.io/streaming/</link>
-        <guid isPermaLink="true">http://localhost:4000/liampoet.github.io/streaming/</guid>
+        <link>http://localhost:4000/streaming/</link>
+        <guid isPermaLink="true">http://localhost:4000/streaming/</guid>
         
         
         <category>CDN</category>
@@ -451,7 +493,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/alb/alb-element.png&quot; alt=&quot;ALB 구성 요소&quot; /&gt;&lt;em&gt;이미지 1. ALB 구성 요소(출처: AWS Docs)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/alb/alb-element.png&quot; alt=&quot;ALB 구성 요소&quot; /&gt;&lt;em&gt;이미지 1. ALB 구성 요소(출처: AWS Docs)&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -472,7 +514,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/alb/create-alb1.png&quot; alt=&quot;AWS Console &amp;gt; EC2 &amp;gt; 로드 밸런서 생성&quot; /&gt;&lt;em&gt;이미지 2. 로드 밸런서 생성&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/alb/create-alb1.png&quot; alt=&quot;AWS Console &amp;gt; EC2 &amp;gt; 로드 밸런서 생성&quot; /&gt;&lt;em&gt;이미지 2. 로드 밸런서 생성&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -480,7 +522,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/alb/create-alb2.png&quot; alt=&quot;Application Load Balancer 생성&quot; /&gt;&lt;em&gt;이미지 3. Application Load Balancer 생성 - 1&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/alb/create-alb2.png&quot; alt=&quot;Application Load Balancer 생성&quot; /&gt;&lt;em&gt;이미지 3. Application Load Balancer 생성 - 1&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -488,7 +530,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/alb/create-alb3.png&quot; alt=&quot;Application Load Balancer 생성&quot; /&gt;&lt;em&gt;이미지 4. Application Load Balancer 생성 - 2&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/alb/create-alb3.png&quot; alt=&quot;Application Load Balancer 생성&quot; /&gt;&lt;em&gt;이미지 4. Application Load Balancer 생성 - 2&lt;/em&gt;&lt;/p&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;&lt;strong&gt;Internet-facing(인터넷경계)&lt;/strong&gt; 란, 이름에서 느껴지는 것처럼 인터넷에 연결되는 밸런서를 뜻합니다. 인터넷으로부터 요청을 받아서 각기 다른 EC2로 분배해 주는 역할을 합니다. &lt;strong&gt;Internal(내부)&lt;/strong&gt; 는, private subnet에 연결되어 있는 여러 서버에 연결될 때 사용합니다.&lt;/p&gt;
@@ -496,7 +538,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/alb/create-alb4.png&quot; alt=&quot;Application Load Balancer 생성&quot; /&gt;&lt;em&gt;이미지 5. Application Load Balancer 생성 - 3&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/alb/create-alb4.png&quot; alt=&quot;Application Load Balancer 생성&quot; /&gt;&lt;em&gt;이미지 5. Application Load Balancer 생성 - 3&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -504,7 +546,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/alb/create-alb5.png&quot; alt=&quot;Application Load Balancer 생성&quot; /&gt;&lt;em&gt;이미지 6. Application Load Balancer 생성 - 4&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/alb/create-alb5.png&quot; alt=&quot;Application Load Balancer 생성&quot; /&gt;&lt;em&gt;이미지 6. Application Load Balancer 생성 - 4&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -518,7 +560,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/alb/listeners1.png&quot; alt=&quot;Listeners 업데이트&quot; /&gt;&lt;em&gt;이미지 7. 리스너 규칙 보기/편집&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/alb/listeners1.png&quot; alt=&quot;Listeners 업데이트&quot; /&gt;&lt;em&gt;이미지 7. 리스너 규칙 보기/편집&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -526,7 +568,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/alb/listeners2.png&quot; alt=&quot;규칙 추가&quot; /&gt;&lt;em&gt;이미지 8. 리스너 규칙 추가 - 1&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/alb/listeners2.png&quot; alt=&quot;규칙 추가&quot; /&gt;&lt;em&gt;이미지 8. 리스너 규칙 추가 - 1&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -539,7 +581,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/alb/listeners3.png&quot; alt=&quot;규칙 추가&quot; /&gt;&lt;em&gt;이미지 9. 리스너 규칙 추가 - 2&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/alb/listeners3.png&quot; alt=&quot;규칙 추가&quot; /&gt;&lt;em&gt;이미지 9. 리스너 규칙 추가 - 2&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -559,8 +601,8 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 </description>
         <pubDate>Wed, 31 Aug 2022 14:40:22 +0900</pubDate>
-        <link>http://localhost:4000/liampoet.github.io/alb/</link>
-        <guid isPermaLink="true">http://localhost:4000/liampoet.github.io/alb/</guid>
+        <link>http://localhost:4000/alb/</link>
+        <guid isPermaLink="true">http://localhost:4000/alb/</guid>
         
         
         <category>AWS</category>
@@ -608,7 +650,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/lambda-nat/vpc.png&quot; alt=&quot;Amazon VPC&quot; /&gt;&lt;em&gt;이미지 1. Amazon VPC&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/lambda-nat/vpc.png&quot; alt=&quot;Amazon VPC&quot; /&gt;&lt;em&gt;이미지 1. Amazon VPC&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -622,7 +664,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/lambda-nat/subnet.png&quot; alt=&quot;Subnet&quot; /&gt;&lt;em&gt;이미지 2. Subnet&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/lambda-nat/subnet.png&quot; alt=&quot;Subnet&quot; /&gt;&lt;em&gt;이미지 2. Subnet&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -636,7 +678,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/lambda-nat/router.png&quot; alt=&quot;Router&quot; /&gt;&lt;em&gt;이미지 3. Router&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/lambda-nat/router.png&quot; alt=&quot;Router&quot; /&gt;&lt;em&gt;이미지 3. Router&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -650,7 +692,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/lambda-nat/gateway.png&quot; alt=&quot;IGW / NAT GW&quot; /&gt;&lt;em&gt;이미지 4. IGW / NAT GW&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/lambda-nat/gateway.png&quot; alt=&quot;IGW / NAT GW&quot; /&gt;&lt;em&gt;이미지 4. IGW / NAT GW&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;
 &lt;br /&gt;&lt;/p&gt;
@@ -665,7 +707,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/lambda-nat/vpc_console.png&quot; alt=&quot;AWS Console &amp;gt; VPC&quot; /&gt;&lt;em&gt;이미지 5. AWS Console -&amp;gt; VPC&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/lambda-nat/vpc_console.png&quot; alt=&quot;AWS Console &amp;gt; VPC&quot; /&gt;&lt;em&gt;이미지 5. AWS Console -&amp;gt; VPC&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -678,11 +720,11 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/lambda-nat/create_vpc1.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; VPC 생성1&quot; /&gt;&lt;em&gt;이미지 6. VPC 생성 버튼 클릭&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/lambda-nat/create_vpc1.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; VPC 생성1&quot; /&gt;&lt;em&gt;이미지 6. VPC 생성 버튼 클릭&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/lambda-nat/create_vpc2.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; VPC 생성2&quot; /&gt;&lt;em&gt;이미지 7. VPC 생성&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/lambda-nat/create_vpc2.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; VPC 생성2&quot; /&gt;&lt;em&gt;이미지 7. VPC 생성&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -696,11 +738,11 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/lambda-nat/create_subnet1.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; Subnet 생성1&quot; /&gt;&lt;em&gt;이미지 8. 서브넷 생성 버튼 클릭&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/lambda-nat/create_subnet1.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; Subnet 생성1&quot; /&gt;&lt;em&gt;이미지 8. 서브넷 생성 버튼 클릭&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/lambda-nat/create_subnet2.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; Subnet 생성2&quot; /&gt;&lt;em&gt;이미지 9. 서브넷 생성&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/lambda-nat/create_subnet2.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; Subnet 생성2&quot; /&gt;&lt;em&gt;이미지 9. 서브넷 생성&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -713,15 +755,15 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/lambda-nat/create_igw1.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; IGW 생성1&quot; /&gt;&lt;em&gt;이미지 10. 인터넷 게이트웨이 생성 버튼 클릭&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/lambda-nat/create_igw1.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; IGW 생성1&quot; /&gt;&lt;em&gt;이미지 10. 인터넷 게이트웨이 생성 버튼 클릭&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/lambda-nat/create_igw2.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; IGW 생성2&quot; /&gt;&lt;em&gt;이미지 11. 인터넷 게이트웨이 생성&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/lambda-nat/create_igw2.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; IGW 생성2&quot; /&gt;&lt;em&gt;이미지 11. 인터넷 게이트웨이 생성&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/lambda-nat/create_igw3.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; IGW 연결&quot; /&gt;&lt;em&gt;이미지 12. 만들어둔 VPC연결&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/lambda-nat/create_igw3.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; IGW 연결&quot; /&gt;&lt;em&gt;이미지 12. 만들어둔 VPC연결&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -738,11 +780,11 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/lambda-nat/create_nat1.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; NAT GW 생성1&quot; /&gt;&lt;em&gt;이미지 13. NAT 게이트웨이 생성 버튼 클릭&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/lambda-nat/create_nat1.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; NAT GW 생성1&quot; /&gt;&lt;em&gt;이미지 13. NAT 게이트웨이 생성 버튼 클릭&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/lambda-nat/create_nat2.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; NAT GW 생성2&quot; /&gt;&lt;em&gt;이미지 14. 만들어둔 서브넷 연결 후 NAT 게이트웨이 생성&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/lambda-nat/create_nat2.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; NAT GW 생성2&quot; /&gt;&lt;em&gt;이미지 14. 만들어둔 서브넷 연결 후 NAT 게이트웨이 생성&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -756,11 +798,11 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/lambda-nat/create_route1.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; 라우팅 테이블 생성1&quot; /&gt;&lt;em&gt;이미지 15. 라우팅 테이블 생성 버튼 클릭&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/lambda-nat/create_route1.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; 라우팅 테이블 생성1&quot; /&gt;&lt;em&gt;이미지 15. 라우팅 테이블 생성 버튼 클릭&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/lambda-nat/create_route2.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; 라우팅 테이블 생성2&quot; /&gt;&lt;em&gt;이미지 16. 라우팅 테이블 두 개 생성&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/lambda-nat/create_route2.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; 라우팅 테이블 생성2&quot; /&gt;&lt;em&gt;이미지 16. 라우팅 테이블 두 개 생성&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -773,7 +815,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/lambda-nat/create_route3.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; 라우팅 테이블 생성3&quot; /&gt;&lt;em&gt;이미지 17. 라우팅 테이블 편집에서 인터넷 게이트웨이 연결&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/lambda-nat/create_route3.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; 라우팅 테이블 생성3&quot; /&gt;&lt;em&gt;이미지 17. 라우팅 테이블 편집에서 인터넷 게이트웨이 연결&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -786,7 +828,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/lambda-nat/create_route4.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; 라우팅 테이블 생성4&quot; /&gt;&lt;em&gt;이미지 18. 라우팅 테이블 편집에서 NAT 게이트웨이 연결&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/lambda-nat/create_route4.png&quot; alt=&quot;AWS Console &amp;gt; VPC &amp;gt; 라우팅 테이블 생성4&quot; /&gt;&lt;em&gt;이미지 18. 라우팅 테이블 편집에서 NAT 게이트웨이 연결&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;
 &lt;br /&gt;&lt;/p&gt;
@@ -800,7 +842,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/lambda-nat/lambda1.png&quot; alt=&quot;AWS Console &amp;gt; Lambda &amp;gt; VPC 연결할 함수 &amp;gt; 구성 &amp;gt; VPC &amp;gt; 편집&quot; /&gt;&lt;em&gt;이미지 19. Lambda 함수 VPC 편집 선택&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/lambda-nat/lambda1.png&quot; alt=&quot;AWS Console &amp;gt; Lambda &amp;gt; VPC 연결할 함수 &amp;gt; 구성 &amp;gt; VPC &amp;gt; 편집&quot; /&gt;&lt;em&gt;이미지 19. Lambda 함수 VPC 편집 선택&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -811,7 +853,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/lambda-nat/lambda2.png&quot; alt=&quot;Lambda VPC 편집&quot; /&gt;&lt;em&gt;이미지 20. VPC 편집&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/lambda-nat/lambda2.png&quot; alt=&quot;Lambda VPC 편집&quot; /&gt;&lt;em&gt;이미지 20. VPC 편집&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;
 &lt;br /&gt;&lt;/p&gt;
@@ -838,8 +880,8 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 </description>
         <pubDate>Fri, 19 Aug 2022 21:01:55 +0900</pubDate>
-        <link>http://localhost:4000/liampoet.github.io/lambda-nat/</link>
-        <guid isPermaLink="true">http://localhost:4000/liampoet.github.io/lambda-nat/</guid>
+        <link>http://localhost:4000/lambda-nat/</link>
+        <guid isPermaLink="true">http://localhost:4000/lambda-nat/</guid>
         
         
         <category>AWS</category>
@@ -864,7 +906,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;1. DevOps란 무엇인가요?&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;1-devops란-무엇인가요&quot;&gt;1. DevOps란 무엇인가요?&lt;/h4&gt;
 
 &lt;p&gt;데브옵스(Dev(개발) Ops(운영))란, 애플리케이션 개발-운영 간의 협업 프로세스를 자동화하는 것을 말하는 개발 방법론 이며, 결과적으로 애플리케이션의 개발과 개선 속도를 빠르게 합니다.&lt;/p&gt;
 &lt;blockquote&gt;
@@ -873,7 +915,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;2. CI/CD란 무엇인가요? 적용해 본 적이있다면 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;2-cicd란-무엇인가요-적용해-본-적이있다면-설명해-주세요&quot;&gt;2. CI/CD란 무엇인가요? 적용해 본 적이있다면 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;CI(Continuous Integration)/CD(Continuous Deployment)란, 서비스 빌드부터 배포까지 애플리케이션 개발 단계를 자동화 하는 과정입니다. 예를 들어 Github으로 코드를 커밋하고 Jenkins가 자동으로 빌드하도록 설계해본 경험 등에 대해 설명하면 될 것 같습니다.&lt;/p&gt;
 &lt;blockquote&gt;
@@ -882,7 +924,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;3. Test Code에 대해서 알고 계신가요? 그렇다면 왜 작성해야 할까요?&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;3-test-code에-대해서-알고-계신가요-그렇다면-왜-작성해야-할까요&quot;&gt;3. Test Code에 대해서 알고 계신가요? 그렇다면 왜 작성해야 할까요?&lt;/h4&gt;
 
 &lt;p&gt;테스트 코드란 내가 작성한 메서드가 실제로 제대로 동작하는지에 대해 테스트를 하는 코드입니다. 테스트 코드는 잘 작동하고, 깔끔한 코드를 얻기 위해서 작성합니다.&lt;/p&gt;
 &lt;blockquote&gt;
@@ -891,7 +933,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;4. TDD(Test-Driven Development)에 대해 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;4-tddtest-driven-development에-대해-설명해-주세요&quot;&gt;4. TDD(Test-Driven Development)에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;TDD란 작은 단위의 테스트 케이스를 작성하고 그에 맞는 코드를 작성하여 테스트를 통과한 후에 상황에 맞게 리팩토링하는 테스트 주도 개발 방식을 말합니다. 레드 그린 사이클이라는 3가지 과정을 거치는데,&lt;/p&gt;
 &lt;ol&gt;
@@ -902,27 +944,27 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;5. DDD(Domain-Driven Design)에 대해 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;5-ddddomain-driven-design에-대해-설명해-주세요&quot;&gt;5. DDD(Domain-Driven Design)에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;DDD란, 각 비즈니스 도메인이 중심이 되어 진행하는 개발 방식으로 소프트웨어의 연관된 부분들을 연결하여 계속해서 진화하는 새로운 모델을 만들어나가 복잡한 애플리케이션을 만드는 것을 쉽게 해주는 것에 있습니다. 도메인 전문가와 IT 개발자 간의 커뮤니케이션과 협업을 통해서 모델을 발전시키는 것을 추구합니다. 쇼핑몰을 예로 들면 손님들이 주문하는 도메인, 점주들이 관리하는 도메인 등이 있을 수 있습니다. 이러한 도메인들이 서로 상호작용하며 설계하는 것이 도메인 주도 설계입니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/interview/ddd.png&quot; alt=&quot;DDD(Domain-Driven Design)&quot; /&gt;&lt;em&gt;이미지 1. DDD(Domain-Driven Design)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/interview/ddd.png&quot; alt=&quot;DDD(Domain-Driven Design)&quot; /&gt;&lt;em&gt;이미지 1. DDD(Domain-Driven Design)&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;6. &lt;u&gt;Monolithic Architecture&lt;/u&gt;와 &lt;u&gt;MSA(Microservice Architecture)&lt;/u&gt;의 차이점에 대해 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;6-monolithic-architecture와-msamicroservice-architecture의-차이점에-대해-설명해-주세요&quot;&gt;6. &lt;u&gt;Monolithic Architecture&lt;/u&gt;와 &lt;u&gt;MSA(Microservice Architecture)&lt;/u&gt;의 차이점에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;모놀리식 아키텍쳐는 모든 시스템의 구성요소가 한 프로젝트에 통합되어 있는 하나의 통합된 패키지로 개발하는 방식입니다. 반면에, 마이크로 서비스는 1개의 시스템을 독립적으로 배포가능한 각각의 서비스로 분할하는 개별 서비스 단위로 개발하는 방식입니다. 때문에 마이크로 서비스는 개별 서비스 단위로 나뉘어져 있어서 해당 부분만 수정 또는 배포하기 좋고, 필요한 부분만 확장하기에도 용이하다는 장점이 있습니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/interview/msa.png&quot; alt=&quot;MSA(Microservice Architecture)&quot; /&gt;&lt;em&gt;이미지 2. MSA(Microservice Architecture)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/interview/msa.png&quot; alt=&quot;MSA(Microservice Architecture)&quot; /&gt;&lt;em&gt;이미지 2. MSA(Microservice Architecture)&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;7. 트러블슈팅(troubleshooting)을 경험해 보셨나요?&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;7-트러블슈팅troubleshooting을-경험해-보셨나요&quot;&gt;7. 트러블슈팅(troubleshooting)을 경험해 보셨나요?&lt;/h4&gt;
 
 &lt;p&gt;개발을 하면서 발생한 문제를 어떻게 해결했는지, 원인 규명 -&amp;gt; 사실 정리 -&amp;gt; 원인 추론 -&amp;gt; 조치 및 방안 검토 -&amp;gt; 해결 과정을 차근차근 설명하시면 될 것같습니다. 추가로 알게 된 개념 혹은 방법을 곁들여서 함께 설명할 수 있으면 더 좋을 것 같습니다.&lt;/p&gt;
 
@@ -933,13 +975,13 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;1. Docker에 대해 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;1-docker에-대해-설명해-주세요&quot;&gt;1. Docker에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;도커는 컨테이너 기술을 기반으로한 가상화 플랫폼입니다. 기존의 가상화는 하드웨어를 가상화하여 무거운데다, 반드시 하이퍼바이저를 거쳐야 하기 때문에 속도 저하가 발생했습니다. 이러한 이유로 베이스 환경의 OS를 공유하면서 필요한 프로세스만 격리시킨 컨테이너를 통해 가상화를 하는 Docker같은 기술이 등장했습니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/interview/docker.png&quot; alt=&quot;Docker&quot; /&gt;&lt;em&gt;이미지 3. VM과 Docker의 차이&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/interview/docker.png&quot; alt=&quot;Docker&quot; /&gt;&lt;em&gt;이미지 3. VM과 Docker의 차이&lt;/em&gt;&lt;/p&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;가상 머신을 생성하기 위해서는 하이퍼바이저 또는 가상 머신 모니터라고 불리는 소프트웨어를 이용합니다. &lt;strong&gt;하이퍼바이저는 호스트 하드웨어에 설치되어 호스트와 게스트를 나누는 역할을 하고, 각각의 게스트는 하이퍼바이저에 의해 관리되며 시스템 자원을 할당받게 됩니다.&lt;/strong&gt; 하이퍼바이저와 달리 컨테이너는 가상의 OS를 만드는 것이 아닙니다. &lt;strong&gt;컨테이너는 베이스 환경의 OS를 공유하면서 필요한 프로세스만 격리하는 방식으로, 커널을 공유하기 때문에 호스트 OS의 기능을 모두 사용할 수 있습니다.&lt;/strong&gt; 그렇기 때문에 컨테이너 위에서는 호스트 OS와 다른 OS를 구동할 수 없습니다. 대신 격리시킬 애플리케이션과 거기에 필요한 파일이나 특정 라이브러리 등 종속 항목만 포함하기 때문에 배포를 위해 생성되는 이미지의 용량이 작아진다는 장점이 있습니다. 운영체제가 아닌 프로세스이며, 하이퍼바이저를 거칠 필요가 없어 실행 속도가 빠르기도 합니다.&lt;/p&gt;
@@ -947,7 +989,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;2. Dockerfile, Docker-Compose, Docker Image와 Container의 차이, Docker Hub&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;2-dockerfile-docker-compose-docker-image와-container의-차이-docker-hub&quot;&gt;2. Dockerfile, Docker-Compose, Docker Image와 Container의 차이, Docker Hub&lt;/h4&gt;
 
 &lt;ol&gt;
   &lt;li&gt;Dockerfile : Dockerfile은 이미지를 생성하기 위한 용도로 컨테이너에 설치해야하는 패키지, 소스코드, 명령어, 환경변수설정 등을 기록한 하나의 파일&lt;/li&gt;
@@ -956,17 +998,17 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
   &lt;li&gt;Docker Hub : Docker에서 운영하는 Docker 이미지 저장소 서비스&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;3. k8s(Kubernetes)에 대해서 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;3-k8skubernetes에-대해서-설명해-주세요&quot;&gt;3. k8s(Kubernetes)에 대해서 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;쿠버네티스(Kubernetes)란, 컨테이너화된 애플리케이션의 배포, 확장 및 관리를 자동화하는 오픈 소스 시스템입니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;3-1. 쿠버네티스 클러스터의 기본 아키텍처에 대해 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;3-1-쿠버네티스-클러스터의-기본-아키텍처에-대해-설명해-주세요&quot;&gt;3-1. 쿠버네티스 클러스터의 기본 아키텍처에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;3-2. 쿠버네티스에서 Auto Scaling의 원리에 대해 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;3-2-쿠버네티스에서-auto-scaling의-원리에-대해-설명해-주세요&quot;&gt;3-2. 쿠버네티스에서 Auto Scaling의 원리에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;아직 k8s에 대해 익숙하지 않아서 열심히 공부하는 중입니다;ㅅ;. 🌎&lt;a href=&quot;https://kubernetes.io/ko/docs/home/&quot;&gt;kubernetes 공식 문서&lt;/a&gt;에서 깊이 있게 공부하실 수 있습니다.&lt;/p&gt;
@@ -979,13 +1021,13 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;**&lt;font size=&quot;4&quot;&gt;1. AWS 인프라를 구축해본 경험에 대해 설명해 주세요.&amp;lt;/Font&amp;gt;**&lt;/font&gt;&lt;/p&gt;
+&lt;h4 id=&quot;1-aws-인프라를-구축해본-경험에-대해-설명해-주세요&quot;&gt;1. AWS 인프라를 구축해본 경험에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;AWS를 사용해본 경험에 대하여 설명해 주시면 될 것 같습니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;**&lt;font size=&quot;4&quot;&gt;2. 서버리스(Serverless)란 무엇인가요?&amp;lt;/Font&amp;gt;**&lt;/font&gt;&lt;/p&gt;
+&lt;h4 id=&quot;2-서버리스serverless란-무엇인가요&quot;&gt;2. 서버리스(Serverless)란 무엇인가요?&lt;/h4&gt;
 
 &lt;p&gt;서버리스 컴퓨팅(Serverless Computing)이란 IT 인프라를 데이터센터 또는 클라우드에 준비 없이 필요한 기능을 함수로 구현해서 관리하는 것을 의미 합니다. 추가로 서버리스 컴퓨팅을 사용해본 경험에 대해 질문이 들어온다면, AWS Lambda와 같은 서버리스 컴퓨팅 플랫폼을 사용해본 경험에 대해 설명하시면 될 것 같습니다.&lt;/p&gt;
 
@@ -995,11 +1037,11 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/interview/serverless.png&quot; alt=&quot;서버리스 컴퓨팅&quot; /&gt;&lt;em&gt;이미지 4. 기술의 발전&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/interview/serverless.png&quot; alt=&quot;서버리스 컴퓨팅&quot; /&gt;&lt;em&gt;이미지 4. 기술의 발전&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;**&lt;font size=&quot;4&quot;&gt;3. Amazon VPC(Amazon Virtual Private Cloud)란 무엇인가요?&amp;lt;/Font&amp;gt;**&lt;/font&gt;&lt;/p&gt;
+&lt;h4 id=&quot;3-amazon-vpcamazon-virtual-private-cloud란-무엇인가요&quot;&gt;3. Amazon VPC(Amazon Virtual Private Cloud)란 무엇인가요?&lt;/h4&gt;
 
 &lt;p&gt;AWS 클라우드에서 다른 고객과 완벽하게 논리적으로 격리된 네트워크 공간을 제공하여 프로비저닝하여 가상 네트워크에서 AWS 리소스를 만드는데 사용하는 리소스입니다. 쉽게 풀어서 설명하자면, 자신이 사용할 AWS Resource들을 격리 되어진 하나의 네트워크로 묶는 서비스를 의미하며 격리되어 있기 때문에 다른 사람들은 접근하고 보는 것이 불가능해집니다.&lt;/p&gt;
 
@@ -1009,7 +1051,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;**&lt;font size=&quot;4&quot;&gt;3-1. Amazon VPC에 따른 AWS Lambda의 상태에 대해 설명해주세요.&amp;lt;/Font&amp;gt;**&lt;/font&gt;&lt;/p&gt;
+&lt;h4 id=&quot;3-1-amazon-vpc에-따른-aws-lambda의-상태에-대해-설명해주세요&quot;&gt;3-1. Amazon VPC에 따른 AWS Lambda의 상태에 대해 설명해주세요.&lt;/h4&gt;
 
 &lt;ul&gt;
   &lt;li&gt;&lt;strong&gt;VPC&lt;/strong&gt;가 없는 상태 : 웹에 자유롭게 접속할 수 있지만, 로컬 네트워크로 AWS 서비스들과 연결할 수 없습니다.&lt;/li&gt;
@@ -1019,23 +1061,23 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;**&lt;font size=&quot;4&quot;&gt;3-2. NAT(Network Address Translation, 네트워크 주소 변환) Gateway란 무엇인가요?&amp;lt;/Font&amp;gt;**&lt;/font&gt;&lt;/p&gt;
+&lt;h4 id=&quot;3-2-natnetwork-address-translation-네트워크-주소-변환-gateway란-무엇인가요&quot;&gt;3-2. NAT(Network Address Translation, 네트워크 주소 변환) Gateway란 무엇인가요?&lt;/h4&gt;
 
 &lt;p&gt;NAT(Network Address Translation, 네트워크 주소 변환) Gateway란, 외부 서비스에서 프라이빗 서브넷의 인스턴스로 접근할 수 없게 하되, 프라이빗 서브넷의 인스턴스에서는 외부 서비스로 접근할 수 있게 해주는 서비스 입니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/interview/natgateway.png&quot; alt=&quot;NAT GW&quot; /&gt;&lt;em&gt;이미지 5. NAT GW (Network Address Translation Gateway)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/interview/natgateway.png&quot; alt=&quot;NAT GW&quot; /&gt;&lt;em&gt;이미지 5. NAT GW (Network Address Translation Gateway)&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;**&lt;font size=&quot;4&quot;&gt;4. 만약 클라이언트의 수가 늘어나게 되면서 기존 서버만으로는 정상적인 서비스가 불가능하게 되었습니다. 이럴 때는 어떠한 방법이 있을까요?&amp;lt;/Font&amp;gt;**&lt;/font&gt;&lt;/p&gt;
+&lt;h4 id=&quot;4-만약-클라이언트의-수가-늘어나게-되면서-기존-서버만으로는-정상적인-서비스가-불가능하게-되었습니다-이럴-때는-어떠한-방법이-있을까요&quot;&gt;4. 만약 클라이언트의 수가 늘어나게 되면서 기존 서버만으로는 정상적인 서비스가 불가능하게 되었습니다. 이럴 때는 어떠한 방법이 있을까요?&lt;/h4&gt;
 
 &lt;p&gt;증가한 트래픽에 대처할 수 있는 방법은 크게 서버 자체의 성능을 확장하는 Scale-up 방식과 서버를 여러대로 나눠서 트래픽을 처리하는 Scale-out의 방법이 있습니다. 또한, Scale-out의 방식은 여러 대의 서버로 트래픽을 균등하게 분산해주는 로드밸런싱이 반드시 필요합니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;**&lt;font size=&quot;4&quot;&gt;4-1. 로드 밸런서(Load Balancer)에 대해서 설명해 주세요.&amp;lt;/Font&amp;gt;**&lt;/font&gt;&lt;/p&gt;
+&lt;h4 id=&quot;4-1-로드-밸런서load-balancer에-대해서-설명해-주세요&quot;&gt;4-1. 로드 밸런서(Load Balancer)에 대해서 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;로드 밸런서란, 서버에 가해지는 트래픽을 여러 대의 서버에게 균등하게 분산시켜주는 역할을 합니다. 또한, 여러 대의 서버 덕분에 무중단 서비스 제공할 수 있습니다.&lt;/p&gt;
 
@@ -1045,19 +1087,19 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;**&lt;font size=&quot;4&quot;&gt;5. 무중단 시스템으로 가기 위해 필요한 방법에 대한 본인의 생각을 말해주세요.&amp;lt;/Font&amp;gt;**&lt;/font&gt;&lt;/p&gt;
+&lt;h4 id=&quot;5-무중단-시스템으로-가기-위해-필요한-방법에-대한-본인의-생각을-말해주세요&quot;&gt;5. 무중단 시스템으로 가기 위해 필요한 방법에 대한 본인의 생각을 말해주세요.&lt;/h4&gt;
 
 &lt;p&gt;다운 타임이 발생하지 않도록 기본적으로 두 대 이상의 서버를 서비스해야 합니다. 비용 절감을 위해 배포할 때에만 새롭게 서비스를 띄우고, 배포가 완료된 후에는 기존 서버는 셧다운 시키면 될 것 같습니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;**&lt;font size=&quot;4&quot;&gt;6. &lt;u&gt;Forward Proxy&lt;/u&gt;와 &lt;u&gt;Reverse Proxy&lt;/u&gt;에 대해 설명해 주세요.&amp;lt;/Font&amp;gt;**&lt;/font&gt;&lt;/p&gt;
+&lt;h4 id=&quot;6-forward-proxy와-reverse-proxy에-대해-설명해-주세요&quot;&gt;6. &lt;u&gt;Forward Proxy&lt;/u&gt;와 &lt;u&gt;Reverse Proxy&lt;/u&gt;에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;&lt;strong&gt;Forward Proxy&lt;/strong&gt; : 클라이언트에서 서버로 리소스를 요청할 때 직접 요청하지 않고 프록시 서버를 거쳐서 요청합니다. 특정 컨텐츠에 접근하는 것을 방지할 수 있으며, 유저의 정체를 숨겨줄 수도 있습니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/interview/forward.png&quot; alt=&quot;Forward Proxy&quot; /&gt;&lt;em&gt;이미지 6. Forward Proxy&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/interview/forward.png&quot; alt=&quot;Forward Proxy&quot; /&gt;&lt;em&gt;이미지 6. Forward Proxy&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Reverse Proxy&lt;/strong&gt; : 애플리케이션 서버의 앞에 위치하여 클라이언트가 서버를 요청할 때 리버스 프록시를 호출하고, 리버스 프록시가 서버로부터 응답을 전달받아 다시 클라이언트에게 전송하는 역할을 합니다. 로드 밸런싱(load balancing)에 사용되고 있으며, SSL 암호화와 보안에 좋다는 장점이 있습니다.&lt;/p&gt;
 
@@ -1067,19 +1109,19 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/interview/reverse.png&quot; alt=&quot;Reverse Proxy&quot; /&gt;&lt;em&gt;이미지 7. Reverse Proxy&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/interview/reverse.png&quot; alt=&quot;Reverse Proxy&quot; /&gt;&lt;em&gt;이미지 7. Reverse Proxy&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;**&lt;font size=&quot;4&quot;&gt;7. AWS 리전(Region)과 가용 영역(Availability Zone, AZ)에 대해 설명해 주세요.&amp;lt;/Font&amp;gt;**&lt;/font&gt;&lt;/p&gt;
+&lt;h4 id=&quot;7-aws-리전region과-가용-영역availability-zone-az에-대해-설명해-주세요&quot;&gt;7. AWS 리전(Region)과 가용 영역(Availability Zone, AZ)에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;**&lt;font size=&quot;4&quot;&gt;8. Snapshot에 대해 설명해 주세요.&amp;lt;/Font&amp;gt;**&lt;/font&gt;&lt;/p&gt;
+&lt;h4 id=&quot;8-snapshot에-대해-설명해-주세요&quot;&gt;8. Snapshot에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;**&lt;font size=&quot;4&quot;&gt;8-1. &lt;u&gt;EC2 AMI(Amazon Machine Image)&lt;/u&gt;와 &lt;u&gt;Snapshot&lt;/u&gt;의 차이점에 대해 설명해 주세요.&amp;lt;/Font&amp;gt;**&lt;/font&gt;&lt;/p&gt;
+&lt;h4 id=&quot;8-1-ec2-amiamazon-machine-image와-snapshot의-차이점에-대해-설명해-주세요&quot;&gt;8-1. &lt;u&gt;EC2 AMI(Amazon Machine Image)&lt;/u&gt;와 &lt;u&gt;Snapshot&lt;/u&gt;의 차이점에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;기본적으로 EBS(Elastic Block Store)를 백업한다는 점에서는 AMI(Amazon Machine Image)와 Snapshot은 동일하지만, AMI는 EC2 인스턴스에 연결되어 있는 모든 EBS Volume을 동시에 백업하는 것이라면 Snapshot 기능은 여러분들이 선택한 EBS Volume을 백업한다는 점에서 차이점이 있습니다. 또한 Snapshot은 AMI 주기적인 백업 기능을 제공해주지만, AMI는 제공하지 않습니다.&lt;/p&gt;
 
@@ -1112,8 +1154,8 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 </description>
         <pubDate>Sat, 13 Aug 2022 18:55:46 +0900</pubDate>
-        <link>http://localhost:4000/liampoet.github.io/interview3/</link>
-        <guid isPermaLink="true">http://localhost:4000/liampoet.github.io/interview3/</guid>
+        <link>http://localhost:4000/interview3/</link>
+        <guid isPermaLink="true">http://localhost:4000/interview3/</guid>
         
         
         <category>Interview</category>
@@ -1142,7 +1184,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;1. SQL SELECT 쿼리 문법 순서와 실행 순서에 대해서 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;1-sql-select-쿼리-문법-순서와-실행-순서에-대해서-설명해-주세요&quot;&gt;1. SQL SELECT 쿼리 문법 순서와 실행 순서에 대해서 설명해 주세요.&lt;/h4&gt;
 
 &lt;ul&gt;
   &lt;li&gt;SQL 문법 순서 : SELECT -&amp;gt; FROM -&amp;gt; WHERE -&amp;gt; GROUP BY -&amp;gt; HAVING -&amp;gt; ORDER BY&lt;/li&gt;
@@ -1151,13 +1193,13 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;2. 데이터베이스에서 인덱스를 사용하는 이유와 장점, 단점에 대해서 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;2-데이터베이스에서-인덱스를-사용하는-이유와-장점-단점에-대해서-설명해-주세요&quot;&gt;2. 데이터베이스에서 인덱스를 사용하는 이유와 장점, 단점에 대해서 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;인덱스란, 테이블을 처음부터 끝까지 검색하는 방법인 FTS(Full Table Scan)과는 달리 인덱스를 검색하여 해당 자료의 테이블을 엑세스하는 방법입니다. 즉, 인덱스를 잘 사용하면 데이터베이스의 테이블에서 필요한 데이터를 빨리 찾을 수 있다는 장점이 있습니다. 인덱스의 단점이라하면 추가, 수정, 삭제 연산시에는 인덱스를 형성하기 위한 추가적인 연산이 수행되기 때문에 실행 속도가 느릴 수 있습니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;3. &lt;u&gt;RDBMS&lt;/u&gt;와 &lt;u&gt;NoSQL&lt;/u&gt;에 대해서 설명한 후 그 두 가지의 차이점에 대해서 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;3-rdbms와-nosql에-대해서-설명한-후-그-두-가지의-차이점에-대해서-설명해-주세요&quot;&gt;3. &lt;u&gt;RDBMS&lt;/u&gt;와 &lt;u&gt;NoSQL&lt;/u&gt;에 대해서 설명한 후 그 두 가지의 차이점에 대해서 설명해 주세요.&lt;/h4&gt;
 
 &lt;ul&gt;
   &lt;li&gt;RDBMS는 데이터베이스를 이루는 객체들의 릴레이션을 통해서 데이터를 저장하는 데이터베이스입니다.&lt;/li&gt;
@@ -1168,13 +1210,13 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;4. 트랜잭션에 대해서 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;4-트랜잭션에-대해서-설명해-주세요&quot;&gt;4. 트랜잭션에 대해서 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;트랜잭션이란 데이터베이스의 상태를 변화시키는 하나의 논리적인 작업 단위라고 할 수 있으며, 작업의 완전성을 보장해 줍니다. 즉, 작업들을 모두 처리하거나 처리하지 못할 경우 이전 상태로 복구하여 작업의 일부만 적용되는 현상이 발생하지 않게 해줍니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;4-1. 트랜잭션의 ACID에 대해서 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;4-1-트랜잭션의-acid에-대해서-설명해-주세요&quot;&gt;4-1. 트랜잭션의 ACID에 대해서 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;ACID는 트랜잭션이 안전하게 수행된다는 것을 보장하기 위한 성질입니다.&lt;/p&gt;
 
@@ -1187,7 +1229,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;4-2. 트랜잭션 격리 수준(Transaction Isolation Levels)에 대해서 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;4-2-트랜잭션-격리-수준transaction-isolation-levels에-대해서-설명해-주세요&quot;&gt;4-2. 트랜잭션 격리 수준(Transaction Isolation Levels)에 대해서 설명해 주세요.&lt;/h4&gt;
 
 &lt;ul&gt;
   &lt;li&gt;READ UNCOMMITTED : 다른 트랜잭션에서 커밋되지 않은 내용도 참조할 수 있습니다.&lt;/li&gt;
@@ -1198,7 +1240,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;5. DB Lock에 대해 설명해주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;5-db-lock에-대해-설명해주세요&quot;&gt;5. DB Lock에 대해 설명해주세요.&lt;/h4&gt;
 
 &lt;p&gt;DB Lock은 트랜잭션 처리의 순차성을 보장하기 위한 방법입니다.&lt;/p&gt;
 
@@ -1209,7 +1251,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;6. 정규화에 대해서 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;6-정규화에-대해서-설명해-주세요&quot;&gt;6. 정규화에 대해서 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;정규화는 데이터의 중복방지, 무결성을 충족시키기 위해 데이터베이스를 설계하는 것을 의미합니다.&lt;/p&gt;
 
@@ -1222,7 +1264,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;7. 이상 현상에 대해서 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;7-이상-현상에-대해서-설명해-주세요&quot;&gt;7. 이상 현상에 대해서 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;이상 현상은 테이블을 설계할 때 잘못 설계하여 데이터를 삽입,삭제,수정할 때 생기는 논리적 오류를 말합니다. 이상 현상의 종류는 다음과 같습니다.&lt;/p&gt;
 
@@ -1234,25 +1276,25 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;8. Redis에 대해서 간단히 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;8-redis에-대해서-간단히-설명해-주세요&quot;&gt;8. Redis에 대해서 간단히 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;Redis는 key-value store NOSQL DB입니다. 싱글스레드로 동작하며 자료구조를 지원합니다. 그리고 다양한 용도로 사용될 수 있도록 다양한 기능을 지원합니다. 데이터의 스냅샷 혹은 AOF 로그를 통해 복구가 가능해서 어느정도 영속성도 보장됩니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;8-1. 그렇다면 Redis를 왜 사용하나요?&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;8-1-그렇다면-redis를-왜-사용하나요&quot;&gt;8-1. 그렇다면 Redis를 왜 사용하나요?&lt;/h4&gt;
 
 &lt;p&gt;사용자가 늘어남에 따라 DB에 부하가 가해지기 시작합니다. 이 부하를 줄이기 위해 한 번 읽어온 데이터를 저장하고, 다시 요청하는 경우 빠르게 결과 값을 받을 수 있도록(캐싱) 하기 위해 Redis를 사용합니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/interview/redis.png&quot; alt=&quot;Redis&quot; /&gt;&lt;em&gt;이미지 1. Redis&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/interview/redis.png&quot; alt=&quot;Redis&quot; /&gt;&lt;em&gt;이미지 1. Redis&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;여기서 캐시가 Redis가 되며 look aside cache 기준으로 가장 먼저 캐시에 데이터가 있는지 확인하고, 데이터가 있으면 캐시 데이터 사용합니다. 데이터가 없으면 실제 DB데이터 사용한 후 DB데이터를 캐시에 저장합니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;9. Elasticsearch에 대해서 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;9-elasticsearch에-대해서-설명해-주세요&quot;&gt;9. Elasticsearch에 대해서 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;Apache Lucene(아파치 루씬) 기반의 java 오픈소스 분산 검색 엔진이며, 역색인(Inverted Index) 구조로 데이터를 저장해서, 전체 텍스트 검색시에 RDBMS에 비해 뛰어난 성능을 보장합니다. 또한, 데이터 저장소가 아니기 때문에 관계형 데이터베이스(RDBMS: mysql, oracle, mariadb)를 대체할 수 없습니다.&lt;/p&gt;
 &lt;blockquote&gt;
@@ -1261,23 +1303,23 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;9-1. Elasticsearch의 인덱스 구조와 RDBMS의 인덱스 구조의 차이에 대해 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;9-1-elasticsearch의-인덱스-구조와-rdbms의-인덱스-구조의-차이에-대해-설명해-주세요&quot;&gt;9-1. Elasticsearch의 인덱스 구조와 RDBMS의 인덱스 구조의 차이에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;Elasticsearch는 역색인(Inverted Index) 구조로 데이터를 저장합니다. 반면 RDBMS는 B-Tree와 그와 유사한 인덱스를 사용합니다. 데이터가 어디에 존재하는지, 또는 어떤 순서로 저장하는지의 차이라고 생각합니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;9-2. Elasticsearch의 키워드 검색과 RDBMS의 LIKE 검색의 차이에 대해 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;9-2-elasticsearch의-키워드-검색과-rdbms의-like-검색의-차이에-대해-설명해-주세요&quot;&gt;9-2. Elasticsearch의 키워드 검색과 RDBMS의 LIKE 검색의 차이에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;RDBMS는 단순 텍스트매칭에 대한 검색만을 제공해 동의어나 유의어 같은 검색은 불가능합니다. 하지만 Elasticsearch는 동의어나 유의어를 활용한 검색이 가능하며, 비정형 데이터의 색인과 검색이 가능하고, 역색인(Inverted Index) 지원으로 매우 빠른 검색이 가능합니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;10. &lt;u&gt;CAP 이론&lt;/u&gt;과, &lt;u&gt;Eventual Consistency&lt;/u&gt;에 대해서 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;10-cap-이론과-eventual-consistency에-대해서-설명해-주세요&quot;&gt;10. &lt;u&gt;CAP 이론&lt;/u&gt;과, &lt;u&gt;Eventual Consistency&lt;/u&gt;에 대해서 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/interview/cap.png&quot; alt=&quot;CAP 이론&quot; /&gt;&lt;em&gt;이미지 2. CAP 이론&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/interview/cap.png&quot; alt=&quot;CAP 이론&quot; /&gt;&lt;em&gt;이미지 2. CAP 이론&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;CAP 이론은 분산 환경에서 모두를 만족하는 시스템은 없다는 이론입니다. 즉, CAP 세 가지 속성을 모두 만족하는 부분은 존재하지 않으며, 오직 두 가지만 만족할 수 있다로 정리되는 이론입니다.&lt;/p&gt;
 
@@ -1295,7 +1337,7 @@ Kafka의 데이터 복제는 파티션 단위로 이루어집니다. 위와 같�
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;11. ORM(Object Relational Mapping)에 대해서 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;11-ormobject-relational-mapping에-대해서-설명해-주세요&quot;&gt;11. ORM(Object Relational Mapping)에 대해서 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;ORM(Object Relational Mapping)이란, 객체와 관계형 데이터베이스 매핑의 줄임말 입니다. 우리가 OOP(Object Oriented Programming)에서 쓰는 객체라는 개념을 구현한 클래스와
 RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 것을 의미합니다.&lt;/p&gt;
@@ -1304,7 +1346,7 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;12. Replciation과 Clustering에 대해 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;12-replciation과-clustering에-대해-설명해-주세요&quot;&gt;12. Replciation과 Clustering에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;&lt;strong&gt;🧩 리플리케이션(Replciation)&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
@@ -1324,17 +1366,17 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;13. 데이터베이스 튜닝(Tuning)과 방법에 대해서 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;13-데이터베이스-튜닝tuning과-방법에-대해서-설명해-주세요&quot;&gt;13. 데이터베이스 튜닝(Tuning)과 방법에 대해서 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;DB 튜닝이란 DB의 구조나, DB 자체, 운영체제 등을 조정하여 DB 시스템의 전체적인 성능을 개선하는 작업을 말합니다. 튜닝은 DB 설계 튜닝 → DBMS 튜닝 → SQL 튜닝 단계로 진행할 수 있습니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/interview/tuning.png&quot; alt=&quot;DB tuning&quot; /&gt;&lt;em&gt;표 1. DB tuning&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/interview/tuning.png&quot; alt=&quot;DB tuning&quot; /&gt;&lt;em&gt;표 1. DB tuning&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;14. ELK Stack에 대해서 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;14-elk-stack에-대해서-설명해-주세요&quot;&gt;14. ELK Stack에 대해서 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;&lt;strong&gt;ELK&lt;/strong&gt;는 분석 및 저장 기능을 담당하는 &lt;strong&gt;E&lt;/strong&gt;lasticSearch, 수집 기능을 하는 &lt;strong&gt;L&lt;/strong&gt;ogstash, 이를 시각화하는 도구인 &lt;strong&gt;K&lt;/strong&gt;ibana의 앞글자만 딴 단어이며, ELK는 접근성과 용이성이 좋아 최근 가장 핫한 Log 및 데이터 분석 도구입니다.&lt;/p&gt;
 
@@ -1354,7 +1396,7 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/interview/elk.png&quot; alt=&quot;Elastic Stack의 Data Flow&quot; /&gt;&lt;em&gt;이미지 3. Elastic Stack의 Data Flow&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/interview/elk.png&quot; alt=&quot;Elastic Stack의 Data Flow&quot; /&gt;&lt;em&gt;이미지 3. Elastic Stack의 Data Flow&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;
 &lt;br /&gt;&lt;/p&gt;
@@ -1377,8 +1419,8 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 &lt;/ul&gt;
 </description>
         <pubDate>Thu, 28 Jul 2022 16:32:48 +0900</pubDate>
-        <link>http://localhost:4000/liampoet.github.io/interview2/</link>
-        <guid isPermaLink="true">http://localhost:4000/liampoet.github.io/interview2/</guid>
+        <link>http://localhost:4000/interview2/</link>
+        <guid isPermaLink="true">http://localhost:4000/interview2/</guid>
         
         
         <category>Interview</category>
@@ -1402,13 +1444,13 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;1. &lt;u&gt;HTTP&lt;/u&gt;와 &lt;u&gt;HTTPS&lt;/u&gt;에 대해 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;1-http와-https에-대해-설명해-주세요&quot;&gt;1. &lt;u&gt;HTTP&lt;/u&gt;와 &lt;u&gt;HTTPS&lt;/u&gt;에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;HTTP(Hyper Text Transfer Protocol)이란 데이터를 주고 받기 위한 프로토콜이며, 서버/클라이언트 모델을 따릅니다. 또한 HTTP는 평문 데이터를 전송하는 프로토콜이기 때문에, HTTP로 중요한 정보를 주고 받으면 제 3자에 의해 조회될 수 있습니다. 이러한 문제를 해결하기 위해 HTTP에 암호화가 추가된 프로토콜이 HTTPS입니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/interview/https.png&quot; alt=&quot;http / https&quot; /&gt;&lt;em&gt;이미지 1. HTTP와 HTTPS의 차이&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/interview/https.png&quot; alt=&quot;http / https&quot; /&gt;&lt;em&gt;이미지 1. HTTP와 HTTPS의 차이&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -1416,7 +1458,7 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;2. HTTP Method에 대해 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;2-http-method에-대해-설명해-주세요&quot;&gt;2. HTTP Method에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;ul&gt;
   &lt;li&gt;GET, POST, PUT, DELETE가 있습니다.&lt;/li&gt;
@@ -1427,7 +1469,7 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;3. HTTP의 주요 상태코드에 대해 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;3-http의-주요-상태코드에-대해-설명해-주세요&quot;&gt;3. HTTP의 주요 상태코드에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;ul&gt;
   &lt;li&gt;200 : OK, 요청이 성공적으로 처리되었습니다. 요청에 따른 응답을 반환합니다.&lt;/li&gt;
@@ -1447,7 +1489,7 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;4. &lt;u&gt;쿠키(Cookie)&lt;/u&gt;와 &lt;u&gt;세션(Session)&lt;/u&gt;의 차이점에 대해 말해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;4-쿠키cookie와-세션session의-차이점에-대해-말해-주세요&quot;&gt;4. &lt;u&gt;쿠키(Cookie)&lt;/u&gt;와 &lt;u&gt;세션(Session)&lt;/u&gt;의 차이점에 대해 말해 주세요.&lt;/h4&gt;
 
 &lt;ul&gt;
   &lt;li&gt;쿠키는 사용자의 컴퓨터에 저장하는 작은 기록 정보 파일입니다. HTTP에서 클라이언트의 상태 정보를 PC에 저장했다가 필요시 정보를 참조하거나 재사용할 수 있습니다.&lt;/li&gt;
@@ -1456,9 +1498,9 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;5. https://www.google.com/에 접속할 때 생기는 과정에 대해 설명해 주세요.(웹 동작 방식 이해)&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;5-httpswwwgooglecom에-접속할-때-생기는-과정에-대해-설명해-주세요웹-동작-방식-이해&quot;&gt;5. https://www.google.com/에 접속할 때 생기는 과정에 대해 설명해 주세요.(웹 동작 방식 이해)&lt;/h4&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/interview/web-flow.png&quot; alt=&quot;Web flow&quot; /&gt;&lt;em&gt;이미지 2. 웹 동작 방식 이해&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/interview/web-flow.png&quot; alt=&quot;Web flow&quot; /&gt;&lt;em&gt;이미지 2. 웹 동작 방식 이해&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -1474,7 +1516,7 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;6. &lt;u&gt;TCP&lt;/u&gt;와 &lt;u&gt;UDP&lt;/u&gt;의 차이를 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;6-tcp와-udp의-차이를-설명해-주세요&quot;&gt;6. &lt;u&gt;TCP&lt;/u&gt;와 &lt;u&gt;UDP&lt;/u&gt;의 차이를 설명해 주세요.&lt;/h4&gt;
 
 &lt;ul&gt;
   &lt;li&gt;TCP는 연결형 서비스로 3-way handshaking 과정을 통해 연결을 설정하기 때문에 높은 신뢰성을 보장하지만, 속도가 비교적 느리다는 단점이 있습니다.(1:1 통신방식)&lt;/li&gt;
@@ -1483,7 +1525,7 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;6-1. 그렇다면 &lt;u&gt;3 way-handshake&lt;/u&gt;와 &lt;u&gt;4 way-handshake&lt;/u&gt;를 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;6-1-그렇다면-3-way-handshake와-4-way-handshake를-설명해-주세요&quot;&gt;6-1. 그렇다면 &lt;u&gt;3 way-handshake&lt;/u&gt;와 &lt;u&gt;4 way-handshake&lt;/u&gt;를 설명해 주세요.&lt;/h4&gt;
 
 &lt;ul&gt;
   &lt;li&gt;3 way-handshake란 TCP 네트워크에서 통신 하는 장치가 서로 연결이 잘 되었는지 확인하는 방법입니다. 송신자와 수신자는 총 3번에 걸쳐 데이터를 주고 받으며 통신이 가능한 상태인지 확인합니다.&lt;/li&gt;
@@ -1492,9 +1534,9 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;7. OSI 7 layer와 각 계층에 대해 아는대로 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;7-osi-7-layer와-각-계층에-대해-아는대로-설명해-주세요&quot;&gt;7. OSI 7 layer와 각 계층에 대해 아는대로 설명해 주세요.&lt;/h4&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/interview/osi7.png&quot; alt=&quot;OSI 7 layer&quot; /&gt;&lt;em&gt;이미지 3. OSI 7 layer&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/interview/osi7.png&quot; alt=&quot;OSI 7 layer&quot; /&gt;&lt;em&gt;이미지 3. OSI 7 layer&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -1512,7 +1554,7 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;8. &lt;u&gt;세션 기반 인증&lt;/u&gt;과 &lt;u&gt;토큰 기반 인증&lt;/u&gt;의 차이에 대해 얘기해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;8-세션-기반-인증과-토큰-기반-인증의-차이에-대해-얘기해-주세요&quot;&gt;8. &lt;u&gt;세션 기반 인증&lt;/u&gt;과 &lt;u&gt;토큰 기반 인증&lt;/u&gt;의 차이에 대해 얘기해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;세션 기반 인증은 클라이언트로부터 요청을 받으면 클라이언트의 상태 정보를 저장하므로 Stateful한 구조를 가지고, 토큰 기반 인증은 상태 정보를 서버에 저장하지 않으므로 Stateless한 구조를 가집니다.&lt;/p&gt;
 
@@ -1522,7 +1564,7 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;8-1. 그렇다면 Stateful한 세션 기반의 인증 방식을 사용하게 된다면 어떠한 단점이 있을까요?&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;8-1-그렇다면-stateful한-세션-기반의-인증-방식을-사용하게-된다면-어떠한-단점이-있을까요&quot;&gt;8-1. 그렇다면 Stateful한 세션 기반의 인증 방식을 사용하게 된다면 어떠한 단점이 있을까요?&lt;/h4&gt;
 
 &lt;ul&gt;
   &lt;li&gt;서버에 세션을 저장하기 때문에 사용자가 증가하면 서버에 과부하를 줄 수 있어 확장성이 낮습니다.&lt;/li&gt;
@@ -1530,7 +1572,7 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 &lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;8-2. JWT(Json Web Token)에 대해 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;8-2-jwtjson-web-token에-대해-설명해-주세요&quot;&gt;8-2. JWT(Json Web Token)에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;JWT란 JSON 포맷을 이용해 사용자에 대한 속성을 저장하는 Claim 기반의 웹 토큰이며, 토큰 자체를 정보로 사용하는 Self-Contained(자가수용적-JWT는 필요한 모든 정보를 자체적으로 가지고 있음) 방식으로 정보를 안전하게 전달합니다. JWT는 각 파트를 .으로 구분하여 헤더(Header).내용(Payload).서명(Signature) 형식으로 구성됩니다.&lt;/p&gt;
 &lt;blockquote&gt;
@@ -1539,13 +1581,13 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;9. RESTful에 대해 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;9-restful에-대해-설명해-주세요&quot;&gt;9. RESTful에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;우선 REST란, HTTP URI(Uniform Resource Identifier)를 통해 자원(Resource)을 명시하고, HTTP Method(POST, GET, PUT, DELETE)를 통해 해당 자원에 대한 CRUD Operation을 적용하는 것을 의미합니다. REST 기반으로 서비스 API를 구현한 것을 REST API라고 하며, 이러한 ‘REST API’를 제공하는 웹 서비스를 ‘RESTful’하다고 할 수 있습니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;9-1. 그렇다면, RESTful하지 못한 경우는 어떤 것인가요?&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;9-1-그렇다면-restful하지-못한-경우는-어떤-것인가요&quot;&gt;9-1. 그렇다면, RESTful하지 못한 경우는 어떤 것인가요?&lt;/h4&gt;
 
 &lt;p&gt;CRUD 기능을 모두 POST로만 처리하는 API같은 경우 또는 route에 resource, id 외의 정보가 들어가는 경우 등이 있습니다.&lt;/p&gt;
 
@@ -1558,7 +1600,7 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;1. &lt;u&gt;프로세스&lt;/u&gt;와 &lt;u&gt;스레드&lt;/u&gt;의 차이를 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;1-프로세스와-스레드의-차이를-설명해-주세요&quot;&gt;1. &lt;u&gt;프로세스&lt;/u&gt;와 &lt;u&gt;스레드&lt;/u&gt;의 차이를 설명해 주세요.&lt;/h4&gt;
 
 &lt;ul&gt;
   &lt;li&gt;프로세스는 실행중인 프로그램을 의미합니다. 완벽히 독립적이기 때문에 메모리 영역(Code, Data, Heap, Stack)을 다른 프로세스와 공유하지 않습니다. 프로세스는 최소 1개의 쓰레드를 가지고 있습니다.&lt;/li&gt;
@@ -1567,7 +1609,7 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;2. &lt;u&gt;멀티 프로세스&lt;/u&gt;와 &lt;u&gt;멀티 스레드&lt;/u&gt;의 특징에 대해 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;2-멀티-프로세스와-멀티-스레드의-특징에-대해-설명해-주세요&quot;&gt;2. &lt;u&gt;멀티 프로세스&lt;/u&gt;와 &lt;u&gt;멀티 스레드&lt;/u&gt;의 특징에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;ul&gt;
   &lt;li&gt;멀티 프로세스는 하나의 프로세스가 죽어도 다른 프로세스에 영향을 끼치지 않고 계속 실행된다는 장점이 있지만 멀티 스레드보다 많은 메모리 공간과 CPU 시간을 차지한다는 단점이 있습니다.&lt;/li&gt;
@@ -1576,7 +1618,7 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;3. 멀티 스레드 프로그래밍에 대해 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;3-멀티-스레드-프로그래밍에-대해-설명해-주세요&quot;&gt;3. 멀티 스레드 프로그래밍에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;멀티 스레드 프로그래밍은 하나의 프로세스에서 여러개의 스레드를 만들어 자원의 생성과 관리의 중복을 최소화하는 것을 멀티 스레드 프로그래밍이라고 합니다.&lt;/p&gt;
 
@@ -1593,47 +1635,47 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;3-1. &lt;u&gt;멀티 프로세스&lt;/u&gt; or &lt;u&gt;멀티 스레드&lt;/u&gt; 프로그래밍을 해본 경험이 있나요?&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;3-1-멀티-프로세스-or-멀티-스레드-프로그래밍을-해본-경험이-있나요&quot;&gt;3-1. &lt;u&gt;멀티 프로세스&lt;/u&gt; or &lt;u&gt;멀티 스레드&lt;/u&gt; 프로그래밍을 해본 경험이 있나요?&lt;/h4&gt;
 
 &lt;p&gt;저는 🌎&lt;a href=&quot;https://liampoet.github.io/Python-GIL/&quot;&gt;Python GIL, Global interpreter Lock&lt;/a&gt;을 공부하기 위해 멀티 스레딩을 경험해 본 적이 있습니다. 이 문제는 지원자분이 멀티 프로세스 or 멀티 스레드를 구현해본 경험을 이야기 하시면 될 것 같습니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;4. 컨텍스트 스위칭(Context Switching)에 대해 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;4-컨텍스트-스위칭context-switching에-대해-설명해-주세요&quot;&gt;4. 컨텍스트 스위칭(Context Switching)에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;컨텍스트 스위칭(Context Switching)은 한 Task가 끝날 때까지 기다리는 것이 아니라 여러 작업을 번갈아가며 실행해서 동시에 처리될 수 있도록 하는 방법입니다. 인터럽트가 발생하면 현재 프로세스의 상태를 PCB에 저장하고 새로운 프로세스의 상태를 레지스터에 저장하는 방식으로 동작합니다. 이 때, CPU는 아무런 일을 하지 않으므로 잦은 컨텍스트 스위칭은 성능저하를 일으킬 수 있습니다. 스레드와 프로세스의 동작방식이 약간 상이한데, 스레드는 캐시메모리나 PCB에 저장해야하는 내용이 적고, 비워야 하는 내용도 적기때문에 상대적으로 더 빠른 컨텍스트 스위칭이 일어날 수 있습니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;5. &lt;u&gt;동기&lt;/u&gt;와 &lt;u&gt;비동기&lt;/u&gt;의 차이에 대해 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;5-동기와-비동기의-차이에-대해-설명해-주세요&quot;&gt;5. &lt;u&gt;동기&lt;/u&gt;와 &lt;u&gt;비동기&lt;/u&gt;의 차이에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;동기는 순차적, 직렬적으로 테스크를 수행하고, 비동기는 병렬적으로 테스크를 수행합니다. 예를 들어, 서버에서 데이터를 가져와서 화면에 표시하는 작업을 수행할 때, 동기는 서버에 데이터를 요청하고 데이터가 응답될 때까지 이후 테스크들은 블로킹(Blocking, 작업 중단)됩니다. 비동기는 서버에 데이터를 요청한 이후 서버로부터 데이터가 응답될 때까지 대기하지 않고(Non-Blocking) 즉시 다음 테스크를 계속해 수행합니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;6. 데드락(DeadLock)이 무엇인가요?&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;6-데드락deadlock이-무엇인가요&quot;&gt;6. 데드락(DeadLock)이 무엇인가요?&lt;/h4&gt;
 
 &lt;p&gt;데드락(DeadLock) 또는 교착상태란 한정된 자원을 여러 프로세스가 사용하고자 할 때 발생하는 상황으로, 프로레스가 자원을 얻기 위해 영구적으로 기다리는 상태입니다. 예를 들어 다음과 같은 상황에서 데드락이 발생할 수 있습니다. 자원 A를 가진 프로세스 P1과 자원 B를 가진 프로세스 P2가 있을 때, P1은 B를 필요로 하고 P2는 A를 필요로 한다면 두 프로세스 P1, P2는 서로 자원을 얻기위해 무한정 기다리게 됩니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/interview/deadlock.png&quot; alt=&quot;Deadlock 예시&quot; /&gt;&lt;em&gt;이미지 4. DeadLock&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/interview/deadlock.png&quot; alt=&quot;Deadlock 예시&quot; /&gt;&lt;em&gt;이미지 4. DeadLock&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;7. &lt;u&gt;뮤텍스(Mutex)&lt;/u&gt;와 &lt;u&gt;세마포어(Semaphore)&lt;/u&gt;의 차이에 대해 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;7-뮤텍스mutex와-세마포어semaphore의-차이에-대해-설명해-주세요&quot;&gt;7. &lt;u&gt;뮤텍스(Mutex)&lt;/u&gt;와 &lt;u&gt;세마포어(Semaphore)&lt;/u&gt;의 차이에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;세마포어는 여러개의 프로세스가 접근 가능한 공유자원을 관리하는 방식이고, 뮤텍스가 될 수 있지만, 뮤텍스는 한 번에 한 개의 프로세스만 접근 가능하도록 관리하는 방식입니다. 따라서 뮤텍스는 세마포어가 될 수 없습니다. 또, 세마포어는 다른 프로세스가 세마포어를 해제할 수 있지만, 뮤텍스는 락을 획득한 프로세스만 락을 반환할 수 있습니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;8. &lt;u&gt;가상 메모리&lt;/u&gt;와 &lt;u&gt;페이지 폴트&lt;/u&gt;에 대해 설명해 주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;8-가상-메모리와-페이지-폴트에-대해-설명해-주세요&quot;&gt;8. &lt;u&gt;가상 메모리&lt;/u&gt;와 &lt;u&gt;페이지 폴트&lt;/u&gt;에 대해 설명해 주세요.&lt;/h4&gt;
 
 &lt;p&gt;가상메모리는 RAM의 부족한 용량을 보완하기 위해, 각 프로그램에 실제 메모리 주소가 아닌 가상의 메모리 주소를 할당하는 방식입니다. OS는 프로세스들의 내용(페이지) 중에서 덜 중요한 것들을 하드디스크에 옮겨 놓고, 관련 정보를 페이지 테이블에 기록합니다. CPU는 프로세스를 실행하면서 페이지 테이블을 통해 페이지를 조회하는데, 실제메모리에 원하는 페이지가 없는 상황이 발생할 수 있습니다. 이것을 페이지 폴트라고 하는데 프로세스가 동작하면서 실제메모리에 필요한 데이터(페이지)가 없으면 가상메모리를 통해서 해당 데이터를 가져오게 됩니다. 가상메모리는 하드디스크에 저장되어 있기 때문에, 페이지폴트가 발생하면 I/O에 의한 속도의 저하가 발생합니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;font size=&quot;4&quot;&gt;9. 페이지 교체 알고리즘에 대해 설명해주세요.&lt;/font&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;9-페이지-교체-알고리즘에-대해-설명해주세요&quot;&gt;9. 페이지 교체 알고리즘에 대해 설명해주세요.&lt;/h4&gt;
 
 &lt;p&gt;페이지를 교체하는 이유는 가상메모리를 통해 조회한 페이지는 다시 사용될 가능성이 높기 때문입니다. 페이지 교체를 위해서는 실제메모리에 존재하는 페이지를 가상메모리로 저장한 후에, 가상메모리에서 조회한 페이지를 실제메모리로 로드해야 됩니다. 이 때 사용되어지는 알고리즘을 페이지 교체 알고리즘이라고 합니다. 아래는 대표적인 페이지 교체 알고리즘 입니다.&lt;/p&gt;
 
@@ -1663,8 +1705,8 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 &lt;/ul&gt;
 </description>
         <pubDate>Fri, 22 Jul 2022 15:28:55 +0900</pubDate>
-        <link>http://localhost:4000/liampoet.github.io/interview1/</link>
-        <guid isPermaLink="true">http://localhost:4000/liampoet.github.io/interview1/</guid>
+        <link>http://localhost:4000/interview1/</link>
+        <guid isPermaLink="true">http://localhost:4000/interview1/</guid>
         
         
         <category>Interview</category>
@@ -1699,7 +1741,7 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/mysql-error/ERROR1227-1.png&quot; alt=&quot;ERROR1227-1.png&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/mysql-error/ERROR1227-1.png&quot; alt=&quot;ERROR1227-1.png&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -1707,7 +1749,7 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/mysql-error/ERROR1227-2.png&quot; alt=&quot;ERROR1227-2.png&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/mysql-error/ERROR1227-2.png&quot; alt=&quot;ERROR1227-2.png&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;
 &lt;br /&gt;&lt;/p&gt;
@@ -1718,7 +1760,7 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/mysql-error/ERROR1227-3.png&quot; alt=&quot;ERROR1227-3.png&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/mysql-error/ERROR1227-3.png&quot; alt=&quot;ERROR1227-3.png&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -1726,7 +1768,7 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/mysql-error/ERROR1227-4.png&quot; alt=&quot;ERROR1227-4.png&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/mysql-error/ERROR1227-4.png&quot; alt=&quot;ERROR1227-4.png&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;
 &lt;br /&gt;&lt;/p&gt;
@@ -1738,8 +1780,8 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 </description>
         <pubDate>Fri, 01 Jul 2022 16:42:29 +0900</pubDate>
-        <link>http://localhost:4000/liampoet.github.io/mysql-error2/</link>
-        <guid isPermaLink="true">http://localhost:4000/liampoet.github.io/mysql-error2/</guid>
+        <link>http://localhost:4000/mysql-error2/</link>
+        <guid isPermaLink="true">http://localhost:4000/mysql-error2/</guid>
         
         
         <category>MySQL</category>
@@ -1789,7 +1831,7 @@ RDB(Relational DataBase)에서 쓰이는 데이터인 테이블을 매핑하는 
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/liampoet.github.io/assets/images/gil/GIL1.png&quot; alt=&quot;GIL1.png&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/gil/GIL1.png&quot; alt=&quot;GIL1.png&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;
 &lt;br /&gt;&lt;/p&gt;
@@ -1943,8 +1985,8 @@ Python으로 작업하는 개발자의 입장으로써 지금까지는 GIL로 �
 &lt;/ul&gt;
 </description>
         <pubDate>Thu, 16 Jun 2022 14:30:28 +0900</pubDate>
-        <link>http://localhost:4000/liampoet.github.io/python-gil/</link>
-        <guid isPermaLink="true">http://localhost:4000/liampoet.github.io/python-gil/</guid>
+        <link>http://localhost:4000/python-gil/</link>
+        <guid isPermaLink="true">http://localhost:4000/python-gil/</guid>
         
         
         <category>Python</category>

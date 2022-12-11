@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<link rel="icon" href="/liampoet.github.io/assets/images/logo.png">
+<link rel="icon" href="/assets/images/logo.png">
 
-<title>VPC내의 AWS Lambda의 인터넷 접속하기 | Liam</title>
+<title>VPC내의 AWS Lambda의 인터넷 접속하기 | LiamCoding</title>
 
 <!-- Begin Jekyll SEO tag v2.5.0 -->
 <title>VPC내의 AWS Lambda의 인터넷 접속하기 | LiamCoding</title>
@@ -16,24 +16,24 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="💡 Intro Amazon Virtual Private Cloud(Amazon VPC)에 연결된 AWS Lambda에 인터넷 접속을 가능하게 하려면, NAT GW(Network Address Translation Gateway) 설정을 해야합니다. 오늘은 이에 대해서 정리해 보려고 합니다. 🔎 AWS Lambda의 세 가지 상태 저는 Amazon Virtual Private Cloud(Amazon VPC)에 연결된 AWS Lambda에 인터넷 접속을 가능하게 하기 위해, 3번째 케이스인 VPC와 NAT이 있는 상태로 진행해보도록 하겠습니다. VPC가 없는 상태 : 웹에 자유롭게 접속할 수 있지만, 로컬 네트워크로 AWS 서비스들과 연결할 수 없습니다. VPC가 있는 상태 : 기본적인 설정으로 로컬 네트워크에 연결이 가능하지만, 웹에는 접속할 수 없습니다. VPC와 NAT이 있는 상태 : AWS 서비스와 웹 둘 다 접속이 가능합니다. 🔎 Amazon VPC(Amazon Virtual Private Cloud), Subnet, Router, Routing Table, IGW(Internet Gateway), NAT GW(Network Address Translation Gateway)란? 본 내용에 들어가기전, Amazon VPC, Subnet, Routing Table, IGW, NAT GW에 대해서 먼저 정리하고 넘어가 보도록 하겠습니다. 🌎 Amazon VPC(Amazon Virtual Private Cloud) Amazon VPC란, AWS 클라우드에서 다른 고객과 완벽하게 논리적으로 격리된 네트워크 공간을 제공하여 프로비저닝하여 가상 네트워크에서 AWS 리소스를 만드는데 사용하는 리소스입니다. 쉽게 풀어서 설명하자면, 자신이 사용할 AWS Resource들을 격리 되어진 하나의 네트워크로 묶는 서비스를 의미하며 격리되어 있기 때문에 다른 사람들은 접근하고 보는 것이 불가능해집니다. 만약, VPC 없이 인스턴스를 생성한다면 아래와 같이 인스턴스끼리의 구분없는 연결로 인해 시스템 복잡도가 증가할 것이며, 인터넷을 통해 전달되는 트래픽의 전송이 굉장히 비효율적이게 될 것 입니다. VPC를 적용하면 인스턴스가 VPC에 속함으로써 네트워크를 구분할 수 있고, VPC 별로 필요한 설정을 통해 인스턴스에 네트워크 설정을 적용할 수 있습니다. 또한, 각각의 VPC는 독립적이기 때문에 서로 통신할 수 없습니다. 만일 통신을 원한다면 VPC 피어링 서비스를 통해 VPC 간에 트래픽을 라우팅할 수 있도록 설정할 수 있습니다. ➕ AWS는 VPC의 중요성을 강조하여 2019년부터 거의 모든 서비스에 VPC를 적용하도록 강제하였습니다. 이미지 1. Amazon VPC 🌎 서브넷(Subnet) 서브넷(Subnet) 이란, IP 주소를 나누어 리소스가 배치되는 물리적인 주소 범위입니다. 즉, 서브넷은 VPC를 잘 개 쪼갠 것이며 서브넷을 나누는 이유는 더 많은 네트워크 망을 만들기 위함입니다. 또한 인터넷에 연결되어야 하는 리소스에는 퍼블릭 서브넷(Public Subnet)을 사용하고, 인터넷에 연결되지 않는 리소스에는 프라이빗 서브넷(Private Subnet)을 사용합니다. 이처럼 인터넷 연결 여부로 퍼블릭 서브넷(Public Subnet)과 프라이빗 서브넷(Private Subnet)로 구분하는 이유는 보안을 강화하기 위함입니다. 퍼블릭 서브넷에 존재하는 인스턴스는 인터넷에 연결되어 아웃바운드, 인바운드 트래픽을 주고받을 수 있습니다. 반면 프라이빗 서브넷은 외부에 노출이 되어 있지 않기 때문에 접근할 수 없습니다. 즉, 인터넷과 연결되어 외부에 노출되어 있는 면적을 최소화함으로써 네트워크 망에 함부로 접근하는 것을 막기 위함입니다. 이미지 2. Subnet 🌎 라우팅 테이블(Routing Table)과 라우터(Router) AWS VPC 설명서에는 라우팅 테이블의 역할이 이렇게 소개되어져 있습니다. VPC에는 암시적 라우터가 있으며 라우팅 테이블을 사용하여 네트워크 트래픽이 전달되는 위치를 제어합니다. VPC의 각 서브넷을 라우팅 테이블에 연결해야 합니다. 테이블에서는 서브넷에 대한 라우팅을 제어합니다(서브넷 라우팅 테이블). 서브넷을 특정 라우팅 테이블과 명시적으로 연결할 수 있습니다. 그렇지 않으면 서브넷이 기본 라우팅 테이블과 암시적으로 연결됩니다. 서브넷은 한 번에 하나의 라우팅 테이블에만 연결할 수 있지만 여러 서브넷을 동일한 서브넷 라우팅 테이블에 연결할 수 있습니다. - 출처: AWS Docs 간단하게 설명하자면 라우터(Router)는 목적지이고, 라우팅 테이블(Routing Tabl)은 이정표라고할 수 있습니다. 172.31.0.0/16가 목적지면 이리로 오고, 10.0.0.0/16가 목적지면 절로 가세요.라고 알려주는 이정표일 뿐인거죠. 만약 목적지가 라우팅 테이블에 명시되지 않은 트래픽들을 라우팅 시키고 싶을 땐 0.0.0.0/0라는 주소를 통해 전달시킬 수 있습니다. 이미지 3. Router 🌎 IGW(Internet Gateway, 인터넷 게이트웨이) / NAT GW(Network Address Translation Gateway, NAT 게이트웨이) 사실상 IGW와 NAT GW 이 두 개를 통해 인터넷 간 통신을 활성화시킬 수 있습니다. IGW는 VPC 리소스와 인터넷 간 통신을 활성화하기 위해 VPC에 연결하며, 퍼블릭 서브넷만 외부와 통신해야 하므로 퍼블릭 서브넷의 라우팅 테이블에만 IGW로 향하는 규칙을 포함합니다. NAT GW는 퍼블릭 서브넷에 위치하여 프라이빗 서브넷에서 발생하는 네트워크 요청을 받은 후, IGW에 패킷을 전달하여 인터넷과 통신할 수 있도록 도와줍니다. 라우팅 테이블을 보면 0.0.0.0/0으로 되어 있는 것을 볼 수 있는데, 목적지의 IP 주소가 172.31.0.0/16(VPC 내부)에 해당하는지 확인하고 해당하지 않는 모든 트래픽에 대하여 IGW로 보내라는 뜻입니다. 즉, 목적지가 라우팅 테이블에 명시되지 않은 모든 트래픽을 라우팅 시키고 싶을 땐 0.0.0.0/0라는 주소를 사용할 수 있습니다. 이미지 4. IGW / NAT GW 📚 VPC내의 AWS Lambda의 인터넷 접속하기 이제 본격적으로 작업을 실시할 수 있습니다. 🌎Amazon Virtual Private Cloud(Amazon VPC)에 연결된 AWS Lambda 함수에 인터넷 액세스를 제공하려 합니다. 어떻게 설정해야 하나요? 문서에 자세하게 나와있습니다. 그냥 이 순서 그대로 따라하시면 진행하는데 전혀 큰 어려움은 없습니다. 📕 Amazon VPC 설정 AWS Console &gt; VPC로 들어가면, VPC, Subnet, Routing Table, IGW, NAT GW등 앞서 정리한 모든 항목이 있습니다. 이미지 5. AWS Console -&gt; VPC 1. Amazon VPC를 생성합니다. AWS Console &gt; VPC &gt; VPC 생성 이름 및 IPv4를 지정 / 생성해줍니다. 이미지 6. VPC 생성 버튼 클릭 이미지 7. VPC 생성 2. Amazon VPC에 하나의 퍼블릭 서브넷과 둘 이상의 프라이빗 서브넷을 생성합니다. AWS Console &gt; VPC &gt; Subnet 생성 이름 및 IPv4과 가용영역을 설정하고, 이전에 만든 VPC를 연결합니다. Amazon VPC에 하나의 퍼블릭 서브넷과 둘 이상의 프라이빗 서브넷을 생성합니다.(서브넷을 생성할 때, [이름 태그]에 퍼블릭 또는 프라이빗 서브넷을 식별하는 각 서브넷의 이름을 입력합니다. 예: public-Subnet1, private-Lambda-Subnet1, private-Lambda-Subnet2) 이미지 8. 서브넷 생성 버튼 클릭 이미지 9. 서브넷 생성 3. 인터넷 게이트웨이를 생성하여 Amazon VPC에 연결합니다. AWS Console &gt; VPC &gt; IGW(Internet Gateway) 이름을 생성해준 후, 생성한 IGW를 클릭하여 이전 단계에서 만든 VPC에 연결해줍니다. 이미지 10. 인터넷 게이트웨이 생성 버튼 클릭 이미지 11. 인터넷 게이트웨이 생성 이미지 12. 만들어둔 VPC연결 4. NAT 게이트웨이를 생성합니다. AWS Console &gt; VPC &gt; NAT GW(Network Address Translation Gateway) 이름을 설정하고 이전에 Public Subnet으로 사용하기 위해 만들었던 Subnet에 연결하여 NAT GW를 생성합니다. ✅ NAT Gateway는 시간당 0.059 USD가 부과됩니다.(리전: 아시아 태평양(서울)) 이미지 13. NAT 게이트웨이 생성 버튼 클릭 이미지 14. 만들어둔 서브넷 연결 후 NAT 게이트웨이 생성 5. 퍼블릭 서브넷과 프라이빗 서브넷용 사용자 지정 라우팅 테이블 두 개를 생성합니다. AWS Console &gt; VPC &gt; Routing Table 이름을 지정하고 이전에 만든 VPC에 연결합니다. 퍼블릭 서브넷과 프라이빗 서브넷용 사용자 지정 라우팅 테이블 두 개를 생성합니다. 이미지 15. 라우팅 테이블 생성 버튼 클릭 이미지 16. 라우팅 테이블 두 개 생성 🧩 퍼블릭 서브넷의 라우팅 테이블의 경우 [Destination]에 [0.0.0.0/0]을 입력합니다. [Target]에서 IGW를 선택한 다음, 이전에 생성한 IGW의 ID(my-igw1)를 선택합니다. 서브넷 연결 &gt; 서브넷 연결 편집 &gt; Public Subnet 선택 &gt; 저장합니다. 이미지 17. 라우팅 테이블 편집에서 인터넷 게이트웨이 연결 🧩 프라이빗 서브넷의 라우팅 테이블의 경우 [Destination]에 [0.0.0.0/0]을 입력합니다. [Target]에서 NAT GW 선택합니다. 그런 다음 생성한 NAT GW(my-nat-gw1)의 ID를 선택합니다. 서브넷 연결 &gt; 서브넷 연결 편집 &gt; Private Subnet들 선택 &gt; 저장합니다. 이미지 18. 라우팅 테이블 편집에서 NAT 게이트웨이 연결 📘 Lambda 함수 구성 Lambda 콘솔에서 함수페이지를 연 후, 본인이 생성한 Amazon VPC에 연결할 함수를 선택합니다. [구성] &gt; VPC &gt; [편집]을 선택합니다. 이미지 19. Lambda 함수 VPC 편집 선택 VPC를 선택한 후, 만들어 둔 Private Subnet을 선택합니다. [보안 그룹]에서 보안 그룹을 선택합니다.(참고 : 기본 보안 그룹을 사용해도 모든 아웃바운드 인터넷 트래픽을 허용하며, 대부분의 경우에 충분합니다. 자세한 내용은 VPC의 보안 그룹을 참조하십시오. - 출처: AWS Docs) 이미지 20. VPC 편집 끝맺음 VPC, NAT GW, IGW 등에 대해 다시 정리를 해보려다 직접 연결을 해보면서 하는 것이 나을 것 같아서, 예시로 Lambda에 연결하는 부분까지 다시 정리해 보았습니다. 내용을 정리하면서 여러 정보를 찾았는데, 결론은 다들 요금 주의,,,,,,😭 NAT GW에서 쓸데없는 요금이 나가는 경우도 있더라고요. 다음에는 AWS를 하면서 주의해야 할 요금에 대해 정리를 해보려 합니다.(솔직히 아직 AWS에 대해 초보이다 보니, 이번에 강전희 님과 정태환 님이 번역하신 AWS 비용 최적화 바이블 - 핀옵스를 위한 최적의 기술 활용부터 운영 노하우까지를 샀습니다…. 빨리 다 읽어보고 한번 정리를 해보려고 합니다!😃) [참고자료] AWS docs - VPC, Subnet https://aws.amazon.com/ko/premiumsupport/knowledge-center/internet-access-lambda-function/ https://medium.com/@kimjnsjwj/vpc내의-aws-lambda의-인터넷-접속-bc503e9940f5 https://jbhs7014.tistory.com/164 https://err-bzz.oopy.io/c4abbed2-fc30-4061-81b0-2803c4a59809 AWS docs - VPC의 보안 그룹" />
 <meta property="og:description" content="💡 Intro Amazon Virtual Private Cloud(Amazon VPC)에 연결된 AWS Lambda에 인터넷 접속을 가능하게 하려면, NAT GW(Network Address Translation Gateway) 설정을 해야합니다. 오늘은 이에 대해서 정리해 보려고 합니다. 🔎 AWS Lambda의 세 가지 상태 저는 Amazon Virtual Private Cloud(Amazon VPC)에 연결된 AWS Lambda에 인터넷 접속을 가능하게 하기 위해, 3번째 케이스인 VPC와 NAT이 있는 상태로 진행해보도록 하겠습니다. VPC가 없는 상태 : 웹에 자유롭게 접속할 수 있지만, 로컬 네트워크로 AWS 서비스들과 연결할 수 없습니다. VPC가 있는 상태 : 기본적인 설정으로 로컬 네트워크에 연결이 가능하지만, 웹에는 접속할 수 없습니다. VPC와 NAT이 있는 상태 : AWS 서비스와 웹 둘 다 접속이 가능합니다. 🔎 Amazon VPC(Amazon Virtual Private Cloud), Subnet, Router, Routing Table, IGW(Internet Gateway), NAT GW(Network Address Translation Gateway)란? 본 내용에 들어가기전, Amazon VPC, Subnet, Routing Table, IGW, NAT GW에 대해서 먼저 정리하고 넘어가 보도록 하겠습니다. 🌎 Amazon VPC(Amazon Virtual Private Cloud) Amazon VPC란, AWS 클라우드에서 다른 고객과 완벽하게 논리적으로 격리된 네트워크 공간을 제공하여 프로비저닝하여 가상 네트워크에서 AWS 리소스를 만드는데 사용하는 리소스입니다. 쉽게 풀어서 설명하자면, 자신이 사용할 AWS Resource들을 격리 되어진 하나의 네트워크로 묶는 서비스를 의미하며 격리되어 있기 때문에 다른 사람들은 접근하고 보는 것이 불가능해집니다. 만약, VPC 없이 인스턴스를 생성한다면 아래와 같이 인스턴스끼리의 구분없는 연결로 인해 시스템 복잡도가 증가할 것이며, 인터넷을 통해 전달되는 트래픽의 전송이 굉장히 비효율적이게 될 것 입니다. VPC를 적용하면 인스턴스가 VPC에 속함으로써 네트워크를 구분할 수 있고, VPC 별로 필요한 설정을 통해 인스턴스에 네트워크 설정을 적용할 수 있습니다. 또한, 각각의 VPC는 독립적이기 때문에 서로 통신할 수 없습니다. 만일 통신을 원한다면 VPC 피어링 서비스를 통해 VPC 간에 트래픽을 라우팅할 수 있도록 설정할 수 있습니다. ➕ AWS는 VPC의 중요성을 강조하여 2019년부터 거의 모든 서비스에 VPC를 적용하도록 강제하였습니다. 이미지 1. Amazon VPC 🌎 서브넷(Subnet) 서브넷(Subnet) 이란, IP 주소를 나누어 리소스가 배치되는 물리적인 주소 범위입니다. 즉, 서브넷은 VPC를 잘 개 쪼갠 것이며 서브넷을 나누는 이유는 더 많은 네트워크 망을 만들기 위함입니다. 또한 인터넷에 연결되어야 하는 리소스에는 퍼블릭 서브넷(Public Subnet)을 사용하고, 인터넷에 연결되지 않는 리소스에는 프라이빗 서브넷(Private Subnet)을 사용합니다. 이처럼 인터넷 연결 여부로 퍼블릭 서브넷(Public Subnet)과 프라이빗 서브넷(Private Subnet)로 구분하는 이유는 보안을 강화하기 위함입니다. 퍼블릭 서브넷에 존재하는 인스턴스는 인터넷에 연결되어 아웃바운드, 인바운드 트래픽을 주고받을 수 있습니다. 반면 프라이빗 서브넷은 외부에 노출이 되어 있지 않기 때문에 접근할 수 없습니다. 즉, 인터넷과 연결되어 외부에 노출되어 있는 면적을 최소화함으로써 네트워크 망에 함부로 접근하는 것을 막기 위함입니다. 이미지 2. Subnet 🌎 라우팅 테이블(Routing Table)과 라우터(Router) AWS VPC 설명서에는 라우팅 테이블의 역할이 이렇게 소개되어져 있습니다. VPC에는 암시적 라우터가 있으며 라우팅 테이블을 사용하여 네트워크 트래픽이 전달되는 위치를 제어합니다. VPC의 각 서브넷을 라우팅 테이블에 연결해야 합니다. 테이블에서는 서브넷에 대한 라우팅을 제어합니다(서브넷 라우팅 테이블). 서브넷을 특정 라우팅 테이블과 명시적으로 연결할 수 있습니다. 그렇지 않으면 서브넷이 기본 라우팅 테이블과 암시적으로 연결됩니다. 서브넷은 한 번에 하나의 라우팅 테이블에만 연결할 수 있지만 여러 서브넷을 동일한 서브넷 라우팅 테이블에 연결할 수 있습니다. - 출처: AWS Docs 간단하게 설명하자면 라우터(Router)는 목적지이고, 라우팅 테이블(Routing Tabl)은 이정표라고할 수 있습니다. 172.31.0.0/16가 목적지면 이리로 오고, 10.0.0.0/16가 목적지면 절로 가세요.라고 알려주는 이정표일 뿐인거죠. 만약 목적지가 라우팅 테이블에 명시되지 않은 트래픽들을 라우팅 시키고 싶을 땐 0.0.0.0/0라는 주소를 통해 전달시킬 수 있습니다. 이미지 3. Router 🌎 IGW(Internet Gateway, 인터넷 게이트웨이) / NAT GW(Network Address Translation Gateway, NAT 게이트웨이) 사실상 IGW와 NAT GW 이 두 개를 통해 인터넷 간 통신을 활성화시킬 수 있습니다. IGW는 VPC 리소스와 인터넷 간 통신을 활성화하기 위해 VPC에 연결하며, 퍼블릭 서브넷만 외부와 통신해야 하므로 퍼블릭 서브넷의 라우팅 테이블에만 IGW로 향하는 규칙을 포함합니다. NAT GW는 퍼블릭 서브넷에 위치하여 프라이빗 서브넷에서 발생하는 네트워크 요청을 받은 후, IGW에 패킷을 전달하여 인터넷과 통신할 수 있도록 도와줍니다. 라우팅 테이블을 보면 0.0.0.0/0으로 되어 있는 것을 볼 수 있는데, 목적지의 IP 주소가 172.31.0.0/16(VPC 내부)에 해당하는지 확인하고 해당하지 않는 모든 트래픽에 대하여 IGW로 보내라는 뜻입니다. 즉, 목적지가 라우팅 테이블에 명시되지 않은 모든 트래픽을 라우팅 시키고 싶을 땐 0.0.0.0/0라는 주소를 사용할 수 있습니다. 이미지 4. IGW / NAT GW 📚 VPC내의 AWS Lambda의 인터넷 접속하기 이제 본격적으로 작업을 실시할 수 있습니다. 🌎Amazon Virtual Private Cloud(Amazon VPC)에 연결된 AWS Lambda 함수에 인터넷 액세스를 제공하려 합니다. 어떻게 설정해야 하나요? 문서에 자세하게 나와있습니다. 그냥 이 순서 그대로 따라하시면 진행하는데 전혀 큰 어려움은 없습니다. 📕 Amazon VPC 설정 AWS Console &gt; VPC로 들어가면, VPC, Subnet, Routing Table, IGW, NAT GW등 앞서 정리한 모든 항목이 있습니다. 이미지 5. AWS Console -&gt; VPC 1. Amazon VPC를 생성합니다. AWS Console &gt; VPC &gt; VPC 생성 이름 및 IPv4를 지정 / 생성해줍니다. 이미지 6. VPC 생성 버튼 클릭 이미지 7. VPC 생성 2. Amazon VPC에 하나의 퍼블릭 서브넷과 둘 이상의 프라이빗 서브넷을 생성합니다. AWS Console &gt; VPC &gt; Subnet 생성 이름 및 IPv4과 가용영역을 설정하고, 이전에 만든 VPC를 연결합니다. Amazon VPC에 하나의 퍼블릭 서브넷과 둘 이상의 프라이빗 서브넷을 생성합니다.(서브넷을 생성할 때, [이름 태그]에 퍼블릭 또는 프라이빗 서브넷을 식별하는 각 서브넷의 이름을 입력합니다. 예: public-Subnet1, private-Lambda-Subnet1, private-Lambda-Subnet2) 이미지 8. 서브넷 생성 버튼 클릭 이미지 9. 서브넷 생성 3. 인터넷 게이트웨이를 생성하여 Amazon VPC에 연결합니다. AWS Console &gt; VPC &gt; IGW(Internet Gateway) 이름을 생성해준 후, 생성한 IGW를 클릭하여 이전 단계에서 만든 VPC에 연결해줍니다. 이미지 10. 인터넷 게이트웨이 생성 버튼 클릭 이미지 11. 인터넷 게이트웨이 생성 이미지 12. 만들어둔 VPC연결 4. NAT 게이트웨이를 생성합니다. AWS Console &gt; VPC &gt; NAT GW(Network Address Translation Gateway) 이름을 설정하고 이전에 Public Subnet으로 사용하기 위해 만들었던 Subnet에 연결하여 NAT GW를 생성합니다. ✅ NAT Gateway는 시간당 0.059 USD가 부과됩니다.(리전: 아시아 태평양(서울)) 이미지 13. NAT 게이트웨이 생성 버튼 클릭 이미지 14. 만들어둔 서브넷 연결 후 NAT 게이트웨이 생성 5. 퍼블릭 서브넷과 프라이빗 서브넷용 사용자 지정 라우팅 테이블 두 개를 생성합니다. AWS Console &gt; VPC &gt; Routing Table 이름을 지정하고 이전에 만든 VPC에 연결합니다. 퍼블릭 서브넷과 프라이빗 서브넷용 사용자 지정 라우팅 테이블 두 개를 생성합니다. 이미지 15. 라우팅 테이블 생성 버튼 클릭 이미지 16. 라우팅 테이블 두 개 생성 🧩 퍼블릭 서브넷의 라우팅 테이블의 경우 [Destination]에 [0.0.0.0/0]을 입력합니다. [Target]에서 IGW를 선택한 다음, 이전에 생성한 IGW의 ID(my-igw1)를 선택합니다. 서브넷 연결 &gt; 서브넷 연결 편집 &gt; Public Subnet 선택 &gt; 저장합니다. 이미지 17. 라우팅 테이블 편집에서 인터넷 게이트웨이 연결 🧩 프라이빗 서브넷의 라우팅 테이블의 경우 [Destination]에 [0.0.0.0/0]을 입력합니다. [Target]에서 NAT GW 선택합니다. 그런 다음 생성한 NAT GW(my-nat-gw1)의 ID를 선택합니다. 서브넷 연결 &gt; 서브넷 연결 편집 &gt; Private Subnet들 선택 &gt; 저장합니다. 이미지 18. 라우팅 테이블 편집에서 NAT 게이트웨이 연결 📘 Lambda 함수 구성 Lambda 콘솔에서 함수페이지를 연 후, 본인이 생성한 Amazon VPC에 연결할 함수를 선택합니다. [구성] &gt; VPC &gt; [편집]을 선택합니다. 이미지 19. Lambda 함수 VPC 편집 선택 VPC를 선택한 후, 만들어 둔 Private Subnet을 선택합니다. [보안 그룹]에서 보안 그룹을 선택합니다.(참고 : 기본 보안 그룹을 사용해도 모든 아웃바운드 인터넷 트래픽을 허용하며, 대부분의 경우에 충분합니다. 자세한 내용은 VPC의 보안 그룹을 참조하십시오. - 출처: AWS Docs) 이미지 20. VPC 편집 끝맺음 VPC, NAT GW, IGW 등에 대해 다시 정리를 해보려다 직접 연결을 해보면서 하는 것이 나을 것 같아서, 예시로 Lambda에 연결하는 부분까지 다시 정리해 보았습니다. 내용을 정리하면서 여러 정보를 찾았는데, 결론은 다들 요금 주의,,,,,,😭 NAT GW에서 쓸데없는 요금이 나가는 경우도 있더라고요. 다음에는 AWS를 하면서 주의해야 할 요금에 대해 정리를 해보려 합니다.(솔직히 아직 AWS에 대해 초보이다 보니, 이번에 강전희 님과 정태환 님이 번역하신 AWS 비용 최적화 바이블 - 핀옵스를 위한 최적의 기술 활용부터 운영 노하우까지를 샀습니다…. 빨리 다 읽어보고 한번 정리를 해보려고 합니다!😃) [참고자료] AWS docs - VPC, Subnet https://aws.amazon.com/ko/premiumsupport/knowledge-center/internet-access-lambda-function/ https://medium.com/@kimjnsjwj/vpc내의-aws-lambda의-인터넷-접속-bc503e9940f5 https://jbhs7014.tistory.com/164 https://err-bzz.oopy.io/c4abbed2-fc30-4061-81b0-2803c4a59809 AWS docs - VPC의 보안 그룹" />
-<link rel="canonical" href="http://localhost:4000/liampoet.github.io/lambda-nat/" />
-<meta property="og:url" content="http://localhost:4000/liampoet.github.io/lambda-nat/" />
+<link rel="canonical" href="http://localhost:4000/lambda-nat/" />
+<meta property="og:url" content="http://localhost:4000/lambda-nat/" />
 <meta property="og:site_name" content="LiamCoding" />
-<meta property="og:image" content="http://localhost:4000/liampoet.github.io/assets/images/lambda-nat/gateway.png" />
+<meta property="og:image" content="http://localhost:4000/assets/images/lambda-nat/gateway.png" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-08-19T21:01:55+09:00" />
 <script type="application/ld+json">
-{"@type":"BlogPosting","headline":"VPC내의 AWS Lambda의 인터넷 접속하기","dateModified":"2022-08-19T21:01:55+09:00","datePublished":"2022-08-19T21:01:55+09:00","image":"http://localhost:4000/liampoet.github.io/assets/images/lambda-nat/gateway.png","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/liampoet.github.io/assets/images/logo.png"},"name":"Liam"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/liampoet.github.io/lambda-nat/"},"author":{"@type":"Person","name":"Liam"},"description":"💡 Intro Amazon Virtual Private Cloud(Amazon VPC)에 연결된 AWS Lambda에 인터넷 접속을 가능하게 하려면, NAT GW(Network Address Translation Gateway) 설정을 해야합니다. 오늘은 이에 대해서 정리해 보려고 합니다. 🔎 AWS Lambda의 세 가지 상태 저는 Amazon Virtual Private Cloud(Amazon VPC)에 연결된 AWS Lambda에 인터넷 접속을 가능하게 하기 위해, 3번째 케이스인 VPC와 NAT이 있는 상태로 진행해보도록 하겠습니다. VPC가 없는 상태 : 웹에 자유롭게 접속할 수 있지만, 로컬 네트워크로 AWS 서비스들과 연결할 수 없습니다. VPC가 있는 상태 : 기본적인 설정으로 로컬 네트워크에 연결이 가능하지만, 웹에는 접속할 수 없습니다. VPC와 NAT이 있는 상태 : AWS 서비스와 웹 둘 다 접속이 가능합니다. 🔎 Amazon VPC(Amazon Virtual Private Cloud), Subnet, Router, Routing Table, IGW(Internet Gateway), NAT GW(Network Address Translation Gateway)란? 본 내용에 들어가기전, Amazon VPC, Subnet, Routing Table, IGW, NAT GW에 대해서 먼저 정리하고 넘어가 보도록 하겠습니다. 🌎 Amazon VPC(Amazon Virtual Private Cloud) Amazon VPC란, AWS 클라우드에서 다른 고객과 완벽하게 논리적으로 격리된 네트워크 공간을 제공하여 프로비저닝하여 가상 네트워크에서 AWS 리소스를 만드는데 사용하는 리소스입니다. 쉽게 풀어서 설명하자면, 자신이 사용할 AWS Resource들을 격리 되어진 하나의 네트워크로 묶는 서비스를 의미하며 격리되어 있기 때문에 다른 사람들은 접근하고 보는 것이 불가능해집니다. 만약, VPC 없이 인스턴스를 생성한다면 아래와 같이 인스턴스끼리의 구분없는 연결로 인해 시스템 복잡도가 증가할 것이며, 인터넷을 통해 전달되는 트래픽의 전송이 굉장히 비효율적이게 될 것 입니다. VPC를 적용하면 인스턴스가 VPC에 속함으로써 네트워크를 구분할 수 있고, VPC 별로 필요한 설정을 통해 인스턴스에 네트워크 설정을 적용할 수 있습니다. 또한, 각각의 VPC는 독립적이기 때문에 서로 통신할 수 없습니다. 만일 통신을 원한다면 VPC 피어링 서비스를 통해 VPC 간에 트래픽을 라우팅할 수 있도록 설정할 수 있습니다. ➕ AWS는 VPC의 중요성을 강조하여 2019년부터 거의 모든 서비스에 VPC를 적용하도록 강제하였습니다. 이미지 1. Amazon VPC 🌎 서브넷(Subnet) 서브넷(Subnet) 이란, IP 주소를 나누어 리소스가 배치되는 물리적인 주소 범위입니다. 즉, 서브넷은 VPC를 잘 개 쪼갠 것이며 서브넷을 나누는 이유는 더 많은 네트워크 망을 만들기 위함입니다. 또한 인터넷에 연결되어야 하는 리소스에는 퍼블릭 서브넷(Public Subnet)을 사용하고, 인터넷에 연결되지 않는 리소스에는 프라이빗 서브넷(Private Subnet)을 사용합니다. 이처럼 인터넷 연결 여부로 퍼블릭 서브넷(Public Subnet)과 프라이빗 서브넷(Private Subnet)로 구분하는 이유는 보안을 강화하기 위함입니다. 퍼블릭 서브넷에 존재하는 인스턴스는 인터넷에 연결되어 아웃바운드, 인바운드 트래픽을 주고받을 수 있습니다. 반면 프라이빗 서브넷은 외부에 노출이 되어 있지 않기 때문에 접근할 수 없습니다. 즉, 인터넷과 연결되어 외부에 노출되어 있는 면적을 최소화함으로써 네트워크 망에 함부로 접근하는 것을 막기 위함입니다. 이미지 2. Subnet 🌎 라우팅 테이블(Routing Table)과 라우터(Router) AWS VPC 설명서에는 라우팅 테이블의 역할이 이렇게 소개되어져 있습니다. VPC에는 암시적 라우터가 있으며 라우팅 테이블을 사용하여 네트워크 트래픽이 전달되는 위치를 제어합니다. VPC의 각 서브넷을 라우팅 테이블에 연결해야 합니다. 테이블에서는 서브넷에 대한 라우팅을 제어합니다(서브넷 라우팅 테이블). 서브넷을 특정 라우팅 테이블과 명시적으로 연결할 수 있습니다. 그렇지 않으면 서브넷이 기본 라우팅 테이블과 암시적으로 연결됩니다. 서브넷은 한 번에 하나의 라우팅 테이블에만 연결할 수 있지만 여러 서브넷을 동일한 서브넷 라우팅 테이블에 연결할 수 있습니다. - 출처: AWS Docs 간단하게 설명하자면 라우터(Router)는 목적지이고, 라우팅 테이블(Routing Tabl)은 이정표라고할 수 있습니다. 172.31.0.0/16가 목적지면 이리로 오고, 10.0.0.0/16가 목적지면 절로 가세요.라고 알려주는 이정표일 뿐인거죠. 만약 목적지가 라우팅 테이블에 명시되지 않은 트래픽들을 라우팅 시키고 싶을 땐 0.0.0.0/0라는 주소를 통해 전달시킬 수 있습니다. 이미지 3. Router 🌎 IGW(Internet Gateway, 인터넷 게이트웨이) / NAT GW(Network Address Translation Gateway, NAT 게이트웨이) 사실상 IGW와 NAT GW 이 두 개를 통해 인터넷 간 통신을 활성화시킬 수 있습니다. IGW는 VPC 리소스와 인터넷 간 통신을 활성화하기 위해 VPC에 연결하며, 퍼블릭 서브넷만 외부와 통신해야 하므로 퍼블릭 서브넷의 라우팅 테이블에만 IGW로 향하는 규칙을 포함합니다. NAT GW는 퍼블릭 서브넷에 위치하여 프라이빗 서브넷에서 발생하는 네트워크 요청을 받은 후, IGW에 패킷을 전달하여 인터넷과 통신할 수 있도록 도와줍니다. 라우팅 테이블을 보면 0.0.0.0/0으로 되어 있는 것을 볼 수 있는데, 목적지의 IP 주소가 172.31.0.0/16(VPC 내부)에 해당하는지 확인하고 해당하지 않는 모든 트래픽에 대하여 IGW로 보내라는 뜻입니다. 즉, 목적지가 라우팅 테이블에 명시되지 않은 모든 트래픽을 라우팅 시키고 싶을 땐 0.0.0.0/0라는 주소를 사용할 수 있습니다. 이미지 4. IGW / NAT GW 📚 VPC내의 AWS Lambda의 인터넷 접속하기 이제 본격적으로 작업을 실시할 수 있습니다. 🌎Amazon Virtual Private Cloud(Amazon VPC)에 연결된 AWS Lambda 함수에 인터넷 액세스를 제공하려 합니다. 어떻게 설정해야 하나요? 문서에 자세하게 나와있습니다. 그냥 이 순서 그대로 따라하시면 진행하는데 전혀 큰 어려움은 없습니다. 📕 Amazon VPC 설정 AWS Console &gt; VPC로 들어가면, VPC, Subnet, Routing Table, IGW, NAT GW등 앞서 정리한 모든 항목이 있습니다. 이미지 5. AWS Console -&gt; VPC 1. Amazon VPC를 생성합니다. AWS Console &gt; VPC &gt; VPC 생성 이름 및 IPv4를 지정 / 생성해줍니다. 이미지 6. VPC 생성 버튼 클릭 이미지 7. VPC 생성 2. Amazon VPC에 하나의 퍼블릭 서브넷과 둘 이상의 프라이빗 서브넷을 생성합니다. AWS Console &gt; VPC &gt; Subnet 생성 이름 및 IPv4과 가용영역을 설정하고, 이전에 만든 VPC를 연결합니다. Amazon VPC에 하나의 퍼블릭 서브넷과 둘 이상의 프라이빗 서브넷을 생성합니다.(서브넷을 생성할 때, [이름 태그]에 퍼블릭 또는 프라이빗 서브넷을 식별하는 각 서브넷의 이름을 입력합니다. 예: public-Subnet1, private-Lambda-Subnet1, private-Lambda-Subnet2) 이미지 8. 서브넷 생성 버튼 클릭 이미지 9. 서브넷 생성 3. 인터넷 게이트웨이를 생성하여 Amazon VPC에 연결합니다. AWS Console &gt; VPC &gt; IGW(Internet Gateway) 이름을 생성해준 후, 생성한 IGW를 클릭하여 이전 단계에서 만든 VPC에 연결해줍니다. 이미지 10. 인터넷 게이트웨이 생성 버튼 클릭 이미지 11. 인터넷 게이트웨이 생성 이미지 12. 만들어둔 VPC연결 4. NAT 게이트웨이를 생성합니다. AWS Console &gt; VPC &gt; NAT GW(Network Address Translation Gateway) 이름을 설정하고 이전에 Public Subnet으로 사용하기 위해 만들었던 Subnet에 연결하여 NAT GW를 생성합니다. ✅ NAT Gateway는 시간당\u001d 0.059 USD가 부과됩니다.(리전: 아시아 태평양(서울)) 이미지 13. NAT 게이트웨이 생성 버튼 클릭 이미지 14. 만들어둔 서브넷 연결 후 NAT 게이트웨이 생성 5. 퍼블릭 서브넷과 프라이빗 서브넷용 사용자 지정 라우팅 테이블 두 개를 생성합니다. AWS Console &gt; VPC &gt; Routing Table 이름을 지정하고 이전에 만든 VPC에 연결합니다. 퍼블릭 서브넷과 프라이빗 서브넷용 사용자 지정 라우팅 테이블 두 개를 생성합니다. 이미지 15. 라우팅 테이블 생성 버튼 클릭 이미지 16. 라우팅 테이블 두 개 생성 🧩 퍼블릭 서브넷의 라우팅 테이블의 경우 [Destination]에 [0.0.0.0/0]을 입력합니다. [Target]에서 IGW를 선택한 다음, 이전에 생성한 IGW의 ID(my-igw1)를 선택합니다. 서브넷 연결 &gt; 서브넷 연결 편집 &gt; Public Subnet 선택 &gt; 저장합니다. 이미지 17. 라우팅 테이블 편집에서 인터넷 게이트웨이 연결 🧩 프라이빗 서브넷의 라우팅 테이블의 경우 [Destination]에 [0.0.0.0/0]을 입력합니다. [Target]에서 NAT GW 선택합니다. 그런 다음 생성한 NAT GW(my-nat-gw1)의 ID를 선택합니다. 서브넷 연결 &gt; 서브넷 연결 편집 &gt; Private Subnet들 선택 &gt; 저장합니다. 이미지 18. 라우팅 테이블 편집에서 NAT 게이트웨이 연결 📘 Lambda 함수 구성 Lambda 콘솔에서 함수페이지를 연 후, 본인이 생성한 Amazon VPC에 연결할 함수를 선택합니다. [구성] &gt; VPC &gt; [편집]을 선택합니다. 이미지 19. Lambda 함수 VPC 편집 선택 VPC를 선택한 후, 만들어 둔 Private Subnet을 선택합니다. [보안 그룹]에서 보안 그룹을 선택합니다.(참고 : 기본 보안 그룹을 사용해도 모든 아웃바운드 인터넷 트래픽을 허용하며, 대부분의 경우에 충분합니다. 자세한 내용은 VPC의 보안 그룹을 참조하십시오. - 출처: AWS Docs) 이미지 20. VPC 편집 끝맺음 VPC, NAT GW, IGW 등에 대해 다시 정리를 해보려다 직접 연결을 해보면서 하는 것이 나을 것 같아서, 예시로 Lambda에 연결하는 부분까지 다시 정리해 보았습니다. 내용을 정리하면서 여러 정보를 찾았는데, 결론은 다들 요금 주의,,,,,,😭 NAT GW에서 쓸데없는 요금이 나가는 경우도 있더라고요. 다음에는 AWS를 하면서 주의해야 할 요금에 대해 정리를 해보려 합니다.(솔직히 아직 AWS에 대해 초보이다 보니, 이번에 강전희 님과 정태환 님이 번역하신 AWS 비용 최적화 바이블 - 핀옵스를 위한 최적의 기술 활용부터 운영 노하우까지를 샀습니다…. 빨리 다 읽어보고 한번 정리를 해보려고 합니다!😃) [참고자료] AWS docs - VPC, Subnet https://aws.amazon.com/ko/premiumsupport/knowledge-center/internet-access-lambda-function/ https://medium.com/@kimjnsjwj/vpc내의-aws-lambda의-인터넷-접속-bc503e9940f5 https://jbhs7014.tistory.com/164 https://err-bzz.oopy.io/c4abbed2-fc30-4061-81b0-2803c4a59809 AWS docs - VPC의 보안 그룹","url":"http://localhost:4000/liampoet.github.io/lambda-nat/","@context":"http://schema.org"}</script>
+{"@type":"BlogPosting","headline":"VPC내의 AWS Lambda의 인터넷 접속하기","dateModified":"2022-08-19T21:01:55+09:00","datePublished":"2022-08-19T21:01:55+09:00","image":"http://localhost:4000/assets/images/lambda-nat/gateway.png","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/images/logo.png"},"name":"Liam"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/lambda-nat/"},"author":{"@type":"Person","name":"Liam"},"description":"💡 Intro Amazon Virtual Private Cloud(Amazon VPC)에 연결된 AWS Lambda에 인터넷 접속을 가능하게 하려면, NAT GW(Network Address Translation Gateway) 설정을 해야합니다. 오늘은 이에 대해서 정리해 보려고 합니다. 🔎 AWS Lambda의 세 가지 상태 저는 Amazon Virtual Private Cloud(Amazon VPC)에 연결된 AWS Lambda에 인터넷 접속을 가능하게 하기 위해, 3번째 케이스인 VPC와 NAT이 있는 상태로 진행해보도록 하겠습니다. VPC가 없는 상태 : 웹에 자유롭게 접속할 수 있지만, 로컬 네트워크로 AWS 서비스들과 연결할 수 없습니다. VPC가 있는 상태 : 기본적인 설정으로 로컬 네트워크에 연결이 가능하지만, 웹에는 접속할 수 없습니다. VPC와 NAT이 있는 상태 : AWS 서비스와 웹 둘 다 접속이 가능합니다. 🔎 Amazon VPC(Amazon Virtual Private Cloud), Subnet, Router, Routing Table, IGW(Internet Gateway), NAT GW(Network Address Translation Gateway)란? 본 내용에 들어가기전, Amazon VPC, Subnet, Routing Table, IGW, NAT GW에 대해서 먼저 정리하고 넘어가 보도록 하겠습니다. 🌎 Amazon VPC(Amazon Virtual Private Cloud) Amazon VPC란, AWS 클라우드에서 다른 고객과 완벽하게 논리적으로 격리된 네트워크 공간을 제공하여 프로비저닝하여 가상 네트워크에서 AWS 리소스를 만드는데 사용하는 리소스입니다. 쉽게 풀어서 설명하자면, 자신이 사용할 AWS Resource들을 격리 되어진 하나의 네트워크로 묶는 서비스를 의미하며 격리되어 있기 때문에 다른 사람들은 접근하고 보는 것이 불가능해집니다. 만약, VPC 없이 인스턴스를 생성한다면 아래와 같이 인스턴스끼리의 구분없는 연결로 인해 시스템 복잡도가 증가할 것이며, 인터넷을 통해 전달되는 트래픽의 전송이 굉장히 비효율적이게 될 것 입니다. VPC를 적용하면 인스턴스가 VPC에 속함으로써 네트워크를 구분할 수 있고, VPC 별로 필요한 설정을 통해 인스턴스에 네트워크 설정을 적용할 수 있습니다. 또한, 각각의 VPC는 독립적이기 때문에 서로 통신할 수 없습니다. 만일 통신을 원한다면 VPC 피어링 서비스를 통해 VPC 간에 트래픽을 라우팅할 수 있도록 설정할 수 있습니다. ➕ AWS는 VPC의 중요성을 강조하여 2019년부터 거의 모든 서비스에 VPC를 적용하도록 강제하였습니다. 이미지 1. Amazon VPC 🌎 서브넷(Subnet) 서브넷(Subnet) 이란, IP 주소를 나누어 리소스가 배치되는 물리적인 주소 범위입니다. 즉, 서브넷은 VPC를 잘 개 쪼갠 것이며 서브넷을 나누는 이유는 더 많은 네트워크 망을 만들기 위함입니다. 또한 인터넷에 연결되어야 하는 리소스에는 퍼블릭 서브넷(Public Subnet)을 사용하고, 인터넷에 연결되지 않는 리소스에는 프라이빗 서브넷(Private Subnet)을 사용합니다. 이처럼 인터넷 연결 여부로 퍼블릭 서브넷(Public Subnet)과 프라이빗 서브넷(Private Subnet)로 구분하는 이유는 보안을 강화하기 위함입니다. 퍼블릭 서브넷에 존재하는 인스턴스는 인터넷에 연결되어 아웃바운드, 인바운드 트래픽을 주고받을 수 있습니다. 반면 프라이빗 서브넷은 외부에 노출이 되어 있지 않기 때문에 접근할 수 없습니다. 즉, 인터넷과 연결되어 외부에 노출되어 있는 면적을 최소화함으로써 네트워크 망에 함부로 접근하는 것을 막기 위함입니다. 이미지 2. Subnet 🌎 라우팅 테이블(Routing Table)과 라우터(Router) AWS VPC 설명서에는 라우팅 테이블의 역할이 이렇게 소개되어져 있습니다. VPC에는 암시적 라우터가 있으며 라우팅 테이블을 사용하여 네트워크 트래픽이 전달되는 위치를 제어합니다. VPC의 각 서브넷을 라우팅 테이블에 연결해야 합니다. 테이블에서는 서브넷에 대한 라우팅을 제어합니다(서브넷 라우팅 테이블). 서브넷을 특정 라우팅 테이블과 명시적으로 연결할 수 있습니다. 그렇지 않으면 서브넷이 기본 라우팅 테이블과 암시적으로 연결됩니다. 서브넷은 한 번에 하나의 라우팅 테이블에만 연결할 수 있지만 여러 서브넷을 동일한 서브넷 라우팅 테이블에 연결할 수 있습니다. - 출처: AWS Docs 간단하게 설명하자면 라우터(Router)는 목적지이고, 라우팅 테이블(Routing Tabl)은 이정표라고할 수 있습니다. 172.31.0.0/16가 목적지면 이리로 오고, 10.0.0.0/16가 목적지면 절로 가세요.라고 알려주는 이정표일 뿐인거죠. 만약 목적지가 라우팅 테이블에 명시되지 않은 트래픽들을 라우팅 시키고 싶을 땐 0.0.0.0/0라는 주소를 통해 전달시킬 수 있습니다. 이미지 3. Router 🌎 IGW(Internet Gateway, 인터넷 게이트웨이) / NAT GW(Network Address Translation Gateway, NAT 게이트웨이) 사실상 IGW와 NAT GW 이 두 개를 통해 인터넷 간 통신을 활성화시킬 수 있습니다. IGW는 VPC 리소스와 인터넷 간 통신을 활성화하기 위해 VPC에 연결하며, 퍼블릭 서브넷만 외부와 통신해야 하므로 퍼블릭 서브넷의 라우팅 테이블에만 IGW로 향하는 규칙을 포함합니다. NAT GW는 퍼블릭 서브넷에 위치하여 프라이빗 서브넷에서 발생하는 네트워크 요청을 받은 후, IGW에 패킷을 전달하여 인터넷과 통신할 수 있도록 도와줍니다. 라우팅 테이블을 보면 0.0.0.0/0으로 되어 있는 것을 볼 수 있는데, 목적지의 IP 주소가 172.31.0.0/16(VPC 내부)에 해당하는지 확인하고 해당하지 않는 모든 트래픽에 대하여 IGW로 보내라는 뜻입니다. 즉, 목적지가 라우팅 테이블에 명시되지 않은 모든 트래픽을 라우팅 시키고 싶을 땐 0.0.0.0/0라는 주소를 사용할 수 있습니다. 이미지 4. IGW / NAT GW 📚 VPC내의 AWS Lambda의 인터넷 접속하기 이제 본격적으로 작업을 실시할 수 있습니다. 🌎Amazon Virtual Private Cloud(Amazon VPC)에 연결된 AWS Lambda 함수에 인터넷 액세스를 제공하려 합니다. 어떻게 설정해야 하나요? 문서에 자세하게 나와있습니다. 그냥 이 순서 그대로 따라하시면 진행하는데 전혀 큰 어려움은 없습니다. 📕 Amazon VPC 설정 AWS Console &gt; VPC로 들어가면, VPC, Subnet, Routing Table, IGW, NAT GW등 앞서 정리한 모든 항목이 있습니다. 이미지 5. AWS Console -&gt; VPC 1. Amazon VPC를 생성합니다. AWS Console &gt; VPC &gt; VPC 생성 이름 및 IPv4를 지정 / 생성해줍니다. 이미지 6. VPC 생성 버튼 클릭 이미지 7. VPC 생성 2. Amazon VPC에 하나의 퍼블릭 서브넷과 둘 이상의 프라이빗 서브넷을 생성합니다. AWS Console &gt; VPC &gt; Subnet 생성 이름 및 IPv4과 가용영역을 설정하고, 이전에 만든 VPC를 연결합니다. Amazon VPC에 하나의 퍼블릭 서브넷과 둘 이상의 프라이빗 서브넷을 생성합니다.(서브넷을 생성할 때, [이름 태그]에 퍼블릭 또는 프라이빗 서브넷을 식별하는 각 서브넷의 이름을 입력합니다. 예: public-Subnet1, private-Lambda-Subnet1, private-Lambda-Subnet2) 이미지 8. 서브넷 생성 버튼 클릭 이미지 9. 서브넷 생성 3. 인터넷 게이트웨이를 생성하여 Amazon VPC에 연결합니다. AWS Console &gt; VPC &gt; IGW(Internet Gateway) 이름을 생성해준 후, 생성한 IGW를 클릭하여 이전 단계에서 만든 VPC에 연결해줍니다. 이미지 10. 인터넷 게이트웨이 생성 버튼 클릭 이미지 11. 인터넷 게이트웨이 생성 이미지 12. 만들어둔 VPC연결 4. NAT 게이트웨이를 생성합니다. AWS Console &gt; VPC &gt; NAT GW(Network Address Translation Gateway) 이름을 설정하고 이전에 Public Subnet으로 사용하기 위해 만들었던 Subnet에 연결하여 NAT GW를 생성합니다. ✅ NAT Gateway는 시간당\u001d 0.059 USD가 부과됩니다.(리전: 아시아 태평양(서울)) 이미지 13. NAT 게이트웨이 생성 버튼 클릭 이미지 14. 만들어둔 서브넷 연결 후 NAT 게이트웨이 생성 5. 퍼블릭 서브넷과 프라이빗 서브넷용 사용자 지정 라우팅 테이블 두 개를 생성합니다. AWS Console &gt; VPC &gt; Routing Table 이름을 지정하고 이전에 만든 VPC에 연결합니다. 퍼블릭 서브넷과 프라이빗 서브넷용 사용자 지정 라우팅 테이블 두 개를 생성합니다. 이미지 15. 라우팅 테이블 생성 버튼 클릭 이미지 16. 라우팅 테이블 두 개 생성 🧩 퍼블릭 서브넷의 라우팅 테이블의 경우 [Destination]에 [0.0.0.0/0]을 입력합니다. [Target]에서 IGW를 선택한 다음, 이전에 생성한 IGW의 ID(my-igw1)를 선택합니다. 서브넷 연결 &gt; 서브넷 연결 편집 &gt; Public Subnet 선택 &gt; 저장합니다. 이미지 17. 라우팅 테이블 편집에서 인터넷 게이트웨이 연결 🧩 프라이빗 서브넷의 라우팅 테이블의 경우 [Destination]에 [0.0.0.0/0]을 입력합니다. [Target]에서 NAT GW 선택합니다. 그런 다음 생성한 NAT GW(my-nat-gw1)의 ID를 선택합니다. 서브넷 연결 &gt; 서브넷 연결 편집 &gt; Private Subnet들 선택 &gt; 저장합니다. 이미지 18. 라우팅 테이블 편집에서 NAT 게이트웨이 연결 📘 Lambda 함수 구성 Lambda 콘솔에서 함수페이지를 연 후, 본인이 생성한 Amazon VPC에 연결할 함수를 선택합니다. [구성] &gt; VPC &gt; [편집]을 선택합니다. 이미지 19. Lambda 함수 VPC 편집 선택 VPC를 선택한 후, 만들어 둔 Private Subnet을 선택합니다. [보안 그룹]에서 보안 그룹을 선택합니다.(참고 : 기본 보안 그룹을 사용해도 모든 아웃바운드 인터넷 트래픽을 허용하며, 대부분의 경우에 충분합니다. 자세한 내용은 VPC의 보안 그룹을 참조하십시오. - 출처: AWS Docs) 이미지 20. VPC 편집 끝맺음 VPC, NAT GW, IGW 등에 대해 다시 정리를 해보려다 직접 연결을 해보면서 하는 것이 나을 것 같아서, 예시로 Lambda에 연결하는 부분까지 다시 정리해 보았습니다. 내용을 정리하면서 여러 정보를 찾았는데, 결론은 다들 요금 주의,,,,,,😭 NAT GW에서 쓸데없는 요금이 나가는 경우도 있더라고요. 다음에는 AWS를 하면서 주의해야 할 요금에 대해 정리를 해보려 합니다.(솔직히 아직 AWS에 대해 초보이다 보니, 이번에 강전희 님과 정태환 님이 번역하신 AWS 비용 최적화 바이블 - 핀옵스를 위한 최적의 기술 활용부터 운영 노하우까지를 샀습니다…. 빨리 다 읽어보고 한번 정리를 해보려고 합니다!😃) [참고자료] AWS docs - VPC, Subnet https://aws.amazon.com/ko/premiumsupport/knowledge-center/internet-access-lambda-function/ https://medium.com/@kimjnsjwj/vpc내의-aws-lambda의-인터넷-접속-bc503e9940f5 https://jbhs7014.tistory.com/164 https://err-bzz.oopy.io/c4abbed2-fc30-4061-81b0-2803c4a59809 AWS docs - VPC의 보안 그룹","url":"http://localhost:4000/lambda-nat/","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     
-<link href="/liampoet.github.io/assets/css/screen.css" rel="stylesheet">
+<link href="/assets/css/screen.css" rel="stylesheet">
 
-<link href="/liampoet.github.io/assets/css/main.css" rel="stylesheet">
+<link href="/assets/css/main.css" rel="stylesheet">
 
-<script src="/liampoet.github.io/assets/js/jquery.min.js"></script>
+<script src="/assets/js/jquery.min.js"></script>
 
 </head>
 
@@ -55,8 +55,8 @@
     <div class="container pr-0">
 
     <!-- Begin Logo -->
-    <a class="navbar-brand" href="/liampoet.github.io/">
-    <img src="/liampoet.github.io/assets/images/logo.png" alt="Liam">
+    <a class="navbar-brand" href="/">
+    <img src="/assets/images/logo.png" alt="LiamCoding">
     </a>
     <!-- End Logo -->
 
@@ -73,18 +73,18 @@
                 
                 <li class="nav-item">
                 
-                <a class="nav-link" href="/liampoet.github.io/index.html">Blog</a>
+                <a class="nav-link" href="/index.html">Blog</a>
                 </li>
 
                 <li class="nav-item">
-                <a class="nav-link" href="/liampoet.github.io/about">About</a>
+                <a class="nav-link" href="/about">About</a>
                 </li>
 
                 <li class="nav-item">
                 <a target="_blank" class="nav-link" href="https://github.com/liampoet"><i class="fab fa-github"></i> Github</a>
                 </li>
 
-                <script src="/liampoet.github.io/assets/js/lunr.js"></script>
+                <script src="/assets/js/lunr.js"></script>
 
 
 <style>
@@ -104,7 +104,7 @@
     <ul></ul>
 </div>
 
-<script src="/liampoet.github.io/assets/js/lunrsearchengine.js"></script>
+<script src="/assets/js/lunrsearchengine.js"></script>
 
             </ul>
 
@@ -124,7 +124,7 @@
 <!-- Site Title
 ================================================== -->
 <div class="mainheading">
-    <h1 class="sitetitle">Liam</h1>
+    <h1 class="sitetitle">LiamCoding</h1>
     <p class="lead">
         Hello! I'm Liam 👋I'm a developer working at ./-
     </p>
@@ -146,19 +146,19 @@
     </p>
     <ul>
         <li class="ml-1 mr-1">
-            <a target="_blank" href="https://twitter.com/intent/tweet?text=VPC내의 AWS Lambda의 인터넷 접속하기&url=http://localhost:4000/liampoet.github.io/lambda-nat/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+            <a target="_blank" href="https://twitter.com/intent/tweet?text=VPC내의 AWS Lambda의 인터넷 접속하기&url=http://localhost:4000/lambda-nat/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                 <i class="fab fa-twitter"></i>
             </a>
         </li>
 
         <li class="ml-1 mr-1">
-            <a target="_blank" href="https://facebook.com/sharer.php?u=http://localhost:4000/liampoet.github.io/lambda-nat/" onclick="window.open(this.href, 'facebook-share', 'width=550,height=435');return false;">
+            <a target="_blank" href="https://facebook.com/sharer.php?u=http://localhost:4000/lambda-nat/" onclick="window.open(this.href, 'facebook-share', 'width=550,height=435');return false;">
                 <i class="fab fa-facebook-f"></i>
             </a>
         </li>
 
         <li class="ml-1 mr-1">
-            <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/liampoet.github.io/lambda-nat/" onclick="window.open(this.href, 'width=550,height=435');return false;">
+            <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/lambda-nat/" onclick="window.open(this.href, 'width=550,height=435');return false;">
                 <i class="fab fa-linkedin-in"></i>
             </a>
         </li>
@@ -192,7 +192,7 @@
                         
                     </div>
                     <div class="col-xs-12 col-md-9 col-lg-10 text-center text-md-left">
-                        <a target="_blank" class="link-dark" href="https://www.linkedin.com/in/kwongmin-lim-32b828247/">Liam</a><a target="_blank" href="" class="btn follow">Follow</a>
+                        <a target="_blank" class="link-dark" href="https://www.linkedin.com/in/kwongmin-lim-32b828247/">Liam</a><a target="_blank" href="https://www.linkedin.com/in/kwongmin-lim-32b828247/" class="btn follow">Follow</a><br>
                         <span class="author-description">공부하는 중입니다.🥸</span>
                     </div>
                 </div>
@@ -211,7 +211,7 @@
             
 
             
-            <img class="featured-image img-fluid lazyimg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAACCAQAAAA3fa6RAAAADklEQVR42mNkAANGCAUAACMAA2w/AMgAAAAASUVORK5CYII=" data-src="/liampoet.github.io/assets/images/lambda-nat/gateway.png" alt="VPC내의 AWS Lambda의 인터넷 접속하기">
+            <img class="featured-image img-fluid lazyimg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAACCAQAAAA3fa6RAAAADklEQVR42mNkAANGCAUAACMAA2w/AMgAAAAASUVORK5CYII=" data-src="/assets/images/lambda-nat/gateway.png" alt="VPC내의 AWS Lambda의 인터넷 접속하기">
             
 
             
@@ -259,7 +259,7 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/lambda-nat/vpc.png" alt="Amazon VPC" /><em>이미지 1. Amazon VPC</em></p>
+<p><img src="/assets/images/lambda-nat/vpc.png" alt="Amazon VPC" /><em>이미지 1. Amazon VPC</em></p>
 
 <p><br /></p>
 
@@ -273,7 +273,7 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/lambda-nat/subnet.png" alt="Subnet" /><em>이미지 2. Subnet</em></p>
+<p><img src="/assets/images/lambda-nat/subnet.png" alt="Subnet" /><em>이미지 2. Subnet</em></p>
 
 <p><br /></p>
 
@@ -287,7 +287,7 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/lambda-nat/router.png" alt="Router" /><em>이미지 3. Router</em></p>
+<p><img src="/assets/images/lambda-nat/router.png" alt="Router" /><em>이미지 3. Router</em></p>
 
 <p><br /></p>
 
@@ -301,7 +301,7 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/lambda-nat/gateway.png" alt="IGW / NAT GW" /><em>이미지 4. IGW / NAT GW</em></p>
+<p><img src="/assets/images/lambda-nat/gateway.png" alt="IGW / NAT GW" /><em>이미지 4. IGW / NAT GW</em></p>
 
 <p><br />
 <br /></p>
@@ -316,7 +316,7 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/lambda-nat/vpc_console.png" alt="AWS Console &gt; VPC" /><em>이미지 5. AWS Console -&gt; VPC</em></p>
+<p><img src="/assets/images/lambda-nat/vpc_console.png" alt="AWS Console &gt; VPC" /><em>이미지 5. AWS Console -&gt; VPC</em></p>
 
 <p><br /></p>
 
@@ -329,11 +329,11 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/lambda-nat/create_vpc1.png" alt="AWS Console &gt; VPC &gt; VPC 생성1" /><em>이미지 6. VPC 생성 버튼 클릭</em></p>
+<p><img src="/assets/images/lambda-nat/create_vpc1.png" alt="AWS Console &gt; VPC &gt; VPC 생성1" /><em>이미지 6. VPC 생성 버튼 클릭</em></p>
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/lambda-nat/create_vpc2.png" alt="AWS Console &gt; VPC &gt; VPC 생성2" /><em>이미지 7. VPC 생성</em></p>
+<p><img src="/assets/images/lambda-nat/create_vpc2.png" alt="AWS Console &gt; VPC &gt; VPC 생성2" /><em>이미지 7. VPC 생성</em></p>
 
 <p><br /></p>
 
@@ -347,11 +347,11 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/lambda-nat/create_subnet1.png" alt="AWS Console &gt; VPC &gt; Subnet 생성1" /><em>이미지 8. 서브넷 생성 버튼 클릭</em></p>
+<p><img src="/assets/images/lambda-nat/create_subnet1.png" alt="AWS Console &gt; VPC &gt; Subnet 생성1" /><em>이미지 8. 서브넷 생성 버튼 클릭</em></p>
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/lambda-nat/create_subnet2.png" alt="AWS Console &gt; VPC &gt; Subnet 생성2" /><em>이미지 9. 서브넷 생성</em></p>
+<p><img src="/assets/images/lambda-nat/create_subnet2.png" alt="AWS Console &gt; VPC &gt; Subnet 생성2" /><em>이미지 9. 서브넷 생성</em></p>
 
 <p><br /></p>
 
@@ -364,15 +364,15 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/lambda-nat/create_igw1.png" alt="AWS Console &gt; VPC &gt; IGW 생성1" /><em>이미지 10. 인터넷 게이트웨이 생성 버튼 클릭</em></p>
+<p><img src="/assets/images/lambda-nat/create_igw1.png" alt="AWS Console &gt; VPC &gt; IGW 생성1" /><em>이미지 10. 인터넷 게이트웨이 생성 버튼 클릭</em></p>
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/lambda-nat/create_igw2.png" alt="AWS Console &gt; VPC &gt; IGW 생성2" /><em>이미지 11. 인터넷 게이트웨이 생성</em></p>
+<p><img src="/assets/images/lambda-nat/create_igw2.png" alt="AWS Console &gt; VPC &gt; IGW 생성2" /><em>이미지 11. 인터넷 게이트웨이 생성</em></p>
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/lambda-nat/create_igw3.png" alt="AWS Console &gt; VPC &gt; IGW 연결" /><em>이미지 12. 만들어둔 VPC연결</em></p>
+<p><img src="/assets/images/lambda-nat/create_igw3.png" alt="AWS Console &gt; VPC &gt; IGW 연결" /><em>이미지 12. 만들어둔 VPC연결</em></p>
 
 <p><br /></p>
 
@@ -389,11 +389,11 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/lambda-nat/create_nat1.png" alt="AWS Console &gt; VPC &gt; NAT GW 생성1" /><em>이미지 13. NAT 게이트웨이 생성 버튼 클릭</em></p>
+<p><img src="/assets/images/lambda-nat/create_nat1.png" alt="AWS Console &gt; VPC &gt; NAT GW 생성1" /><em>이미지 13. NAT 게이트웨이 생성 버튼 클릭</em></p>
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/lambda-nat/create_nat2.png" alt="AWS Console &gt; VPC &gt; NAT GW 생성2" /><em>이미지 14. 만들어둔 서브넷 연결 후 NAT 게이트웨이 생성</em></p>
+<p><img src="/assets/images/lambda-nat/create_nat2.png" alt="AWS Console &gt; VPC &gt; NAT GW 생성2" /><em>이미지 14. 만들어둔 서브넷 연결 후 NAT 게이트웨이 생성</em></p>
 
 <p><br /></p>
 
@@ -407,11 +407,11 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/lambda-nat/create_route1.png" alt="AWS Console &gt; VPC &gt; 라우팅 테이블 생성1" /><em>이미지 15. 라우팅 테이블 생성 버튼 클릭</em></p>
+<p><img src="/assets/images/lambda-nat/create_route1.png" alt="AWS Console &gt; VPC &gt; 라우팅 테이블 생성1" /><em>이미지 15. 라우팅 테이블 생성 버튼 클릭</em></p>
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/lambda-nat/create_route2.png" alt="AWS Console &gt; VPC &gt; 라우팅 테이블 생성2" /><em>이미지 16. 라우팅 테이블 두 개 생성</em></p>
+<p><img src="/assets/images/lambda-nat/create_route2.png" alt="AWS Console &gt; VPC &gt; 라우팅 테이블 생성2" /><em>이미지 16. 라우팅 테이블 두 개 생성</em></p>
 
 <p><br /></p>
 
@@ -424,7 +424,7 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/lambda-nat/create_route3.png" alt="AWS Console &gt; VPC &gt; 라우팅 테이블 생성3" /><em>이미지 17. 라우팅 테이블 편집에서 인터넷 게이트웨이 연결</em></p>
+<p><img src="/assets/images/lambda-nat/create_route3.png" alt="AWS Console &gt; VPC &gt; 라우팅 테이블 생성3" /><em>이미지 17. 라우팅 테이블 편집에서 인터넷 게이트웨이 연결</em></p>
 
 <p><br /></p>
 
@@ -437,7 +437,7 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/lambda-nat/create_route4.png" alt="AWS Console &gt; VPC &gt; 라우팅 테이블 생성4" /><em>이미지 18. 라우팅 테이블 편집에서 NAT 게이트웨이 연결</em></p>
+<p><img src="/assets/images/lambda-nat/create_route4.png" alt="AWS Console &gt; VPC &gt; 라우팅 테이블 생성4" /><em>이미지 18. 라우팅 테이블 편집에서 NAT 게이트웨이 연결</em></p>
 
 <p><br />
 <br /></p>
@@ -451,7 +451,7 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/lambda-nat/lambda1.png" alt="AWS Console &gt; Lambda &gt; VPC 연결할 함수 &gt; 구성 &gt; VPC &gt; 편집" /><em>이미지 19. Lambda 함수 VPC 편집 선택</em></p>
+<p><img src="/assets/images/lambda-nat/lambda1.png" alt="AWS Console &gt; Lambda &gt; VPC 연결할 함수 &gt; 구성 &gt; VPC &gt; 편집" /><em>이미지 19. Lambda 함수 VPC 편집 선택</em></p>
 
 <p><br /></p>
 
@@ -462,7 +462,7 @@
 
 <p><br /></p>
 
-<p><img src="/liampoet.github.io/assets/images/lambda-nat/lambda2.png" alt="Lambda VPC 편집" /><em>이미지 20. VPC 편집</em></p>
+<p><img src="/assets/images/lambda-nat/lambda2.png" alt="Lambda VPC 편집" /><em>이미지 20. VPC 편집</em></p>
 
 <p><br />
 <br /></p>
@@ -507,11 +507,11 @@
                     
                     
                     <li>
-                        <a class="smoothscroll" href="/liampoet.github.io/categories#AWS">AWS</a>
+                        <a class="smoothscroll" href="/categories#AWS">AWS</a>
                     </li>
                     
                     <li>
-                        <a class="smoothscroll" href="/liampoet.github.io/categories#AWS-Lambda">AWS Lambda</a>
+                        <a class="smoothscroll" href="/categories#AWS-Lambda">AWS Lambda</a>
                     </li>
                     
                 </ul>
@@ -530,10 +530,10 @@
             <!-- Prev/Next -->
             <div class="row PageNavigation d-flex justify-content-between font-weight-bold">
             
-            <a class="prev d-block col-md-6" href="/liampoet.github.io//interview3/"> &laquo; 신입 백앤드 개발자를 위한 면접 질문 정리 - 기타(공통, 인프라/클라우드(AWS), 컨테이너)</a>
+            <a class="prev d-block col-md-6" href="//interview3/"> &laquo; 신입 백앤드 개발자를 위한 면접 질문 정리 - 기타(공통, 인프라/클라우드(AWS), 컨테이너)</a>
             
             
-            <a class="next d-block col-md-6 text-lg-right" href="/liampoet.github.io//alb/">ALB(Application Load Balancer)에서 URL 기반 라우팅 &raquo; </a>
+            <a class="next d-block col-md-6 text-lg-right" href="//alb/">ALB(Application Load Balancer)에서 URL 기반 라우팅 &raquo; </a>
             
             <div class="clearfix"></div>
             </div>
@@ -586,7 +586,7 @@ https://search.google.com/structured-data/testing-tool/u/0/
 ================================================== -->
 <div class="alertbar">
 	<div class="container text-center">
-		<span><img src="/liampoet.github.io/assets/images/logo.png" alt="LiamCoding"> &nbsp; Never miss a <b>story</b> from us, subscribe to our newsletter</span>
+		<span><img src="/assets/images/logo.png" alt="LiamCoding"> &nbsp; Never miss a <b>story</b> from us, subscribe to our newsletter</span>
         <form action="https://wowthemes.us11.list-manage.com/subscribe/post?u=8aeb20a530e124561927d3bd8&amp;id=8c3d2d214b" method="post" name="mc-embedded-subscribe-form" class="wj-contact-form validate" target="_blank" novalidate>
             <div class="mc-field-group">
             <input type="email" placeholder="Email" name="EMAIL" class="required email" id="mce-EMAIL" autocomplete="on" required>
@@ -612,47 +612,47 @@ https://search.google.com/structured-data/testing-tool/u/0/
             
             
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#AWS">AWS (7)</a>
+                    <a class="mt-1 mb-1" href="/categories#AWS">AWS (7)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Python">Python (6)</a>
+                    <a class="mt-1 mb-1" href="/categories#Python">Python (6)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Bootpay">Bootpay (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#Bootpay">Bootpay (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#FastAPI">FastAPI (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#FastAPI">FastAPI (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#AWS-Lambda">AWS Lambda (3)</a>
+                    <a class="mt-1 mb-1" href="/categories#AWS-Lambda">AWS Lambda (3)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#EventBridge">EventBridge (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#EventBridge">EventBridge (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Aamazon-Cloudwatch">Aamazon Cloudwatch (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#Aamazon-Cloudwatch">Aamazon Cloudwatch (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Javascript">Javascript (3)</a>
+                    <a class="mt-1 mb-1" href="/categories#Javascript">Javascript (3)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#jQuery">jQuery (3)</a>
+                    <a class="mt-1 mb-1" href="/categories#jQuery">jQuery (3)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#MySQL">MySQL (4)</a>
+                    <a class="mt-1 mb-1" href="/categories#MySQL">MySQL (4)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#HTML">HTML (2)</a>
+                    <a class="mt-1 mb-1" href="/categories#HTML">HTML (2)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Json">Json (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#Json">Json (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Postman">Postman (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#Postman">Postman (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#AWS-RDS">AWS RDS (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#AWS-RDS">AWS RDS (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Interview">Interview (3)</a>
+                    <a class="mt-1 mb-1" href="/categories#Interview">Interview (3)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Docker">Docker (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#Docker">Docker (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#K8S">K8S (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#K8S">K8S (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#ALB">ALB (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#ALB">ALB (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#CDN">CDN (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#CDN">CDN (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Diary">Diary (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#Diary">Diary (1)</a>
                 
-                    <a class="mt-1 mb-1" href="/liampoet.github.io/categories#Kafka">Kafka (1)</a>
+                    <a class="mt-1 mb-1" href="/categories#Kafka">Kafka (1)</a>
                 
             
             
@@ -666,7 +666,7 @@ https://search.google.com/structured-data/testing-tool/u/0/
     <div class="container">
         <div class="row">
             <div class="col-md-6 col-sm-6 text-center text-lg-left">
-                Copyright © 2022 Liam 
+                Copyright © 2022 LiamCoding 
             </div>
             <div class="col-md-6 col-sm-6 text-center text-lg-right">    
                 <a target="_blank" href="https://www.wowthemes.net/mediumish-free-jekyll-template/">Mediumish Jekyll Theme</a> by WowThemes.net
@@ -686,13 +686,13 @@ https://search.google.com/structured-data/testing-tool/u/0/
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 
-<script src="/liampoet.github.io/assets/js/mediumish.js"></script>
+<script src="/assets/js/mediumish.js"></script>
 
 
-<script src="/liampoet.github.io/assets/js/lazyload.js"></script>
+<script src="/assets/js/lazyload.js"></script>
 
 
-<script src="/liampoet.github.io/assets/js/ie10-viewport-bug-workaround.js"></script> 
+<script src="/assets/js/ie10-viewport-bug-workaround.js"></script> 
 
 
 <script id="dsq-count-scr" src="//demowebsite.disqus.com/count.js"></script>
