@@ -24,16 +24,15 @@ comments: true
 <div class="col-md-4">
 
 <div class="sticky-top sticky-top-80">
-<h5>Hello, World!</h5>
+<h5 class="defaultword">Hello, World!</h5>
 
 <p>Thank you for visiting my blog!<br> If you want to contact me, <br> 📬 <a href="mailto:dnwjd6452@gmail.com">dnwjd6452@gmail.com</a> </p>
 
 <a target="_blank" href="https://www.linkedin.com/in/kwongmin-lim-32b828247/" class="btn btn-danger">LinkedIn</a>
 
-<br>
-<br>
+<div style="margin-bottom: 10px"></div>
 
-<a target="_blank" href="https://fringe-comte-9ed.notion.site/e8d7aa586cd34e29b59de401774d28e6" class="btn btn-warning">Notion-Portfolio</a>
+<a target="_blank" href="https://fringe-comte-9ed.notion.site/e8d7aa586cd34e29b59de401774d28e6" class="btn btn-danger">Notion-Portfolio</a>
 
 </div>
 </div>

@@ -11,6 +11,10 @@ License: https://www.wowthemes.net/freebies-license/
     padding: 1rem 0rem;
 }
 
+.defaultword {
+    font-family: Merriweather, sans-serif;
+}
+
 a {
     color: #00ab6b;
     transition: all 0.2s;
@@ -27,7 +31,7 @@ pre {
     border: #E3EDF3 1px solid;
     width: 100%;
     padding: 7px;
-    font-family: monospace, sans-serif;
+    font-family: Merriweather, sans-serif;
     font-size: .9rem;
     white-space: pre;
     overflow: auto;
@@ -305,7 +309,7 @@ span.post-read-more a:hover {
 }
 
 .mainheading h1.sitetitle {
-    font-family: Righteous;
+    font-family: Merriweather;
 }
 
 .mainheading h1.posttitle {
@@ -873,7 +877,7 @@ iframe {
     line-height: 1;
     padding: 2px 3px;
     width: 150px;
-    font-family: Arial;
+    font-family: Merriweather;
     text-align: center;
     border-radius: 3px;
     transition: all .4s;
