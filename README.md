@@ -11,5 +11,5 @@ Please press `Command`+`Shift`+`R` due to Github webcash issue.😭
 
 > December, 2022: Hello! I'm Liam.😊  If you want to contact me, 📬 <u>**<dnwjd6452@gmail.com>**</u>
 
-# [Move to Liam's blog](https://liampoet.github.io/)
+# [Move to Liam's blog](https://liamkwo.github.io/)
 

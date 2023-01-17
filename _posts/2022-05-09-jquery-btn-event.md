@@ -15,7 +15,7 @@ image: assets/images/jquery-btn-event/button2.gif
 
 
 - 저번에 포스팅한 모달창 위에서 진행됩니다! 오늘은 버튼을 클릭했을 때 클릭되는 효과와 클릭한 데이터가 입력되고 지워지는 기능을 만들어 보려고 합니다. 
-- 모달창 생성법은 [자바스크립트 예쁜 모달창 만들기](https://liampoet.github.io/javascript-modal/)포스트를 확인해주세요!
+- 모달창 생성법은 [자바스크립트 예쁜 모달창 만들기](https://liamkwo.github.io/javascript-modal/)포스트를 확인해주세요!
 
 
 <br>
@@ -212,7 +212,7 @@ $(function () {
 <br>
 
 - 먼저 동적으로 변수를 할당시켜주고 싶었으나, javascript에서는 찾지를 못해 `let check = {}`로 Dict형태로 변수들을 0값으로 할당해주었습니다.***(좋은 방법이 있으면 댓글로 남겨주세요.😥)***
-- `[id^=button_]`는 button으로 시작하는 **모든 id의 값을 불러오기위해**서 사용했습니다. 자세한 내용은 [jQuery 정규식 [id^=] 사용해보기](https://liampoet.github.io/jQuery-regex/)에서 확인해 주세요! 
+- `[id^=button_]`는 button으로 시작하는 **모든 id의 값을 불러오기위해**서 사용했습니다. 자세한 내용은 [jQuery 정규식 [id^=] 사용해보기](https://liamkwo.github.io/jQuery-regex/)에서 확인해 주세요! 
 - `var cnt = $(this).attr("id").substr(7)`는 **id의 끝에 붙어있는 숫자를 불러오기위해**서 사용했습니다.(예시 - button_15.substr(7) => 15)
 - 그 후 'checked_cnt'에 방금 불러온 id 끝값인 cnt를 더해서 check Dict안에 있는 키 값을 만들었습니다. `check['checked_cnt'+cnt]`을 통해 check의 'checked_cnt'+cnt값이 초기에 할당된 것처럼 0일 경우 1을 할당해 주었고, `$(this).addClass("on");`를 통해서 아까 **CSS**에서 작성해둔 `button.on`을 활성화 했습니다. 그리고 그 값을 `textarea`에 전달했습니다.
 - 반대로 'checked_cnt'+cnt값이 0이 아니면 0을 할당해주고 `$(this).removeClass("on");`로 `button.on`을 비활성화합니다. 그리고 `button_text = button_text.replace($(this).attr('value'))`를 통해 텍스트를 빼주었습니다.

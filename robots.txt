@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: http://liampoet.github.io/sitemap.xml
+Sitemap: http://liamkwo.github.io/sitemap.xml

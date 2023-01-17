@@ -57,7 +57,7 @@ Amazon EventBridge에서 이벤트목록에 규칙을 들어가면 규칙생성�
 
 ***📝 2단계 - 일정 정의***
 
-규칙2에서는 패턴을 설정하는데, 저녁 12시에 매일 Lambda에 이벤트를 줄 예정이기 때문에 다음과 같이 설정했습니다. Cron식이 궁금하다면 [AWS CloudWatch로 자동 카운트 시스템 개발하기 -1](https://liampoet.github.io/Lambda-CloudWatch/)를 클릭하세요!
+규칙2에서는 패턴을 설정하는데, 저녁 12시에 매일 Lambda에 이벤트를 줄 예정이기 때문에 다음과 같이 설정했습니다. Cron식이 궁금하다면 [AWS CloudWatch로 자동 카운트 시스템 개발하기 -1](https://liamkwo.github.io/Lambda-CloudWatch/)를 클릭하세요!
 
 <br>
 

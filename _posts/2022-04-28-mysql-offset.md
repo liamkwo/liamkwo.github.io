@@ -52,7 +52,7 @@ SELECT * FROM USER ORDERS LIMIT 0, 10;
 
 다른 유용한 mysql명령어는 아래 링크에서 확인할 수 있습니다!😀
 
-[알아두면 쓸모있는 MySQL 명령어 모음](https://liampoet.github.io/mysql-command/)
+[알아두면 쓸모있는 MySQL 명령어 모음](https://liamkwo.github.io/mysql-command/)
 
 <br>
 <br>
@@ -116,4 +116,4 @@ cur.execute(result)
 
 
 **[참고자료]**
-- [hhttps://liampoet.github.io/mysql-command/](https://liampoet.github.io/mysql-command/)
+- [hhttps://liamkwo.github.io/mysql-command/](https://liamkwo.github.io/mysql-command/)
