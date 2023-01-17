@@ -7,8 +7,6 @@
   <img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat" alt="contributions welcome"/>
 </p>
 
-Please press `Command`+`Shift`+`R` due to Github webcash issue.😭
-
 > December, 2022: Hello! I'm Liam.😊  If you want to contact me, 📬 <u>**<dnwjd6452@gmail.com>**</u>
 
 # [Move to Liam's blog](https://liamkwo.github.io/)
