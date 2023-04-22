@@ -36,6 +36,14 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4273395262535395"
          crossorigin="anonymous"></script>
 
+<script type="text/javascript">
+    if (typeof(history.pushState) == 'function') {
+        var CategoryURL = location.href;
+        CategoryURL = CategoryURL.replace(/\?category=([0-9]+)/ig, '');
+        history.pushState(null, null, CategoryURL);
+    }
+</script>
+
 </head>
 
 
